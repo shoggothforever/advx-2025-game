@@ -7,6 +7,7 @@ using SaveYourself.Utils;
 using SaveYourself.Mechanics;
 using static SaveYourself.Core.TimeReverse;
 using SaveYourself.Interact;
+
 namespace SaveYourself.Core
 {
     public enum GameState { PreReverseTime, ReverseTime,PreForwardTime, ForwardTime, LevelComplete, LevelFailed }
@@ -113,6 +114,18 @@ public class GameManager : MonoBehaviour
             currentState = GameState.ForwardTime;
             pastPlayer.SetActive(true);
             EnableReverseSprite();
+            //箱子热胀冷缩
+            foreach (var box in boxes)
+            {
+                if (box.name.StartsWith("shrink_box"))
+                {
+                    var bx = box.GetComponent<ShrinkBox>();
+                    if (bx)
+                    {
+                        bx.EnlargeStable();
+                    }
+                }
+            }
             // 触发一个事件，让所有可逆转物体根据之前的操作更新状态
             // 我们用SendMessage来简化，更大型的项目建议用事件系统(UnityEvent/Action)
             BroadcastMessage("OnForwardTimeStart", SendMessageOptions.DontRequireReceiver);

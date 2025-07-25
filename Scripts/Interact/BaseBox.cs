@@ -36,21 +36,22 @@ namespace SaveYourself.Interact
         {
             rb.bodyType = RigidbodyType2D.Kinematic;
         }
-        void Update()
+        public void Enlarge()
         {
-            if(TimeManager.Instance.phase == TimeManager.Phase.Reverse)
+            // 1. 视觉
+            transform.localScale = Vector3.one * 2f;
+            // 2. 碰撞
+            var bc = GetComponent<BoxCollider2D>();
+            if (bc)
             {
-                lastVelocity = rb.velocity;
+                bc.size = bc.size * 2f;        // 或者 bc.size = new Vector2(2,2);
+                bc.offset = bc.offset * 2f;    // 如果之前有偏移
             }
-
         }
         public bool canPushToLeft;
         public bool canPushToRight;
         public bool canPressDown;
-        [SerializeField] LayerMask stoneLayer = 0;
-        [SerializeField] float raycastOffsetX = 0;
-        [SerializeField] float detectDis = 1f;
-        bool isReachTargetPos;
+        public bool canShrink=false;
         bool CanPushToLeft()
         {
             return false;
