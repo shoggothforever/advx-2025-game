@@ -32,6 +32,10 @@ namespace SaveYourself.Interact
             bool isMoving = rb.velocity.sqrMagnitude > 0.02f;
             return wasMoving != isMoving;
         }
+        public void SetKe()
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+        }
         void Update()
         {
             if(TimeManager.Instance.phase == TimeManager.Phase.Reverse)

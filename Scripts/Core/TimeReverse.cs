@@ -24,7 +24,8 @@ namespace SaveYourself.Core
          int Id { get; }
          TimedAction RecordSnapshot();   // µ±Ç°Ö¡ÅÄ¿ìÕÕ
          void ApplySnapshot(TimedAction a);
-            bool DetectMove();
+            void SetKe();
+        bool DetectMove();
         }
         [RequireComponent(typeof(Rigidbody2D))]
         public class ReversibleObject : MonoBehaviour

@@ -72,6 +72,10 @@ namespace SaveYourself.Mechanics
             transform.position = a.pos;
             body.velocity = Vector2.zero;
         }
+        public void SetKe()
+        {
+            body.bodyType = RigidbodyType2D.Kinematic;
+        }
         public bool DetectMove()
         {
             bool wasMoving = lastVelocity.sqrMagnitude > 0.02f;

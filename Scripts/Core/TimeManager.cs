@@ -13,7 +13,6 @@ namespace SaveYourself.Core
 
         public float reverseDuration = 10f;   // 逆向阶段总时长
         public float currentTime=0;             // 0..reverseDuration
-
         readonly List<TimeReverse.TimedAction> history = new();
         readonly Dictionary<int, TimeReverse.ITimeTrackable> registry = new();
         static public float global_time = 0f;
@@ -22,6 +21,7 @@ namespace SaveYourself.Core
         {
             get { return instance_; }
         }
+        private int rewindIndex = 0;
         private void Awake()
         {
             instance_ = this;
@@ -58,12 +58,36 @@ namespace SaveYourself.Core
         // 在 Replay 阶段逐帧调用
         public void RewindStep(float dt)
         {
-            currentTime = Mathf.Max(currentTime - dt, 0);
-            //Debug.LogFormat("replay obj ID:{0}",a.objId);
-            foreach (var a in history.FindAll(x => Mathf.Abs(x.time - currentTime) < Time.deltaTime))
+
+            currentTime = Mathf.Max(currentTime - dt, 0f);
+
+            // 二分查找第一个 time >= currentTime 的索引
+            int left = 0;
+            int right = history.Count - 1;
+            int hit = -1;
+            while (left <= right)
             {
-                registry[a.objId].ApplySnapshot(a);
-                //Debug.LogFormat("replay obj ID:{0}",a.objId);
+                int mid = (left + right) >> 1;
+                if (history[mid].time >= currentTime)
+                {
+                    hit = mid;
+                    right = mid - 1;
+                }
+                else
+                {
+                    left = mid + 1;
+                }
+            }
+            // 把游标同步到 hit，后续帧直接顺序扫描
+            if (hit >= 0)
+            {
+                rewindIndex = hit;
+                for (; rewindIndex < history.Count && history[rewindIndex].time <= currentTime + dt; ++rewindIndex)
+                {
+                    var a = history[rewindIndex];
+                    if (registry.TryGetValue(a.objId, out var obj))
+                        obj.ApplySnapshot(a);
+                }
             }
         }
 
@@ -119,7 +143,6 @@ namespace SaveYourself.Core
         {
             Instance.phase = Phase.Replay;
             Instance.currentTime = Instance.reverseDuration; // 从末尾开始倒放
-
         }
 
         void StartForward()
