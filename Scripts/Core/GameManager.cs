@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
         public GameObject pastWorld;      // 正时空
         public GameObject pastPlayer;      // 正时空
         public Text countdownText;       // 用于显示倒计时的UI文本
+        public WaterTransformer[] waterTransformers; // 用于控制
         private static int levelIndex = 0;
         private int flagCount = 0;
         private float TimeCountdown;
@@ -89,6 +90,10 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
+            foreach (var wt in waterTransformers)
+            {
+                wt.changeWater();
+            }
             pastWorld.SetActive(false);
             Debug.Log("逆时空阶段开始！你有 " + TimeCountdown + " 秒时间。");
             countdownText.color = Color.red;
@@ -125,6 +130,11 @@ public class GameManager : MonoBehaviour
                         bx.EnlargeStable();
                     }
                 }
+            }
+            // 水变成蒸汽
+            foreach(var wt in waterTransformers)
+            {
+                wt.changeWater();
             }
             // 触发一个事件，让所有可逆转物体根据之前的操作更新状态
             // 我们用SendMessage来简化，更大型的项目建议用事件系统(UnityEvent/Action)
