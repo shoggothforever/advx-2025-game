@@ -300,6 +300,10 @@ PrefabInstance:
       value: shrink_box
       objectReference: {fileID: 0}
     - target: {fileID: 6305650843038092707, guid: 6f0a580c04843084db46ea6b8521bb4a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6305650843038092707, guid: 6f0a580c04843084db46ea6b8521bb4a, type: 3}
       propertyPath: m_TagString
       value: Box
       objectReference: {fileID: 0}
@@ -313,7 +317,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6305650843038092717, guid: 6f0a580c04843084db46ea6b8521bb4a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.11
+      value: -0.09
       objectReference: {fileID: 0}
     - target: {fileID: 6305650843038092717, guid: 6f0a580c04843084db46ea6b8521bb4a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -605,7 +609,7 @@ GameObject:
   - component: {fileID: 716155234}
   m_Layer: 0
   m_Name: House
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3655,6 +3659,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 918330062}
     m_Modifications:
+    - target: {fileID: 712654875, guid: f603362502dd69e408f932278b6941a1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7318342315685545776, guid: f603362502dd69e408f932278b6941a1, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -3705,7 +3713,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7321652345534660310, guid: f603362502dd69e408f932278b6941a1, type: 3}
       propertyPath: m_Layer
-      value: 13
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7321652345534660310, guid: f603362502dd69e408f932278b6941a1, type: 3}
       propertyPath: m_IsActive
@@ -4363,6 +4371,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1381884303}
     m_Modifications:
+    - target: {fileID: 1883970748, guid: ec795d0e758808d4882a9dfbc316ff12, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 651945004807733368, guid: ec795d0e758808d4882a9dfbc316ff12, type: 3}
       propertyPath: m_BodyType
       value: 0
@@ -4431,6 +4443,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player reverse
       objectReference: {fileID: 0}
+    - target: {fileID: 701581881313865964, guid: ec795d0e758808d4882a9dfbc316ff12, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec795d0e758808d4882a9dfbc316ff12, type: 3}
 --- !u!1001 &5341967814618503561
@@ -4447,6 +4463,10 @@ PrefabInstance:
     - target: {fileID: 5341967815127932476, guid: dd801b96afc84a7459b24a30ea5f869d, type: 3}
       propertyPath: m_Name
       value: reversible_box1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5341967815127932476, guid: dd801b96afc84a7459b24a30ea5f869d, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5341967815127932478, guid: dd801b96afc84a7459b24a30ea5f869d, type: 3}
       propertyPath: m_RootOrder

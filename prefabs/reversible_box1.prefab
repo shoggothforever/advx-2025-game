@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5341967815127932465}
   - component: {fileID: 5341967815127932464}
   - component: {fileID: 5341967815127932467}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: reversible_box1
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -151,8 +151,4 @@ MonoBehaviour:
   canPushToLeft: 0
   canPushToRight: 0
   canPressDown: 0
-  stoneLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  raycastOffsetX: 0
-  detectDis: 1
+  canShrink: 0

@@ -8,7 +8,8 @@ namespace SaveYourself.Interact
         [SerializeField] GameObject ShrinkBoxPrefab;   // ÍÏµ½ Inspector
         public void EnlargeStable()
         {
-            var newBox = Instantiate(ShrinkBoxPrefab, transform.position, transform.rotation);
+            var upPosition=transform.position+new Vector3(0,0.5f,0);
+            var newBox = Instantiate(ShrinkBoxPrefab, upPosition, transform.rotation);
             var newRb = newBox.GetComponent<Rigidbody2D>();
             //newRb.velocity = rb.velocity;
             //newRb.angularVelocity = rb.angularVelocity;

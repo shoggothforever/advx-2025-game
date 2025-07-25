@@ -31,7 +31,7 @@ namespace SaveYourself.Core
         {
             if (!registry.ContainsKey(t.Id))
             {
-                Debug.LogFormat("set reversible object ID {0}", t.Id);
+                //Debug.LogFormat("set reversible object ID {0}", t.Id);
                 registry.Add(t.Id, t);
             }
         }
@@ -81,13 +81,18 @@ namespace SaveYourself.Core
             // 把游标同步到 hit，后续帧直接顺序扫描
             if (hit >= 0)
             {
+                int cnt = 0;
                 rewindIndex = hit;
                 for (; rewindIndex < history.Count && history[rewindIndex].time <= currentTime + dt; ++rewindIndex)
                 {
                     var a = history[rewindIndex];
                     if (registry.TryGetValue(a.objId, out var obj))
+                    {
                         obj.ApplySnapshot(a);
+                        ++cnt;
+                    }
                 }
+                //Debug.LogFormat("apply {0} snapshot",cnt);
             }
         }
 
@@ -143,6 +148,14 @@ namespace SaveYourself.Core
         {
             Instance.phase = Phase.Replay;
             Instance.currentTime = Instance.reverseDuration; // 从末尾开始倒放
+            Physics2D.IgnoreLayerCollision(
+            LayerMask.NameToLayer("GhostPlayer"),
+            LayerMask.NameToLayer("Box"),
+            true);
+            Physics2D.IgnoreLayerCollision(
+            LayerMask.NameToLayer("GhostPlayer"),
+            LayerMask.NameToLayer("ShrinkBox"),
+            true);
         }
 
         void StartForward()

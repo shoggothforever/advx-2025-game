@@ -7,9 +7,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4616085876950009355, guid: 6f0a580c04843084db46ea6b8521bb4a, type: 3}
+      propertyPath: m_Simulated
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6305650843038092707, guid: 6f0a580c04843084db46ea6b8521bb4a, type: 3}
       propertyPath: m_Name
       value: shrink_box_large Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6305650843038092707, guid: 6f0a580c04843084db46ea6b8521bb4a, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6305650843038092717, guid: 6f0a580c04843084db46ea6b8521bb4a, type: 3}
       propertyPath: m_RootOrder

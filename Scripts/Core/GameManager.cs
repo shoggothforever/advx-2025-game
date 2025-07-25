@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
             {
                 tracked[GameState.ReverseTime] = true;
                 var per = reversePlayer.GetComponent<Mechanics.Player>();
-                Debug.LogFormat("get player id {0}", per.Id);
+                //Debug.LogFormat("get player id {0}", per.Id);
                 TimeManager.Instance.Register(per);
                 foreach (var box in boxes)
                 {
@@ -209,6 +209,13 @@ public class GameManager : MonoBehaviour
         {
             reverseWorld.SetActive(true);
             reversePlayer.GetComponent<Player>().controlEnabled = false;
+            //reversePlayer.GetComponent<Player>().tag = "GhostPlayer";
+            foreach (var sr in reversePlayer.GetComponentsInChildren<SpriteRenderer>())
+            {
+                Color c = sr.color;
+                c.a = 0.4f;          // 40 % 透明度，可调
+                sr.color = c;
+            }
             reverseVirtualCamera.enabled = false;
         } 
     }

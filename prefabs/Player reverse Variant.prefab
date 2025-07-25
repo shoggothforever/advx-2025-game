@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1883970749}
-  m_Layer: 13
+  m_Layer: 3
   m_Name: cameraEndPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,7 +64,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1208144871472054, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_Name
-      value: Player reverse
+      value: Player reverse Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 1208144871472054, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4520396350849616, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_RootOrder
@@ -196,3 +200,4 @@ MonoBehaviour:
   collider2d: {fileID: 700538218374639929}
   audioSource: {fileID: 0}
   controlEnabled: 1
+  lastVelocity: {x: 0, y: 0}

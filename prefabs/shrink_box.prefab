@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 923972864793460858}
   - component: {fileID: 4616085876950009355}
   - component: {fileID: 8803495101634981627}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: shrink_box
   m_TagString: Box
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 3
 --- !u!114 &8803495101634981627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,5 +151,5 @@ MonoBehaviour:
   canPushToLeft: 0
   canPushToRight: 0
   canPressDown: 0
-  canShrink: 0
+  canShrink: 1
   ShrinkBoxPrefab: {fileID: 4430907268153484034, guid: 36155dcc832700a4b979f243d90164f6, type: 3}
