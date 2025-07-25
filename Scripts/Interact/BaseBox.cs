@@ -9,10 +9,9 @@ namespace SaveYourself.Interact
     {
         public void  ApplySnapshot(TimeReverse.TimedAction a)
         {
-            //var p = JsonUtility.FromJson<Vector3>(a.payload);
-            //rb.MovePosition(a.pos);
-            transform.position = a.pos;
-            rb.velocity = Vector2.zero;
+            rb.MovePosition(a.pos);
+            //transform.position = a.pos;
+            //rb.velocity = Vector2.zero;
         }
 
         public TimeReverse.TimedAction RecordSnapshot()
