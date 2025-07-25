@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SaveYourself.Utils;
 namespace SaveYourself.Core
 {
     public class TimeReverse : MonoBehaviour
@@ -11,6 +12,7 @@ namespace SaveYourself.Core
             public float time;          // 发生时 globalTime
             public int objId;           // 物体唯一 id
             public ActionType type;     // 枚举：Position, AnimatorBool, AnimatorTrigger...
+            public Vector3 pos;
             public string payload;      // JSON 字符串，可存 Vector3、bool 等
         }
         // 为了让 JSON 能序列化 Vector3
@@ -22,54 +24,21 @@ namespace SaveYourself.Core
          int Id { get; }
          TimedAction RecordSnapshot();   // 当前帧拍快照
          void ApplySnapshot(TimedAction a);
+            bool DetectMove();
         }
         [RequireComponent(typeof(Rigidbody2D))]
-        public class ReversibleObject : MonoBehaviour, ITimeTrackable
+        public class ReversibleObject : MonoBehaviour
         {
-            static int nextId = 100;
-            Rigidbody2D rb;
-            Animator anim;
-
+            static int nextId =common.reversableItemInitialID ;
             public int Id { get; private set; }
-
-            void Awake()
+            public Rigidbody2D rb;
+            public Vector2 lastVelocity;
+            public void Awake()
             {
                 Id = nextId++;
                 rb = GetComponent<Rigidbody2D>();
-                anim = GetComponent<Animator>();
-                //TimeManager.Instance.Register(this);
             }
-
-            public TimedAction RecordSnapshot()
-            {
-                var p = new Vector3Snapshot();
-                p.x = transform.position.x;
-                p.y = transform.position.y;
-                p.z = transform.position.z;
-                return new TimedAction
-                {
-                    time = TimeManager.Instance.currentTime,
-                    objId = Id,
-                    type = ActionType.Position,
-                    payload = JsonUtility.ToJson(p)
-                };
-            }
-
-            public void ApplySnapshot(TimedAction a)
-            {
-                switch (a.type)
-                {
-                    case ActionType.Position:
-                        var p = JsonUtility.FromJson<Vector3Snapshot>(a.payload);
-                        transform.position = p.ToVector3();
-                        rb.velocity = Vector2.zero;
-                        break;
-                    case ActionType.AnimatorBool:
-                        var b = JsonUtility.FromJson<BoolSnapshot>(a.payload);
-                        anim.SetBool(b.name, b.value);
-                        break;
-                }
-            }
+            
         }
     }
 }

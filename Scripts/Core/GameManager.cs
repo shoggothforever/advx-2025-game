@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using SaveYourself.Utils;
 using SaveYourself.Mechanics;
 using static SaveYourself.Core.TimeReverse;
-
+using SaveYourself.Interact;
 namespace SaveYourself.Core
 {
     public enum GameState { PreReverseTime, ReverseTime,PreForwardTime, ForwardTime, LevelComplete, LevelFailed }
@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
         private int flagCount = 0;
         private float TimeCountdown;
         readonly List<ITimeTrackable> trackedCache = new();
+        GameObject[] boxes;
         Dictionary<GameState, bool> tracked = new();
 
         void Awake()
@@ -57,8 +58,9 @@ public class GameManager : MonoBehaviour
 
         void Start()
         {
-            Debug.Log("start your life path");
             reversePlayer.GetComponent<Player>().controlEnabled = false;
+            boxes = GameObject.FindGameObjectsWithTag("Box");
+            Debug.LogFormat("find boxes count:{0}",boxes.Length);
         }
 
         // 开始逆时空阶段
@@ -76,6 +78,15 @@ public class GameManager : MonoBehaviour
                 var per = reversePlayer.GetComponent<Mechanics.Player>();
                 Debug.LogFormat("get player id {0}", per.Id);
                 TimeManager.Instance.Register(per);
+                foreach (var box in boxes)
+                {
+                    if (box.name.StartsWith("reversible_box"))
+                    {
+                        var bx = box.GetComponent<BaseBox>();
+                        TimeManager.Instance.Register(bx);
+                        Debug.LogFormat("put box into TimeManager, ID:{0}", bx.Id);
+                    }
+                }
             }
             pastWorld.SetActive(false);
             Debug.Log("逆时空阶段开始！你有 " + TimeCountdown + " 秒时间。");
@@ -142,15 +153,6 @@ public class GameManager : MonoBehaviour
             else if (currentState == GameState.ReverseTime)
             {
                 StartPreForwardTimePhase();
-            }
-            // 逆熵世界纪录状态
-            if (currentState == GameState.ReverseTime)
-            {
-                // 60 seconds 60frames/second 1200 snapshot for every reversible object
-                //if (Time.frameCount % 3 == 0)
-                //{
-                //    TimeManager.Instance.Record();
-                //}
             }
         }
         void LoadNextScene()

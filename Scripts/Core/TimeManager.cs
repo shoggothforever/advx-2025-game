@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using SaveYourself.Utils;
 namespace SaveYourself.Core
 {
     public class TimeManager : MonoBehaviour
@@ -45,9 +45,9 @@ namespace SaveYourself.Core
         // 只在逆向阶段调用,统一记录所有可以逆向运行物体的状态
         public void Record()
         {
-            foreach(var t in registry)
+            foreach (var t in registry)
             {
-                Record(t.Value.RecordSnapshot());
+                    Record(t.Value.RecordSnapshot());
             }
         }
         // 内部使用，往history中添加记录
@@ -59,10 +59,11 @@ namespace SaveYourself.Core
         public void RewindStep(float dt)
         {
             currentTime = Mathf.Max(currentTime - dt, 0);
-            foreach (var a in history.FindAll(x => Mathf.Abs(x.time - currentTime) < 0.02f))
+            //Debug.LogFormat("replay obj ID:{0}",a.objId);
+            foreach (var a in history.FindAll(x => Mathf.Abs(x.time - currentTime) < Time.deltaTime))
             {
                 registry[a.objId].ApplySnapshot(a);
-                Debug.LogFormat("replay obj ID:{0}",a.objId);
+                //Debug.LogFormat("replay obj ID:{0}",a.objId);
             }
         }
 
@@ -85,7 +86,7 @@ namespace SaveYourself.Core
                     }
                     else
                     {
-                        if (Time.frameCount % 3 == 0)
+                        if (Time.frameCount % common.RecordGap == 0)
                         {
                             Instance.Record();
                         }
@@ -117,17 +118,13 @@ namespace SaveYourself.Core
         void StartReplay()
         {
             Instance.phase = Phase.Replay;
-            //reversePlayer.SetActive(false);
             Instance.currentTime = Instance.reverseDuration; // 从末尾开始倒放
-            //Instance.RewindStep(Time.deltaTime);
-            //if (Instance.currentTime <= 0)
-            //    StartForward();
+
         }
 
         void StartForward()
         {
             Instance.phase = Phase.Forward;
-            //pastPlayer.SetActive(true);
         }
     }
 }

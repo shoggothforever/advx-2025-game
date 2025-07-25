@@ -5,6 +5,7 @@ using static SaveYourself.Core.Simulation;
 using SaveYourself.Model;
 using SaveYourself.Gameplay;
 using SaveYourself.Core;
+using SaveYourself.Utils;
 namespace SaveYourself.Mechanics
 {
     public class Player : basePlayer,TimeReverse.ITimeTrackable
@@ -32,14 +33,13 @@ namespace SaveYourself.Mechanics
         public AudioSource audioSource;
         // 控制角色的输入检测
         public bool controlEnabled = true;
-
+        public Vector2 lastVelocity;
         bool jump;
         Vector2 move;
         SpriteRenderer spriteRenderer;
         internal Animator animator;
         readonly PlatformerModel model = GetModel<PlatformerModel>();
-        static int nextId = 1;
-        Rigidbody2D rb;
+        static int nextId = common.reversableRoleInitialID;
         Animator anim;
 
         public int Id { get; private set; }
@@ -51,9 +51,7 @@ namespace SaveYourself.Mechanics
             spriteRenderer = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
             Id = nextId++;
-            rb = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
-            //TimeManager.Instance.Register(this);
         }
 
         public TimeReverse.TimedAction RecordSnapshot()
@@ -63,20 +61,22 @@ namespace SaveYourself.Mechanics
                 time = TimeManager.Instance.currentTime,
                 objId = Id,
                 type = TimeReverse.ActionType.Position,
-                payload = JsonUtility.ToJson(transform.position)
+                pos=transform.position,
+                //payload = JsonUtility.ToJson(transform.position)
             };
         }
 
         public void ApplySnapshot(TimeReverse.TimedAction a)
         {
-            switch (a.type)
-            {
-                case TimeReverse.ActionType.Position:
-                    var p = JsonUtility.FromJson<Vector3>(a.payload);
-                    transform.position = p;
-                    rb.velocity = Vector2.zero;
-                    break;
-            }
+            //body.MovePosition(a.pos);
+            transform.position = a.pos;
+            body.velocity = Vector2.zero;
+        }
+        public bool DetectMove()
+        {
+            bool wasMoving = lastVelocity.sqrMagnitude > 0.02f;
+            bool isMoving = body.velocity.sqrMagnitude > 0.02f;
+            return wasMoving != isMoving;
         }
         public Bounds Bounds => collider2d.bounds;
 
@@ -96,6 +96,10 @@ namespace SaveYourself.Mechanics
             else
             {
                 move.x = 0;
+            }
+            if (TimeManager.Instance.phase == TimeManager.Phase.Reverse)
+            {
+                lastVelocity = body.velocity;
             }
             UpdateJumpState();
             base.Update();
@@ -162,7 +166,13 @@ namespace SaveYourself.Mechanics
 
             targetVelocity = move * maxSpeed;
         }
-
+        void OnCollisionStay2D(Collision2D c)
+        {
+            if (!c.collider.CompareTag("Box")) return;
+            Rigidbody2D rbBox = c.collider.attachedRigidbody;
+            Vector2 dir = c.contacts[0].normal * -1;   // 反向推
+            rbBox.AddForce(dir * common.pushForce, ForceMode2D.Force);
+        }
         public enum JumpState
         {
             Grounded,
