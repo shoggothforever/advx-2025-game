@@ -7,6 +7,7 @@ public class LevelConfig : ScriptableObject
 {
     public string levelName;                    // 本关关卡名
     public string nextLevelName;                // 下关关卡名
+    public float timeLimit;                     // 时间限制
     public Vector3 playerSpawn;                 // 出生点
     public List<SpawnItem> items = new();       // 所有可生成物
 }

@@ -29,8 +29,9 @@ public class LoaderManager : MonoBehaviour
     {
         // 按需 AddComponent 或用 Addressable 实例化
         //gameObject.AddComponent<AudioManager>();
-        gameObject.AddComponent<TimeManager>();
+
         gameObject.AddComponent<GameManager>();
+        gameObject.AddComponent<TimeManager>();
     }
 
     /* 公开 API，任何地方都能调用 */

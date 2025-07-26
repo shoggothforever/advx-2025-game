@@ -14,5 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelName: Tutorial2
   nextLevelName: Tutorial3
+  timeLimit: 20
   playerSpawn: {x: 0, y: 0, z: 0}
-  items: []
+  items:
+  - prefab: {fileID: 6021138300331296203, guid: 6f11f60719b443a48adbef40a6806d17, type: 3}
+    position: {x: 34.968227, y: 13.414608, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - prefab: {fileID: 701581881313865964, guid: ec795d0e758808d4882a9dfbc316ff12, type: 3}
+    position: {x: 34.968227, y: 13.414608, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 2, y: 2, z: 1}
+  - prefab: {fileID: 1534842449224503505, guid: fca333b95db9f484badce7fe4ccd9166, type: 3}
+    position: {x: 6.004113, y: 9.371484, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - prefab: {fileID: 7321652345534660310, guid: f603362502dd69e408f932278b6941a1, type: 3}
+    position: {x: 6.004113, y: 9.371484, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 2, y: 2, z: 1}
+  - prefab: {fileID: 3024578306212300893, guid: 90620d5f0c174a342a283e23ec5d9a82, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}

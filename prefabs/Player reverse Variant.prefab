@@ -237,6 +237,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1208144871472054, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
+      propertyPath: m_TagString
+      value: GhostPlayer
+      objectReference: {fileID: 0}
     - target: {fileID: 4520396350849616, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_RootOrder
       value: 0

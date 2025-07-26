@@ -574,6 +574,10 @@ MonoBehaviour:
   countdownText: {fileID: 1037284526}
   waterTransformers:
   - {fileID: 1314193627}
+  boxes: []
+  levelName: 
+  nextLevelName: 
+  timeLimit: 0
 --- !u!114 &688181668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4039,6 +4043,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3024578304926389638, guid: 90620d5f0c174a342a283e23ec5d9a82, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 24
+      objectReference: {fileID: 0}
     - target: {fileID: 3024578306212300880, guid: 90620d5f0c174a342a283e23ec5d9a82, type: 3}
       propertyPath: m_Camera
       value: 

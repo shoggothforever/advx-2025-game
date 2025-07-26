@@ -51,35 +51,32 @@ namespace SaveYourself.Core
         public GameObject pastPlayer;      // 正时空
         public Text countdownText;       // 用于显示倒计时的UI文本
         public WaterTransformer[] waterTransformers; // 用于控制
-        private static int levelIndex = 0;
         private int flagCount = 0;
         private float TimeCountdown;
         readonly List<ITimeTrackable> trackedCache = new();
         public GameObject[] boxes;
         public string levelName;
         public string nextLevelName;
+        public float timeLimit;
         Dictionary<GameState, bool> tracked = new();
 
-        void Awake()
+        void Start()
         {
             if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); }
             else Destroy(gameObject);
             GetComponentsInChildren<ITimeTrackable>(true, trackedCache);
+            boxes = GameObject.FindGameObjectsWithTag("Box");
+            Debug.LogFormat("find boxes count:{0}", boxes.Length);
         }
 
-        void Start()
-        {
-            reversePlayer.GetComponent<Player>().controlEnabled = false;
-            boxes = GameObject.FindGameObjectsWithTag("Box");
-            Debug.LogFormat("find boxes count:{0}",boxes.Length);
-        }
 
         // 开始逆时空阶段
         public void StartReverseTimePhase()
         {
-            reversePlayer.GetComponent<Player>().controlEnabled = true;
+            reversePlayer.SetActive(true);
+            reversePlayer.GetComponent<Player>().enabled = true;
             currentState = GameState.ReverseTime;
-            TimeCountdown = reverseLevelInfos[levelIndex].duration;
+            TimeCountdown = getTimeLimit();
             TimeManager.Instance.phase=TimeManager.Phase.Reverse;
             // 激活逆时空玩家，禁用正时空AI
             reverseWorld.SetActive(true);
@@ -99,11 +96,14 @@ namespace SaveYourself.Core
                     }
                 }
             }
-            foreach (var wt in waterTransformers)
+            if (waterTransformers != null)
             {
-                wt.changeWater();
+                foreach (var wt in waterTransformers)
+                {
+                    wt.changeWater();
+                }
             }
-            pastWorld.SetActive(false);
+            pastPlayer.SetActive(false);
             Debug.Log("逆时空阶段开始！你有 " + TimeCountdown + " 秒时间。");
             countdownText.color = Color.red;
             countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
@@ -113,7 +113,7 @@ namespace SaveYourself.Core
         public void StartPreForwardTimePhase()
         {
             currentState = GameState.PreForwardTime;
-            TimeCountdown = postiveLevelInfos[levelIndex].duration;
+            TimeCountdown = getTimeLimit();
             // 禁用逆时空玩家，激活正时空AI
             reverseWorld.SetActive(false);
             pastWorld.SetActive(true);
@@ -140,13 +140,13 @@ namespace SaveYourself.Core
                 }
             }
             // 水变成蒸汽
-            foreach (var wt in waterTransformers)
+            if (waterTransformers != null)
             {
-                wt.changeWater();
+                foreach (var wt in waterTransformers)
+                {
+                    wt.changeWater();
+                }
             }
-            // 触发一个事件，让所有可逆转物体根据之前的操作更新状态
-            // 我们用SendMessage来简化，更大型的项目建议用事件系统(UnityEvent/Action)
-            BroadcastMessage("OnForwardTimeStart", SendMessageOptions.DontRequireReceiver);
         }
 
         void Update()
@@ -162,7 +162,7 @@ namespace SaveYourself.Core
                 {
                     StartPreForwardTimePhase();
                 }
-                else if (currentState == GameState.PreForwardTime)
+                if (currentState == GameState.PreForwardTime)
                 {
                     StartForwardTimePhase();
                 }
@@ -171,7 +171,7 @@ namespace SaveYourself.Core
                     StartReverseTimePhase();
                 }
             }
-            if (Input.GetKeyDown(KeyCode.R)) {
+            if (Input.GetKeyDown(KeyCode.P)) {
                 LoadLevel(levelName);
             }
             // 预备时间不倒计时
@@ -185,49 +185,14 @@ namespace SaveYourself.Core
             {
                 StartPreForwardTimePhase();
             }
-            if (gamePassCheck())
-            {
-                LoadNextScene();
-            }
         }
         public void LoadNextScene()
-        {
-            int nextSceneIndex = levelIndex + 1;
-            if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
-            {
-                levelIndex += 1;
-                Debug.LogFormat("load {0} level",levelIndex);
-                SceneManager.LoadScene(levelIndex);
-            }
-        }
-        bool gamePassCheck()
-        {
-            //如果过去的自己到达的终点，现在的自己到达了起点，就通关了
-            if (flagCount == 2 && currentState == GameState.ForwardTime)
-            {
-                Debug.Log("正反世界能量均衡，可以通往下一关");
-                currentState = GameState.LevelComplete;
-                return true;
-            }
-            return false;
-        }
-        private Dictionary<GameState, bool> flags = new Dictionary<GameState, bool>();
-        public int setFlagCount()
-        {
-            if (!flags[GameState.ReverseTime]){
-                flagCount++; 
-                flags[GameState.ReverseTime] = true;
-            }
-            if (!flags[GameState.ForwardTime])
-            {
-                flagCount++;
-                flags[GameState.ForwardTime] = true;
-            }
-            return flagCount;
+        { 
+            LoadLevel(nextLevelName);
         }
         public float getTimeLimit()
         {
-            return reverseLevelInfos[levelIndex].duration;
+            return timeLimit;
         }
         /* 1. 保存当前关卡 */
         public void SaveCheckpoint()
@@ -289,5 +254,9 @@ namespace SaveYourself.Core
             }
             reverseVirtualCamera.enabled = false;
         } 
+        public void Clear()
+        {
+            tracked.Clear();
+        }
     }
 }

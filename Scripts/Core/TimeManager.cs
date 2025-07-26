@@ -106,6 +106,7 @@ namespace SaveYourself.Core
         void Update()
         {
             if (!LoaderManager.Instance.isReady) return;
+            reverseDuration=GameManager.instance.getTimeLimit();
             switch (Instance.phase)
             {
                 case Phase.Reverse:
@@ -156,6 +157,10 @@ namespace SaveYourself.Core
             Physics2D.IgnoreLayerCollision(
             LayerMask.NameToLayer("GhostPlayer"),
             LayerMask.NameToLayer("ShrinkBox"),
+            true);            
+            Physics2D.IgnoreLayerCollision(
+            LayerMask.NameToLayer("GhostPlayer"),
+            LayerMask.NameToLayer("Player"),
             true);
         }
 

@@ -9,8 +9,8 @@ namespace SaveYourself.Interact
     {
         public void  ApplySnapshot(TimeReverse.TimedAction a)
         {
-            rb.MovePosition(a.pos);
-            //transform.position = a.pos;
+            //rb.MovePosition(a.pos);
+            transform.position = a.pos;
             if (ignoreV)
             {
                 rb.velocity = Vector2.zero;

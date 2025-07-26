@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelName: Level2
   nextLevelName: Level3
+  timeLimit: 60
   playerSpawn: {x: 0, y: 0, z: 0}
   items: []

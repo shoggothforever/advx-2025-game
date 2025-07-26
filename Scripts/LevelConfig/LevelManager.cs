@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour
 {
     public LevelConfig config; // Inspector 拖进来
 
-    void Awake()
+    void Start()
     {
         SpawnAll();
     }
@@ -17,6 +17,8 @@ public class LevelManager : MonoBehaviour
         if (config == null) { Debug.LogError("忘记挂 LevelConfig！"); return; }
         GameManager.instance.levelName = config.levelName;
         GameManager.instance.nextLevelName = config.nextLevelName;
+        GameManager.instance.currentState = GameState.PreReverseTime;
+        GameManager.instance.timeLimit = config.timeLimit;
         // 生成所有物件
         int cnt = 0;
         foreach (var i in config.items)
@@ -25,7 +27,7 @@ public class LevelManager : MonoBehaviour
             go.transform.localScale = i.scale;
             if (go.name.StartsWith("BeginPos"))
             {
-                Debug.Log("find Player Variant");
+                Debug.Log("find BeginPos");
                 GameManager.instance.pastWorld = go;
                 cnt++;
             }
@@ -76,9 +78,6 @@ public class LevelManager : MonoBehaviour
             Debug.Log("find reversible boxes");
         }
         LoaderManager.Instance.isReady = true;
-        //var brain = Camera.main.GetComponent<Cinemachine.CinemachineBrain>();
-
-        // 把玩家虚拟相机设为 Live
     }
     public void LoadNextLevel()
     {
