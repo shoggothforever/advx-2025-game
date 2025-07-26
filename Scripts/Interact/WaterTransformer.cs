@@ -8,7 +8,7 @@ public class WaterTransformer : MonoBehaviour
     public GameObject IceArea;
     public GameObject WaterArea;
     public GameObject SteamArea;
-    public bool isOnFire = true;
+    public bool isOnFire = false;
     // Update is called once per frame
     public void Start()
     {
