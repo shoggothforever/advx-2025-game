@@ -136,11 +136,11 @@ GameObject:
   - component: {fileID: 70816445}
   m_Layer: 0
   m_Name: WaterArea
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &70816443
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1403,7 +1403,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: press S to start
+  m_Text: press Z to start
 --- !u!222 &1037284527
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1429,7 +1429,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1295458544
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1571,9 +1571,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bf5f17c3e97d964ba6fa6efe9c5275f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IceArea: {fileID: 0}
-  WaterArea: {fileID: 0}
-  SteamArea: {fileID: 0}
+  IceArea: {fileID: 1295458543}
+  WaterArea: {fileID: 70816442}
+  SteamArea: {fileID: 1860228341}
   isOnFire: 1
 --- !u!1 &1381884302
 GameObject:
@@ -3975,7 +3975,7 @@ GameObject:
   - component: {fileID: 1860228344}
   m_Layer: 0
   m_Name: SteamArea
-  m_TagString: Untagged
+  m_TagString: Steam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
