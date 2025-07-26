@@ -67,7 +67,7 @@ namespace SaveYourself.Core
 
         void Start()
         {
-            //reversePlayer.GetComponent<Player>().controlEnabled = false;
+            reversePlayer.GetComponent<Player>().controlEnabled = false;
             boxes = GameObject.FindGameObjectsWithTag("Box");
             Debug.LogFormat("find boxes count:{0}",boxes.Length);
         }
@@ -181,7 +181,7 @@ namespace SaveYourself.Core
             {
                 StartPreForwardTimePhase();
             }
-            if (gamePassCheck() || Input.GetKeyDown(KeyCode.O))
+            if (gamePassCheck())
             {
                 LoadNextScene();
             }

@@ -363,7 +363,7 @@ MonoBehaviour:
   steamGravityScale: 0.3
   waterJumpMult: 0.6
   steamJumpMult: 1.5
-  isReverse: 1
+  isReverse: 0
   maxSpeed: 4.5
   jumpTakeOffSpeed: 4.5
   jumpState: 0
