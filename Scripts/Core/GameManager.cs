@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
                 }
             }
             // Ë®±ä³ÉÕôÆû
-            foreach(var wt in waterTransformers)
+            foreach (var wt in waterTransformers)
             {
                 wt.changeWater();
             }

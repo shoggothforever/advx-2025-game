@@ -12,16 +12,13 @@ public class WaterTransformer : MonoBehaviour
     // Update is called once per frame
     public void Start()
     {
-        if(IceArea != null || SteamArea != null)
-        {
-            isOnFire = true;
-        }
         if(IceArea)IceArea.SetActive(false);
         if(WaterArea)WaterArea.SetActive(true);
         if(SteamArea)SteamArea.SetActive(false);
     }
     public void changeWater()
     {
+        if (!isOnFire) return;
         if (GameManager.instance.currentState == GameState.ReverseTime)
         {
             if(IceArea)IceArea.SetActive(true);
