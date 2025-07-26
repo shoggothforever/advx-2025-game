@@ -219,6 +219,10 @@ public class GameManager : MonoBehaviour
         {
             reverseWorld.SetActive(true);
             reversePlayer.GetComponent<Player>().controlEnabled = false;
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Box"), true);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), true);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), true);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), true);
             //reversePlayer.GetComponent<Player>().tag = "GhostPlayer";
             foreach (var sr in reversePlayer.GetComponentsInChildren<SpriteRenderer>())
             {
