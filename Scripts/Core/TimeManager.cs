@@ -105,6 +105,7 @@ namespace SaveYourself.Core
         // Update is called once per frame
         void Update()
         {
+            if (!LoaderManager.Instance.isReady) return;
             switch (Instance.phase)
             {
                 case Phase.Reverse:

@@ -18,10 +18,17 @@ namespace SaveYourself.Core
         public float startTime;
         public float endTime;
     }
-
-public class GameManager : MonoBehaviour
+    [System.Serializable]
+    public class LevelCheckpoint
+    {
+        public string levelName;                 // Level_01
+        public Vector3 playerPos;
+        public List<TimeReverse.TimedAction> boxHistory; // 箱子/机关回放数据
+    }
+    public class GameManager : MonoBehaviour
     {
         public static GameManager instance;
+        public LevelCheckpoint checkpoint = new();
         static LevelInfo[] reverseLevelInfos = new LevelInfo[] {
         new LevelInfo { level = 1, duration = 10, startTime = 50, endTime = 40 },
         new LevelInfo { level = 2, duration = 10, startTime = 40, endTime = 30 },
@@ -53,14 +60,14 @@ public class GameManager : MonoBehaviour
 
         void Awake()
         {
-            if (instance == null) instance = this;
+            if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); }
             else Destroy(gameObject);
             GetComponentsInChildren<ITimeTrackable>(true, trackedCache);
         }
 
         void Start()
         {
-            reversePlayer.GetComponent<Player>().controlEnabled = false;
+            //reversePlayer.GetComponent<Player>().controlEnabled = false;
             boxes = GameObject.FindGameObjectsWithTag("Box");
             Debug.LogFormat("find boxes count:{0}",boxes.Length);
         }
@@ -143,6 +150,7 @@ public class GameManager : MonoBehaviour
 
         void Update()
         {
+            if (!LoaderManager.Instance.isReady) return;
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 StartReverseTimePhase();
@@ -162,10 +170,6 @@ public class GameManager : MonoBehaviour
                     StartReverseTimePhase();
                 }
             }   
-            if (gamePassCheck())
-            {
-                levelIndex++;
-            }
             // 预备时间不倒计时
             if (TimeCountdown > 0 && currentState != GameState.PreForwardTime)
             {
@@ -177,13 +181,19 @@ public class GameManager : MonoBehaviour
             {
                 StartPreForwardTimePhase();
             }
+            if (gamePassCheck() || Input.GetKeyDown(KeyCode.O))
+            {
+                LoadNextScene();
+            }
         }
-        void LoadNextScene()
+        public void LoadNextScene()
         {
             int nextSceneIndex = levelIndex + 1;
             if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
             {
-                SceneManager.LoadScene(nextSceneIndex);
+                levelIndex += 1;
+                Debug.LogFormat("load {0} level",levelIndex);
+                SceneManager.LoadScene(levelIndex);
             }
         }
         bool gamePassCheck()
@@ -215,6 +225,49 @@ public class GameManager : MonoBehaviour
         {
             return reverseLevelInfos[levelIndex].duration;
         }
+        /* 1. 保存当前关卡 */
+        public void SaveCheckpoint()
+        {
+            checkpoint.levelName = SceneManager.GetActiveScene().name;
+            checkpoint.playerPos = FindObjectOfType<Player>().transform.position;
+
+            // 示例：每个关卡的回放功能，后续需要自己写导出和解析功能
+            //checkpoint.boxHistory = TimeManager.Instance.ExportHistory(); // 自己写导出
+        }
+
+        /* 2. 异步加载关卡 */
+        public void LoadLevel(string levelName)
+        {
+            StartCoroutine(LoadAsync(levelName));
+        }
+
+        IEnumerator LoadAsync(string levelName)
+        {
+            // 淡出 UI
+            //FadeCanvas.FadeOut(0.3f);
+
+            AsyncOperation op = SceneManager.LoadSceneAsync(levelName);
+            op.allowSceneActivation = false;
+
+            while (op.progress < 0.9f) yield return null;
+            op.allowSceneActivation = true;
+
+            // 场景加载完成后
+            yield return new WaitForEndOfFrame();
+            RestoreCheckpoint();
+        }
+
+        /* 3. 恢复存档 */
+        void RestoreCheckpoint()
+        {
+            if (checkpoint.levelName != SceneManager.GetActiveScene().name)
+                return;  // 第一次进本关
+
+            Player p = FindObjectOfType<Player>();
+            if (p) p.transform.position = checkpoint.playerPos;
+            // 恢复存档机制
+            //TimeManager.Instance.ImportHistory(checkpoint.boxHistory);
+        }
         private void EnableReverseSprite()
         {
             reverseWorld.SetActive(true);
@@ -223,7 +276,7 @@ public class GameManager : MonoBehaviour
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), true);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), true);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), true);
-            //reversePlayer.GetComponent<Player>().tag = "GhostPlayer";
+
             foreach (var sr in reversePlayer.GetComponentsInChildren<SpriteRenderer>())
             {
                 Color c = sr.color;
