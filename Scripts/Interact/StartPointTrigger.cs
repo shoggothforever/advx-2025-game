@@ -44,7 +44,7 @@ public class StartPointTrigger : MonoBehaviour
                 // 计数完成
                 currentCount = 0;
                 dic.Clear();
-                //TimeManager.Instance.Clear();
+                TimeManager.Instance.Clear();
 
                 GameManager.instance.LoadNextScene();
             }

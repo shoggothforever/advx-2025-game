@@ -162,7 +162,7 @@ namespace SaveYourself.Core
                 {
                     StartPreForwardTimePhase();
                 }
-                if (currentState == GameState.PreForwardTime)
+                else if (currentState == GameState.PreForwardTime)
                 {
                     StartForwardTimePhase();
                 }
