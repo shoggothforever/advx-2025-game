@@ -55,7 +55,9 @@ namespace SaveYourself.Core
         private int flagCount = 0;
         private float TimeCountdown;
         readonly List<ITimeTrackable> trackedCache = new();
-        GameObject[] boxes;
+        public GameObject[] boxes;
+        public string levelName;
+        public string nextLevelName;
         Dictionary<GameState, bool> tracked = new();
 
         void Awake()
@@ -111,14 +113,13 @@ namespace SaveYourself.Core
         public void StartPreForwardTimePhase()
         {
             currentState = GameState.PreForwardTime;
-            //TimeManager.Instance.UnRegister(reversePlayer.GetComponent<Mechanics.Player>());
             TimeCountdown = postiveLevelInfos[levelIndex].duration;
             // 禁用逆时空玩家，激活正时空AI
             reverseWorld.SetActive(false);
             pastWorld.SetActive(true);
             Debug.Log("准备开始正时空阶段，你有 " + TimeCountdown + " 秒时间。");
             countdownText.color = Color.blue;
-            countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
+            countdownText.text = common.GetTimeCountDownStr(TimeCountdown) +"\n"+"按下 R 键 结束准备";
         }    
         // 开始正时空阶段
         public void StartForwardTimePhase()
@@ -169,7 +170,10 @@ namespace SaveYourself.Core
                 {
                     StartReverseTimePhase();
                 }
-            }   
+            }
+            if (Input.GetKeyDown(KeyCode.R)) {
+                LoadLevel(levelName);
+            }
             // 预备时间不倒计时
             if (TimeCountdown > 0 && currentState != GameState.PreForwardTime)
             {

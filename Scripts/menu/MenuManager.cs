@@ -11,5 +11,9 @@ namespace SaveYourself.menu
         {
             GameManager.instance.LoadNextScene();
         }
+        public void OnQuitClick()
+        {
+            Application.Quit();
+        }
     }
 }
