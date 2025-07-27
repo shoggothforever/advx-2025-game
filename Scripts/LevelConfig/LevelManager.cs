@@ -17,7 +17,6 @@ public class LevelManager : MonoBehaviour
         if (config == null) { Debug.LogError("忘记挂 LevelConfig！"); return; }
         GameManager.instance.levelName = config.levelName;
         GameManager.instance.nextLevelName = config.nextLevelName;
-        GameManager.instance.currentState = GameState.PreReverseTime;
         GameManager.instance.timeLimit = config.timeLimit;
         // 生成所有物件
         int cnt = 0;

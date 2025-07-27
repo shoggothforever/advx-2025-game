@@ -45,7 +45,7 @@ public class StartPointTrigger : MonoBehaviour
                 currentCount = 0;
                 dic.Clear();
                 TimeManager.Instance.Clear();
-
+                GameManager.instance.Clear();
                 GameManager.instance.LoadNextScene();
             }
         }

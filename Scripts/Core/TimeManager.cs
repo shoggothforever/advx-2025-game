@@ -98,8 +98,22 @@ namespace SaveYourself.Core
         // 正向阶段结束后清理
         public void Clear()
         {
+            currentTime = 0;
+            phase = Phase.PreReverse;
             history.Clear();
             registry.Clear();
+            Physics2D.IgnoreLayerCollision(
+            LayerMask.NameToLayer("GhostPlayer"),
+            LayerMask.NameToLayer("Box"),
+            false);
+            Physics2D.IgnoreLayerCollision(
+            LayerMask.NameToLayer("GhostPlayer"),
+            LayerMask.NameToLayer("ShrinkBox"),
+            false);
+            Physics2D.IgnoreLayerCollision(
+            LayerMask.NameToLayer("GhostPlayer"),
+            LayerMask.NameToLayer("Player"),
+            false);
         }
         // Update is called once per frame
         void Update()

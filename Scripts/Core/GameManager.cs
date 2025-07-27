@@ -43,7 +43,7 @@ namespace SaveYourself.Core
         new LevelInfo { level = 4, duration = 10, startTime = 20, endTime = 40 },
         new LevelInfo { level = 5, duration = 10, startTime = 0, endTime = 20 },
         };
-        public GameState currentState=GameState.ReverseTime;
+        public GameState currentState=GameState.PreReverseTime;
         public GameObject reverseWorld; // 逆时空
         public GameObject reversePlayer; // 逆时空
         public Cinemachine.CinemachineVirtualCamera reverseVirtualCamera; // 逆时空摄像机
@@ -51,7 +51,6 @@ namespace SaveYourself.Core
         public GameObject pastPlayer;      // 正时空
         public Text countdownText;       // 用于显示倒计时的UI文本
         public WaterTransformer[] waterTransformers; // 用于控制
-        private int flagCount = 0;
         private float TimeCountdown=10f;
         readonly List<ITimeTrackable> trackedCache = new();
         public GameObject[] boxes;
@@ -73,19 +72,25 @@ namespace SaveYourself.Core
         // 开始逆时空阶段
         public void StartReverseTimePhase()
         {
+            reverseWorld.SetActive(true);
             reversePlayer.SetActive(true);
             reversePlayer.GetComponent<Player>().enabled = true;
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Box"), false);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), false);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), false);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), false);
             currentState = GameState.ReverseTime;
             TimeCountdown = getTimeLimit();
             TimeManager.Instance.phase=TimeManager.Phase.Reverse;
             // 激活逆时空玩家，禁用正时空AI
-            reverseWorld.SetActive(true);
+
             if (!tracked.ContainsKey(GameState.ReverseTime))
             {
-                tracked[GameState.ReverseTime] = true;
+                tracked.Add(GameState.ReverseTime,true);
                 var per = reversePlayer.GetComponent<Mechanics.Player>();
                 //Debug.LogFormat("get player id {0}", per.Id);
                 TimeManager.Instance.Register(per);
+                Debug.Log("register reverse player into TimeManager, ID: "+per.Id);
                 foreach (var box in boxes)
                 {
                     if (box.name.StartsWith("reversible_box"))
@@ -265,7 +270,17 @@ namespace SaveYourself.Core
         } 
         public void Clear()
         {
+            trackedCache.Clear();
             tracked.Clear();
+            currentState = GameState.PreReverseTime;
+            reverseWorld = null;
+            reversePlayer = null;
+            reverseVirtualCamera = null;
+            pastPlayer = null;
+            pastWorld = null;
+            countdownText = null;
+            waterTransformers = null;
+            boxes = null;
         }
     }
 }
