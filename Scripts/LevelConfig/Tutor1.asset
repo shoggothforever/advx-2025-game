@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97f1b54f76e58444cba6ea52384414da, type: 3}
+  m_Name: Tutor1
+  m_EditorClassIdentifier: 
+  levelName: Tutorial1
+  nextLevelName: Tutorial2
+  timeLimit: 10
+  playerSpawn: {x: 0, y: 0, z: 0}
+  items:
+  - prefab: {fileID: 6021138300331296203, guid: 6f11f60719b443a48adbef40a6806d17, type: 3}
+    position: {x: 15.583969, y: 1.8, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - prefab: {fileID: 701581881313865964, guid: ec795d0e758808d4882a9dfbc316ff12, type: 3}
+    position: {x: 15.44, y: 1.8, z: 1}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 2, y: 2, z: 1}
+  - prefab: {fileID: 1534842449224503505, guid: fca333b95db9f484badce7fe4ccd9166, type: 3}
+    position: {x: -0.34347677, y: -2.3027894, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - prefab: {fileID: 7321652345534660310, guid: f603362502dd69e408f932278b6941a1, type: 3}
+    position: {x: -0.43, y: -2.36, z: 1}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 2, y: 2, z: 1}
+  - prefab: {fileID: 5341967815127932476, guid: dd801b96afc84a7459b24a30ea5f869d, type: 3}
+    position: {x: 9.559165, y: 2.5986044, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - prefab: {fileID: 3024578306212300893, guid: 90620d5f0c174a342a283e23ec5d9a82, type: 3}
+    position: {x: 9.559165, y: 2.5986044, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}

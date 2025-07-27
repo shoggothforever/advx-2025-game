@@ -9,8 +9,8 @@ namespace SaveYourself.Interact
     {
         public void  ApplySnapshot(TimeReverse.TimedAction a)
         {
-            rb.MovePosition(a.pos);
-            //transform.position = a.pos;
+            //rb.MovePosition(a.pos);
+            transform.position = a.pos;
             if (ignoreV)
             {
                 rb.velocity = Vector2.zero;
@@ -55,18 +55,6 @@ namespace SaveYourself.Interact
         public bool canPressDown;
         public bool canShrink=false;
         public bool ignoreV = true;
-        bool CanPushToLeft()
-        {
-            return false;
-        }
-        bool CanPushToRight()
-        {
-            return false;
-        } 
-        bool CanPressDown()
-        {
-            return false;
-        }
 
 
     }

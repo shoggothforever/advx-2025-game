@@ -15,7 +15,6 @@ namespace SaveYourself.Core
         public float currentTime=0;             // 0..reverseDuration
         readonly List<TimeReverse.TimedAction> history = new();
         readonly Dictionary<int, TimeReverse.ITimeTrackable> registry = new();
-        static public float global_time = 0f;
         static private TimeManager instance_;
         public static TimeManager Instance
         {
@@ -99,12 +98,28 @@ namespace SaveYourself.Core
         // 正向阶段结束后清理
         public void Clear()
         {
+            currentTime = 0;
+            phase = Phase.PreReverse;
             history.Clear();
             registry.Clear();
+            Physics2D.IgnoreLayerCollision(
+            LayerMask.NameToLayer("GhostPlayer"),
+            LayerMask.NameToLayer("Box"),
+            false);
+            Physics2D.IgnoreLayerCollision(
+            LayerMask.NameToLayer("GhostPlayer"),
+            LayerMask.NameToLayer("ShrinkBox"),
+            false);
+            Physics2D.IgnoreLayerCollision(
+            LayerMask.NameToLayer("GhostPlayer"),
+            LayerMask.NameToLayer("Player"),
+            false);
         }
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
+            //if (!LoaderManager.Instance.isReady) return;
+            reverseDuration=GameManager.instance.getTimeLimit();
             switch (Instance.phase)
             {
                 case Phase.Reverse:
@@ -155,6 +170,10 @@ namespace SaveYourself.Core
             Physics2D.IgnoreLayerCollision(
             LayerMask.NameToLayer("GhostPlayer"),
             LayerMask.NameToLayer("ShrinkBox"),
+            true);            
+            Physics2D.IgnoreLayerCollision(
+            LayerMask.NameToLayer("GhostPlayer"),
+            LayerMask.NameToLayer("Player"),
             true);
         }
 

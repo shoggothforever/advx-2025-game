@@ -10,9 +10,15 @@ namespace SaveYourself.Mechanics
 {
     public class Player : basePlayer,TimeReverse.ITimeTrackable
     {
-        //public AudioClip jumpAudio;
-        //public AudioClip respawnAudio;
-        //public AudioClip ouchAudio;
+        [Header("Water Effects")]
+        public float waterGravityScale = 0f;          // 普通水
+        public float steamGravityScale = 0.3f;        // 蒸汽
+        public float waterJumpMult = 0.6f;            // 普通水
+        public float steamJumpMult = 1.5f;            // 蒸汽
+
+        float defaultGravity;
+        float defaultJumpTakeOffSpeed;
+        bool inWater;
         public bool isReverse = false;
         /// <summary>
         /// Max horizontal speed of the player.
@@ -52,8 +58,12 @@ namespace SaveYourself.Mechanics
             animator = GetComponent<Animator>();
             Id = nextId++;
             anim = GetComponent<Animator>();
+            defaultJumpTakeOffSpeed = jumpTakeOffSpeed;
         }
-
+        void Start()
+        {
+            defaultGravity = body.gravityScale;
+        }
         public TimeReverse.TimedAction RecordSnapshot()
         {
             return new TimeReverse.TimedAction
@@ -141,6 +151,13 @@ namespace SaveYourself.Mechanics
 
         protected override void ComputeVelocity()
         {
+            // 如果在水里，让 WASD 直接控制 velocity
+            if (inWater)
+            {
+                Vector2 swim = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+                velocity = swim * maxSpeed * 0.8f;   // 0.8 可调整水中速度
+                //return;                                // 跳过原平台逻辑
+            }
             if (jump && IsGrounded)
             {
                 velocity.y = jumpTakeOffSpeed * model.jumpModifier;
@@ -169,6 +186,31 @@ namespace SaveYourself.Mechanics
             animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
 
             targetVelocity = move * maxSpeed;
+        }
+        void OnTriggerEnter2D(Collider2D c)
+        {
+            if (c.CompareTag("Water"))
+            {
+                body.gravityScale = waterGravityScale;
+                jumpTakeOffSpeed = defaultJumpTakeOffSpeed * waterJumpMult;
+                inWater = true;
+            }
+            else if (c.CompareTag("Steam"))
+            {
+                body.gravityScale = steamGravityScale;
+                jumpTakeOffSpeed = defaultJumpTakeOffSpeed * steamJumpMult;
+                inWater = true;
+            }
+        }
+
+        void OnTriggerExit2D(Collider2D c)
+        {
+            if (c.CompareTag("Water") || c.CompareTag("Steam"))
+            {
+                body.gravityScale = defaultGravity;
+                jumpTakeOffSpeed = defaultJumpTakeOffSpeed;
+                inWater = false;
+            }
         }
         void OnCollisionStay2D(Collision2D c)
         {

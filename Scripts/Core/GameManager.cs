@@ -18,10 +18,17 @@ namespace SaveYourself.Core
         public float startTime;
         public float endTime;
     }
-
-public class GameManager : MonoBehaviour
+    [System.Serializable]
+    public class LevelCheckpoint
+    {
+        public string levelName;                 // Level_01
+        public Vector3 playerPos;
+        public List<TimeReverse.TimedAction> boxHistory; // 箱子/机关回放数据
+    }
+    public class GameManager : MonoBehaviour
     {
         public static GameManager instance;
+        public LevelCheckpoint checkpoint = new();
         static LevelInfo[] reverseLevelInfos = new LevelInfo[] {
         new LevelInfo { level = 1, duration = 10, startTime = 50, endTime = 40 },
         new LevelInfo { level = 2, duration = 10, startTime = 40, endTime = 30 },
@@ -36,50 +43,51 @@ public class GameManager : MonoBehaviour
         new LevelInfo { level = 4, duration = 10, startTime = 20, endTime = 40 },
         new LevelInfo { level = 5, duration = 10, startTime = 0, endTime = 20 },
         };
-        public GameState currentState=GameState.ReverseTime;
+        public GameState currentState=GameState.PreReverseTime;
         public GameObject reverseWorld; // 逆时空
         public GameObject reversePlayer; // 逆时空
         public Cinemachine.CinemachineVirtualCamera reverseVirtualCamera; // 逆时空摄像机
         public GameObject pastWorld;      // 正时空
         public GameObject pastPlayer;      // 正时空
         public Text countdownText;       // 用于显示倒计时的UI文本
-        public WaterTransformer[] waterTransformers; // 用于控制
-        private static int levelIndex = 0;
-        private int flagCount = 0;
-        private float TimeCountdown;
+        public List<WaterTransformer> waterTransformers; // 用于控制
+        private float TimeCountdown=10f;
         readonly List<ITimeTrackable> trackedCache = new();
-        GameObject[] boxes;
+        public GameObject[] boxes;
+        public string levelName;
+        public string nextLevelName;
+        public float timeLimit;
         Dictionary<GameState, bool> tracked = new();
-
-        void Awake()
-        {
-            if (instance == null) instance = this;
-            else Destroy(gameObject);
-            GetComponentsInChildren<ITimeTrackable>(true, trackedCache);
-        }
 
         void Start()
         {
-            reversePlayer.GetComponent<Player>().controlEnabled = false;
+            if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); }
+            else Destroy(gameObject);
+            GetComponentsInChildren<ITimeTrackable>(true, trackedCache);
             boxes = GameObject.FindGameObjectsWithTag("Box");
-            Debug.LogFormat("find boxes count:{0}",boxes.Length);
+            Debug.LogFormat("find boxes count:{0}", boxes.Length);
         }
+
 
         // 开始逆时空阶段
         public void StartReverseTimePhase()
         {
-            reversePlayer.GetComponent<Player>().controlEnabled = true;
+            reverseWorld.SetActive(true);
+            reversePlayer.SetActive(true);
+            reversePlayer.GetComponent<Player>().enabled = true;
+            SetGhostPhysicsIgnoreCollision(false);
             currentState = GameState.ReverseTime;
-            TimeCountdown = reverseLevelInfos[levelIndex].duration;
+            TimeCountdown = getTimeLimit();
             TimeManager.Instance.phase=TimeManager.Phase.Reverse;
             // 激活逆时空玩家，禁用正时空AI
-            reverseWorld.SetActive(true);
+
             if (!tracked.ContainsKey(GameState.ReverseTime))
             {
-                tracked[GameState.ReverseTime] = true;
+                tracked.Add(GameState.ReverseTime,true);
                 var per = reversePlayer.GetComponent<Mechanics.Player>();
                 //Debug.LogFormat("get player id {0}", per.Id);
                 TimeManager.Instance.Register(per);
+                Debug.Log("register reverse player into TimeManager, ID: "+per.Id);
                 foreach (var box in boxes)
                 {
                     if (box.name.StartsWith("reversible_box"))
@@ -90,11 +98,26 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
+
+            if (waterTransformers == null) { 
+                Scene scene = SceneManager.GetSceneByName(levelName);
+                if (!scene.isLoaded) return;
+                waterTransformers = new();
+                foreach (var t in LoaderManager.FindComponentsInScene<WaterTransformer>(levelName))
+                {
+                    if (t != null)
+                    {
+                        waterTransformers.Add(t);
+                        Debug.Log("add waterTransform into game manager");
+                    }
+
+                }
+            }
             foreach (var wt in waterTransformers)
             {
                 wt.changeWater();
             }
-            pastWorld.SetActive(false);
+            pastPlayer.SetActive(false);
             Debug.Log("逆时空阶段开始！你有 " + TimeCountdown + " 秒时间。");
             countdownText.color = Color.red;
             countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
@@ -104,14 +127,13 @@ public class GameManager : MonoBehaviour
         public void StartPreForwardTimePhase()
         {
             currentState = GameState.PreForwardTime;
-            //TimeManager.Instance.UnRegister(reversePlayer.GetComponent<Mechanics.Player>());
-            TimeCountdown = postiveLevelInfos[levelIndex].duration;
+            TimeCountdown = getTimeLimit();
             // 禁用逆时空玩家，激活正时空AI
             reverseWorld.SetActive(false);
             pastWorld.SetActive(true);
             Debug.Log("准备开始正时空阶段，你有 " + TimeCountdown + " 秒时间。");
             countdownText.color = Color.blue;
-            countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
+            countdownText.text = common.GetTimeCountDownStr(TimeCountdown) +"\n"+"按下 R 键 结束准备";
         }    
         // 开始正时空阶段
         public void StartForwardTimePhase()
@@ -132,20 +154,26 @@ public class GameManager : MonoBehaviour
                 }
             }
             // 水变成蒸汽
-            foreach(var wt in waterTransformers)
+            if (waterTransformers != null)
             {
-                wt.changeWater();
+                foreach (var wt in waterTransformers)
+                {
+                    wt.changeWater();
+                }
             }
-            // 触发一个事件，让所有可逆转物体根据之前的操作更新状态
-            // 我们用SendMessage来简化，更大型的项目建议用事件系统(UnityEvent/Action)
-            BroadcastMessage("OnForwardTimeStart", SendMessageOptions.DontRequireReceiver);
         }
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.S))
+            if (!LoaderManager.Instance.isReady) return;
+            if (currentState == GameState.PreReverseTime)
             {
-                StartReverseTimePhase();
+                countdownText.text = "press Z to start";
+                if (Input.GetKeyDown(KeyCode.Z))
+                {
+                    StartReverseTimePhase();
+                }
+                return;
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
@@ -161,65 +189,85 @@ public class GameManager : MonoBehaviour
                 {
                     StartReverseTimePhase();
                 }
-            }   
-            if (gamePassCheck())
-            {
-                levelIndex++;
+            }
+            if (Input.GetKeyDown(KeyCode.P)) {
+                LoadLevel(levelName);
             }
             // 预备时间不倒计时
-            if (TimeCountdown > 0 && currentState != GameState.PreForwardTime)
+            if (TimeCountdown > 0 && (currentState != GameState.PreForwardTime || currentState != GameState.PreForwardTime))
             {
                 TimeCountdown = TimeCountdown - Time.deltaTime;
                 //Debug.Log("你有 " + TimeCountdown + " 秒时间。");
-                countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
+                if(currentState == GameState.PreForwardTime || currentState == GameState.PreForwardTime)
+                {
+                    countdownText.text = "press Z to start";
+                }
+                    else countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
             }// 逆熵世界倒计时结束开始正熵世界
-            else if (currentState == GameState.ReverseTime)
+            else if (TimeCountdown <=0 && currentState == GameState.ReverseTime)
             {
                 StartPreForwardTimePhase();
             }
         }
-        void LoadNextScene()
+        public void LoadNextScene()
         {
-            int nextSceneIndex = levelIndex + 1;
-            if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
-            {
-                SceneManager.LoadScene(nextSceneIndex);
-            }
-        }
-        bool gamePassCheck()
-        {
-            //如果过去的自己到达的终点，现在的自己到达了起点，就通关了
-            if (flagCount == 2 && currentState == GameState.ForwardTime)
-            {
-                Debug.Log("正反世界能量均衡，可以通往下一关");
-                currentState = GameState.LevelComplete;
-                return true;
-            }
-            return false;
-        }
-        private Dictionary<GameState, bool> flags = new Dictionary<GameState, bool>();
-        public int setFlagCount()
-        {
-            if (!flags[GameState.ReverseTime]){
-                flagCount++; 
-                flags[GameState.ReverseTime] = true;
-            }
-            if (!flags[GameState.ForwardTime])
-            {
-                flagCount++;
-                flags[GameState.ForwardTime] = true;
-            }
-            return flagCount;
+            Clear();
+            TimeManager.Instance.Clear();
+            LoadLevel(nextLevelName);
         }
         public float getTimeLimit()
         {
-            return reverseLevelInfos[levelIndex].duration;
+            return timeLimit;
+        }
+        /* 1. 保存当前关卡 */
+        public void SaveCheckpoint()
+        {
+            checkpoint.levelName = SceneManager.GetActiveScene().name;
+            checkpoint.playerPos = FindObjectOfType<Player>().transform.position;
+
+            // 示例：每个关卡的回放功能，后续需要自己写导出和解析功能
+            //checkpoint.boxHistory = TimeManager.Instance.ExportHistory(); // 自己写导出
+        }
+
+        /* 2. 异步加载关卡 */
+        public void LoadLevel(string levelName)
+        {
+            StartCoroutine(LoadAsync(levelName));
+        }
+
+        IEnumerator LoadAsync(string levelName)
+        {
+            // 淡出 UI
+            //FadeCanvas.FadeOut(0.3f);
+
+            AsyncOperation op = SceneManager.LoadSceneAsync(levelName);
+            op.allowSceneActivation = false;
+
+            while (op.progress < 0.9f) yield return null;
+            op.allowSceneActivation = true;
+
+            // 场景加载完成后
+            yield return new WaitForEndOfFrame();
+            RestoreCheckpoint();
+        }
+
+        /* 3. 恢复存档 */
+        void RestoreCheckpoint()
+        {
+            if (checkpoint.levelName != SceneManager.GetActiveScene().name)
+                return;  // 第一次进本关
+
+            Player p = FindObjectOfType<Player>();
+            if (p) p.transform.position = checkpoint.playerPos;
+            // 恢复存档机制
+            //TimeManager.Instance.ImportHistory(checkpoint.boxHistory);
         }
         private void EnableReverseSprite()
         {
             reverseWorld.SetActive(true);
             reversePlayer.GetComponent<Player>().controlEnabled = false;
-            //reversePlayer.GetComponent<Player>().tag = "GhostPlayer";
+            SetGhostPhysicsIgnoreCollision(true);
+
             foreach (var sr in reversePlayer.GetComponentsInChildren<SpriteRenderer>())
             {
                 Color c = sr.color;
@@ -228,5 +276,26 @@ public class GameManager : MonoBehaviour
             }
             reverseVirtualCamera.enabled = false;
         } 
+        void SetGhostPhysicsIgnoreCollision(bool isIgnore)
+        {
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Box"), isIgnore);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), isIgnore);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), isIgnore);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), isIgnore);
+        }
+        public void Clear()
+        {
+            trackedCache.Clear();
+            tracked.Clear();
+            currentState = GameState.PreReverseTime;
+            reverseWorld = null;
+            reversePlayer = null;
+            reverseVirtualCamera = null;
+            pastPlayer = null;
+            pastWorld = null;
+            countdownText = null;
+            waterTransformers = null;
+            boxes = null;
+        }
     }
 }
