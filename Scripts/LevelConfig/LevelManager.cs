@@ -77,7 +77,7 @@ public class LevelManager : MonoBehaviour
         {
             Debug.Log("find reversible boxes");
         }
-        LoaderManager.Instance.isReady = true;
+        if(cnt>=2)LoaderManager.Instance.isReady = true;
     }
     public void LoadNextLevel()
     {

@@ -15,7 +15,6 @@ namespace SaveYourself.Core
         public float currentTime=0;             // 0..reverseDuration
         readonly List<TimeReverse.TimedAction> history = new();
         readonly Dictionary<int, TimeReverse.ITimeTrackable> registry = new();
-        static public float global_time = 0f;
         static private TimeManager instance_;
         public static TimeManager Instance
         {
@@ -105,7 +104,7 @@ namespace SaveYourself.Core
         // Update is called once per frame
         void Update()
         {
-            if (!LoaderManager.Instance.isReady) return;
+            //if (!LoaderManager.Instance.isReady) return;
             reverseDuration=GameManager.instance.getTimeLimit();
             switch (Instance.phase)
             {

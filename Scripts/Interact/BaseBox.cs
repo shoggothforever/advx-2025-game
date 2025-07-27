@@ -55,18 +55,6 @@ namespace SaveYourself.Interact
         public bool canPressDown;
         public bool canShrink=false;
         public bool ignoreV = true;
-        bool CanPushToLeft()
-        {
-            return false;
-        }
-        bool CanPushToRight()
-        {
-            return false;
-        } 
-        bool CanPressDown()
-        {
-            return false;
-        }
 
 
     }

@@ -52,7 +52,7 @@ namespace SaveYourself.Core
         public Text countdownText;       // 用于显示倒计时的UI文本
         public WaterTransformer[] waterTransformers; // 用于控制
         private int flagCount = 0;
-        private float TimeCountdown;
+        private float TimeCountdown=10f;
         readonly List<ITimeTrackable> trackedCache = new();
         public GameObject[] boxes;
         public string levelName;
@@ -152,9 +152,14 @@ namespace SaveYourself.Core
         void Update()
         {
             if (!LoaderManager.Instance.isReady) return;
-            if (Input.GetKeyDown(KeyCode.Z))
+            if (currentState == GameState.PreReverseTime)
             {
-                StartReverseTimePhase();
+                countdownText.text = "press Z to start";
+                if (Input.GetKeyDown(KeyCode.Z))
+                {
+                    StartReverseTimePhase();
+                }
+                return;
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
@@ -175,13 +180,17 @@ namespace SaveYourself.Core
                 LoadLevel(levelName);
             }
             // 预备时间不倒计时
-            if (TimeCountdown > 0 && currentState != GameState.PreForwardTime)
+            if (TimeCountdown > 0 && (currentState != GameState.PreForwardTime || currentState != GameState.PreForwardTime))
             {
                 TimeCountdown = TimeCountdown - Time.deltaTime;
                 //Debug.Log("你有 " + TimeCountdown + " 秒时间。");
-                countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
+                if(currentState == GameState.PreForwardTime || currentState == GameState.PreForwardTime)
+                {
+                    countdownText.text = "press Z to start";
+                }
+                    else countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
             }// 逆熵世界倒计时结束开始正熵世界
-            else if (currentState == GameState.ReverseTime)
+            else if (TimeCountdown <=0 && currentState == GameState.ReverseTime)
             {
                 StartPreForwardTimePhase();
             }
