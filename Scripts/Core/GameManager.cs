@@ -50,7 +50,7 @@ namespace SaveYourself.Core
         public GameObject pastWorld;      // 正时空
         public GameObject pastPlayer;      // 正时空
         public Text countdownText;       // 用于显示倒计时的UI文本
-        public WaterTransformer[] waterTransformers; // 用于控制
+        public List<WaterTransformer> waterTransformers; // 用于控制
         private float TimeCountdown=10f;
         readonly List<ITimeTrackable> trackedCache = new();
         public GameObject[] boxes;
@@ -75,10 +75,7 @@ namespace SaveYourself.Core
             reverseWorld.SetActive(true);
             reversePlayer.SetActive(true);
             reversePlayer.GetComponent<Player>().enabled = true;
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Box"), false);
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), false);
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), false);
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), false);
+            SetGhostPhysicsIgnoreCollision(false);
             currentState = GameState.ReverseTime;
             TimeCountdown = getTimeLimit();
             TimeManager.Instance.phase=TimeManager.Phase.Reverse;
@@ -101,12 +98,24 @@ namespace SaveYourself.Core
                     }
                 }
             }
-            if (waterTransformers != null)
-            {
-                foreach (var wt in waterTransformers)
+
+            if (waterTransformers == null) { 
+                Scene scene = SceneManager.GetSceneByName(levelName);
+                if (!scene.isLoaded) return;
+                waterTransformers = new();
+                foreach (var t in LoaderManager.FindComponentsInScene<WaterTransformer>(levelName))
                 {
-                    wt.changeWater();
+                    if (t != null)
+                    {
+                        waterTransformers.Add(t);
+                        Debug.Log("add waterTransform into game manager");
+                    }
+
                 }
+            }
+            foreach (var wt in waterTransformers)
+            {
+                wt.changeWater();
             }
             pastPlayer.SetActive(false);
             Debug.Log("逆时空阶段开始！你有 " + TimeCountdown + " 秒时间。");
@@ -201,7 +210,9 @@ namespace SaveYourself.Core
             }
         }
         public void LoadNextScene()
-        { 
+        {
+            Clear();
+            TimeManager.Instance.Clear();
             LoadLevel(nextLevelName);
         }
         public float getTimeLimit()
@@ -255,10 +266,7 @@ namespace SaveYourself.Core
         {
             reverseWorld.SetActive(true);
             reversePlayer.GetComponent<Player>().controlEnabled = false;
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Box"), true);
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), true);
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), true);
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), true);
+            SetGhostPhysicsIgnoreCollision(true);
 
             foreach (var sr in reversePlayer.GetComponentsInChildren<SpriteRenderer>())
             {
@@ -268,6 +276,13 @@ namespace SaveYourself.Core
             }
             reverseVirtualCamera.enabled = false;
         } 
+        void SetGhostPhysicsIgnoreCollision(bool isIgnore)
+        {
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Box"), isIgnore);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), isIgnore);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), isIgnore);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), isIgnore);
+        }
         public void Clear()
         {
             trackedCache.Clear();

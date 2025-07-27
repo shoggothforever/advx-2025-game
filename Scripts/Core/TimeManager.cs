@@ -116,7 +116,7 @@ namespace SaveYourself.Core
             false);
         }
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
             //if (!LoaderManager.Instance.isReady) return;
             reverseDuration=GameManager.instance.getTimeLimit();

@@ -7,7 +7,6 @@ using static LoaderManager;
 public class LevelManager : MonoBehaviour
 {
     public LevelConfig config; // Inspector ÍÏ½øÀ´
-
     void Start()
     {
         SpawnAll();
@@ -59,13 +58,13 @@ public class LevelManager : MonoBehaviour
                 }
                 ++cnt;
             }
-            else if (go.name.StartsWith("waterTransformers"))
+            else if (go.name.StartsWith("waterTransformer"))
             {
                 Debug.Log("find waterTransformers");
-                GameManager.instance.waterTransformers = go.GetComponent<WaterTransformer[]>();
+                GameManager.instance.waterTransformers = go.GetComponent<List<WaterTransformer>>();
             }else if (go.name.StartsWith("Canvas"))
             {
-                Debug.Log("find waterTransformers");
+                Debug.Log("find Canvas");
                 go.GetComponent<Canvas>().worldCamera=Camera.main;
                 GameManager.instance.countdownText=go.GetComponentInChildren<Text>();
                 ++cnt;
@@ -82,6 +81,8 @@ public class LevelManager : MonoBehaviour
     {
         if (config == null) { Debug.LogError("Íü¼Ç¹Ò LevelConfig£¡"); return; }
         LoaderManager.Instance.isReady = false;
+        TimeManager.Instance.Clear();
+        GameManager.instance.Clear();
         LoaderManager.Instance.LoadScene(config.nextLevelName);
     }
     public void ReloadLevel()
@@ -99,6 +100,10 @@ public class LevelManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.N))
         {
             LoadNextLevel();
+        }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
         }
     }
 

@@ -826,6 +826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingCanvas: {fileID: 1662543028}
   progressBar: {fileID: 67408431}
+  isReady: 0
 --- !u!1 &2077218357
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,8 +953,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
+  far clip plane: 2000
+  field of view: 84
   orthographic: 1
   orthographic size: 5
   m_Depth: -1

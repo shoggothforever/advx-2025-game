@@ -1,13 +1,14 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 using UnityEngine.UI;
 using SaveYourself.Core;
 using SaveYourself.Mechanics;
 public class LoaderManager : MonoBehaviour
 {
     public static LoaderManager Instance { get; private set; }
-
+    public string startLevel = "MainMenu";
     [Header("UI")]
     public CanvasGroup loadingCanvas;   // 拖 CanvasGroup
     public Slider progressBar;     // 可选
@@ -22,7 +23,7 @@ public class LoaderManager : MonoBehaviour
         DontDestroyOnLoad(loadingCanvas.gameObject);
         DontDestroyOnLoad(progressBar.gameObject);
         // 2. 直接进入开始菜单
-        LoadScene("MainMenu");
+        LoadScene(startLevel);
     }
 
     void InitManagers()
@@ -59,5 +60,14 @@ public class LoaderManager : MonoBehaviour
 
         op.allowSceneActivation = true;
         loadingCanvas.alpha = 0f;
+    }
+    public static T[] FindComponentsInScene<T>(string sceneName) where T : Component
+    {
+        Scene scene = SceneManager.GetSceneByName(sceneName);
+        return scene.isLoaded
+            ? scene.GetRootGameObjects()
+                   .SelectMany(go => go.GetComponentsInChildren<T>(true))
+                   .ToArray()
+            : new T[0];
     }
 }
