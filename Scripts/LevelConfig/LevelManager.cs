@@ -103,7 +103,11 @@ public class LevelManager : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            if (config.levelName != "MainMenu")
+            {
+                LoaderManager.Instance.LoadScene("MainMenu");
+            }
+            else Application.Quit();
         }
     }
 
