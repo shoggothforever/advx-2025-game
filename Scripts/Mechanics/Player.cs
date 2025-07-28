@@ -72,6 +72,9 @@ namespace SaveYourself.Mechanics
                 objId = Id,
                 type = TimeReverse.ActionType.Position,
                 pos=transform.position,
+                velocity=body.velocity,
+                rotation=body.rotation,
+
                 //payload = JsonUtility.ToJson(transform.position)
             };
         }
@@ -79,8 +82,8 @@ namespace SaveYourself.Mechanics
         public void ApplySnapshot(TimeReverse.TimedAction a)
         {
             //body.MovePosition(a.pos);
-            transform.position = a.pos;
-            body.velocity = Vector2.zero;
+            transform.position = Vector3.Lerp(transform.position,a.pos,0.4f);
+            //transform.position = a.pos;
         }
         public void SetKe()
         {

@@ -52,6 +52,7 @@ namespace SaveYourself.Core
         public Text countdownText;       // 用于显示倒计时的UI文本
         public List<WaterTransformer> waterTransformers; // 用于控制
         private float TimeCountdown=10f;
+        public float RemainTimeCount=0;
         readonly List<ITimeTrackable> trackedCache = new();
         public GameObject[] boxes;
         public string levelName;
@@ -72,6 +73,7 @@ namespace SaveYourself.Core
         // 开始逆时空阶段
         public void StartReverseTimePhase()
         {
+            RemainTimeCount = 0f;
             reverseWorld.SetActive(true);
             reversePlayer.SetActive(true);
             reversePlayer.GetComponent<Player>().enabled = true;
@@ -127,6 +129,7 @@ namespace SaveYourself.Core
         public void StartPreForwardTimePhase()
         {
             currentState = GameState.PreForwardTime;
+            RemainTimeCount = Mathf.Max(TimeCountdown,0);
             TimeCountdown = getTimeLimit();
             // 禁用逆时空玩家，激活正时空AI
             reverseWorld.SetActive(false);
@@ -165,7 +168,7 @@ namespace SaveYourself.Core
 
         void Update()
         {
-            if (!LoaderManager.Instance.isReady) return;
+            if (levelName!="SampleScene"&&!LoaderManager.Instance.isReady) return;
             if (currentState == GameState.PreReverseTime)
             {
                 countdownText.text = "press Z to start";
@@ -191,7 +194,9 @@ namespace SaveYourself.Core
                 }
             }
             if (Input.GetKeyDown(KeyCode.P)) {
-                LoadLevel(levelName);
+                Clear();
+                TimeManager.Instance.Clear();
+                LoaderManager.Instance.LoadScene(levelName);
             }
             // 预备时间不倒计时
             if (TimeCountdown > 0 && (currentState != GameState.PreForwardTime || currentState != GameState.PreForwardTime))
@@ -213,7 +218,7 @@ namespace SaveYourself.Core
         {
             Clear();
             TimeManager.Instance.Clear();
-            LoadLevel(nextLevelName);
+            LoaderManager.Instance.LoadScene(nextLevelName);
         }
         public float getTimeLimit()
         {
@@ -228,45 +233,12 @@ namespace SaveYourself.Core
             // 示例：每个关卡的回放功能，后续需要自己写导出和解析功能
             //checkpoint.boxHistory = TimeManager.Instance.ExportHistory(); // 自己写导出
         }
-
-        /* 2. 异步加载关卡 */
-        public void LoadLevel(string levelName)
-        {
-            StartCoroutine(LoadAsync(levelName));
-        }
-
-        IEnumerator LoadAsync(string levelName)
-        {
-            // 淡出 UI
-            //FadeCanvas.FadeOut(0.3f);
-
-            AsyncOperation op = SceneManager.LoadSceneAsync(levelName);
-            op.allowSceneActivation = false;
-
-            while (op.progress < 0.9f) yield return null;
-            op.allowSceneActivation = true;
-
-            // 场景加载完成后
-            yield return new WaitForEndOfFrame();
-            RestoreCheckpoint();
-        }
-
-        /* 3. 恢复存档 */
-        void RestoreCheckpoint()
-        {
-            if (checkpoint.levelName != SceneManager.GetActiveScene().name)
-                return;  // 第一次进本关
-
-            Player p = FindObjectOfType<Player>();
-            if (p) p.transform.position = checkpoint.playerPos;
-            // 恢复存档机制
-            //TimeManager.Instance.ImportHistory(checkpoint.boxHistory);
-        }
         private void EnableReverseSprite()
         {
             reverseWorld.SetActive(true);
             reversePlayer.GetComponent<Player>().controlEnabled = false;
             SetGhostPhysicsIgnoreCollision(true);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), true);
 
             foreach (var sr in reversePlayer.GetComponentsInChildren<SpriteRenderer>())
             {
@@ -281,19 +253,12 @@ namespace SaveYourself.Core
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Box"), isIgnore);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), isIgnore);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), isIgnore);
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), isIgnore);
         }
         public void Clear()
         {
             trackedCache.Clear();
             tracked.Clear();
             currentState = GameState.PreReverseTime;
-            reverseWorld = null;
-            reversePlayer = null;
-            reverseVirtualCamera = null;
-            pastPlayer = null;
-            pastWorld = null;
-            countdownText = null;
             waterTransformers = null;
             boxes = null;
         }

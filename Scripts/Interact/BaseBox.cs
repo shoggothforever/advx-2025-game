@@ -10,7 +10,7 @@ namespace SaveYourself.Interact
         public void  ApplySnapshot(TimeReverse.TimedAction a)
         {
             //rb.MovePosition(a.pos);
-            transform.position = a.pos;
+            transform.position = Vector3.Lerp(transform.position, a.pos, 0.4f);
             if (ignoreV)
             {
                 rb.velocity = Vector2.zero;
@@ -25,8 +25,10 @@ namespace SaveYourself.Interact
                 objId = Id,
                 type = TimeReverse.ActionType.Position,
                 pos = transform.position,
-                //payload = JsonUtility.ToJson(transform.position)
-            };
+                velocity = rb.velocity,
+                rotation = rb.rotation
+            //payload = JsonUtility.ToJson(transform.position)
+        };
         }
         public bool DetectMove()
         {
@@ -50,12 +52,24 @@ namespace SaveYourself.Interact
                 bc.offset = bc.offset * 2f;    // 如果之前有偏移
             }
         }
-        public bool canPushToLeft;
-        public bool canPushToRight;
-        public bool canPressDown;
         public bool canShrink=false;
         public bool ignoreV = true;
-
+        private Transform originParent=null;
+        public void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.collider.CompareTag("Player"))
+            {
+                originParent = collision.collider.transform.parent;
+                collision.collider.transform.SetParent(transform, true);
+            }
+        }  
+        public void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.collider.CompareTag("Player"))
+            {
+                collision.collider.transform.SetParent(originParent);
+            }
+        }
 
     }
 }

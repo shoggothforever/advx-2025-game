@@ -10,8 +10,6 @@ namespace SaveYourself.Core
         public GameObject reversePlayer;
         public enum Phase { PreReverse,Reverse,PreReplay, Replay, Forward }
         public Phase phase = Phase.PreReverse;
-
-        public float reverseDuration = 10f;   // 逆向阶段总时长
         public float currentTime=0;             // 0..reverseDuration
         readonly List<TimeReverse.TimedAction> history = new();
         readonly Dictionary<int, TimeReverse.ITimeTrackable> registry = new();
@@ -82,14 +80,20 @@ namespace SaveYourself.Core
             {
                 int cnt = 0;
                 rewindIndex = hit;
+                Stack<TimeReverse.TimedAction> st=new();
                 for (; rewindIndex < history.Count && history[rewindIndex].time <= currentTime + dt; ++rewindIndex)
                 {
                     var a = history[rewindIndex];
                     if (registry.TryGetValue(a.objId, out var obj))
                     {
-                        obj.ApplySnapshot(a);
+                        st.Push(a);
+                        //obj.ApplySnapshot(a);k
                         ++cnt;
                     }
+                }
+                while(st.Count > 0)
+                {
+                    registry[st.Peek().objId].ApplySnapshot(st.Pop());
                 }
                 //Debug.LogFormat("apply {0} snapshot",cnt);
             }
@@ -110,21 +114,16 @@ namespace SaveYourself.Core
             LayerMask.NameToLayer("GhostPlayer"),
             LayerMask.NameToLayer("ShrinkBox"),
             false);
-            Physics2D.IgnoreLayerCollision(
-            LayerMask.NameToLayer("GhostPlayer"),
-            LayerMask.NameToLayer("Player"),
-            false);
         }
         // Update is called once per frame
-        void FixedUpdate()
+        void Update()
         {
             //if (!LoaderManager.Instance.isReady) return;
-            reverseDuration=GameManager.instance.getTimeLimit();
             switch (Instance.phase)
             {
                 case Phase.Reverse:
                     Instance.currentTime += Time.deltaTime;
-                    if (Instance.currentTime >= GameManager.instance.getTimeLimit())
+                    if (Instance.currentTime >= GameManager.instance.getTimeLimit() - GameManager.instance.RemainTimeCount)
                     {
                         StartPreReplay();
                     }
@@ -162,7 +161,7 @@ namespace SaveYourself.Core
         void StartReplay()
         {
             Instance.phase = Phase.Replay;
-            Instance.currentTime = Instance.reverseDuration; // 从末尾开始倒放
+            Instance.currentTime = GameManager.instance.getTimeLimit() - GameManager.instance.RemainTimeCount; // 从末尾开始倒放
             Physics2D.IgnoreLayerCollision(
             LayerMask.NameToLayer("GhostPlayer"),
             LayerMask.NameToLayer("Box"),

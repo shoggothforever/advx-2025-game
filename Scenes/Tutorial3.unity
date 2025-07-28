@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 548263427}
   m_Layer: 10
   m_Name: steamArea
-  m_TagString: Untagged
+  m_TagString: Steam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

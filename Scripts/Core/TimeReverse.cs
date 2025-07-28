@@ -13,6 +13,8 @@ namespace SaveYourself.Core
             public int objId;           // 物体唯一 id
             public ActionType type;     // 枚举：Position, AnimatorBool, AnimatorTrigger...
             public Vector3 pos;
+            public Vector3 velocity;
+            public float rotation;
             public string payload;      // JSON 字符串，可存 Vector3、bool 等
         }
         // 为了让 JSON 能序列化 Vector3
