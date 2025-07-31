@@ -10,25 +10,29 @@ public class LoaderManager : MonoBehaviour
     public static LoaderManager Instance { get; private set; }
     public string startLevel = "MainMenu";
     [Header("UI")]
-    public CanvasGroup loadingCanvas;   // ÍÏ CanvasGroup
-    public Slider progressBar;     // ¿ÉÑ¡
+    public CanvasGroup loadingCanvas;   // æ‹– CanvasGroup
+    public Slider progressBar;     // å¯é€‰
     public bool isReady = false;
     void Awake()
     {
         if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
         else { Destroy(gameObject); return; }
 
-        // 1. ³õÊ¼»¯È«¾Ö¹ÜÀíÆ÷
+        // 1. åˆå§‹åŒ–å…¨å±€ç®¡ç†å™¨
         InitManagers();
         DontDestroyOnLoad(loadingCanvas.gameObject);
         DontDestroyOnLoad(progressBar.gameObject);
-        // 2. Ö±½Ó½øÈë¿ªÊ¼²Ëµ¥
+
+    }
+    void Start()
+    {
+        //ç›´æ¥è¿›å…¥å¼€å§‹èœå•
         LoadScene(startLevel);
     }
 
     void InitManagers()
     {
-        // °´Ğè AddComponent »òÓÃ Addressable ÊµÀı»¯
+        // æŒ‰éœ€ AddComponent æˆ–ç”¨ Addressable å®ä¾‹åŒ–
         //gameObject.AddComponent<AudioManager>();
 
         gameObject.AddComponent<GameManager>();
@@ -36,15 +40,18 @@ public class LoaderManager : MonoBehaviour
         gameObject.AddComponent<SaveManager>();
     }
 
-    /* ¹«¿ª API£¬ÈÎºÎµØ·½¶¼ÄÜµ÷ÓÃ */
+    /* å…¬å¼€ APIï¼Œä»»ä½•åœ°æ–¹éƒ½èƒ½è°ƒç”¨ */
     public void LoadScene(string sceneName)
     {
-        StartCoroutine(LoadAsync(sceneName));
+        if (SaveManager.Instance.Data.levels.ContainsKey(sceneName))
+        {
+            StartCoroutine(LoadAsync(sceneName));
+        }
     }
 
     IEnumerator LoadAsync(string sceneName)
     {
-        loadingCanvas.alpha = 1f;           // ÏÔÊ¾¼ÓÔØ UI
+        loadingCanvas.alpha = 1f;           // æ˜¾ç¤ºåŠ è½½ UI
         yield return null;
 
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);

@@ -10,7 +10,7 @@ namespace SaveYourself.Core
         void Save(string path, string raw);
         string Load(string path);
     }
-    // PC/Mac£ºApplication.persistentDataPath
+    // PC/Macï¼šApplication.persistentDataPath
     public class LocalFileStorage : IStorageBackend
     {
 
@@ -32,17 +32,17 @@ namespace SaveYourself.Core
     {
         public static SaveManager Instance { get; private set; }
 
-        //[Header("ÅäÖÃ")]
-        //[SerializeField] private LevelConfig sceneList; // ÓÃÀ´Ğ£Ñé¹Ø¿¨ÓĞĞ§ĞÔ
+        //[Header("é…ç½®")]
+        //[SerializeField] private LevelConfig sceneList; // ç”¨æ¥æ ¡éªŒå…³å¡æœ‰æ•ˆæ€§
 
         private readonly ISaveSerializer serializer = new JsonSaveSerializer();
         private readonly IStorageBackend storage = new LocalFileStorage();
         private readonly List<IMigration> migrations = new() { new Migration_1_to_2() };
         private string path;
-        private GameSaveDto _cache;           // ÔËĞĞÆÚÖ»²Ù×÷Õâ·İÄÚ´æ
-        private bool _dirty;                  // Ôà±ê¼Ç£¬±ÜÃâÆµ·±Ğ´ÅÌ
-        private float _lastWriteTime;         // ½ÚÁ÷£º×î¶à 2 ÃëĞ´Ò»´Î
-        public GameSaveDto Data => _cache;    // ÈÎºÎµØ·½Ö±½Ó·ÃÎÊ
+        private GameSaveDto _cache;           // è¿è¡ŒæœŸåªæ“ä½œè¿™ä»½å†…å­˜
+        private bool _dirty;                  // è„æ ‡è®°ï¼Œé¿å…é¢‘ç¹å†™ç›˜
+        private float _lastWriteTime;         // èŠ‚æµï¼šæœ€å¤š 2 ç§’å†™ä¸€æ¬¡
+        public GameSaveDto Data => _cache;    // ä»»ä½•åœ°æ–¹ç›´æ¥è®¿é—®
         private static Dictionary<string, int> LevelIndex;
         private void Awake()
         {
@@ -55,6 +55,7 @@ namespace SaveYourself.Core
             path =Path.Combine(Application.persistentDataPath, "save.dat");
             Debug.Log("save file path is " + path);
             initLevelIndexMap();
+            Load();
         }
 
         private void Update()
@@ -66,65 +67,67 @@ namespace SaveYourself.Core
         private void OnApplicationPause(bool pause) { if (pause) Flush(); }
         private void OnApplicationQuit() => Flush();
 
-        // ============== ¶ÔÍâ API ==============
+        // ============== å¯¹å¤– API ==============
 
         public void MarkDirty() => _dirty = true;
         public void SaveData(string levelName, string nextLevelName, float time)
         {
             if (!Data.levels.ContainsKey(levelName))
-                Data.levels[levelName] = new LevelRecordDto();
+            {
+                var levelRec = new LevelRecordDto(LevelIndex[levelName],levelName);
+                Data.levels[levelName] = levelRec;
+            }
             var rec = Data.levels[levelName];
-            rec.cleared = true;
             if (time < rec.bestTime || rec.bestTime == 0) rec.bestTime = time;
             Data.player.highestUnlockedWorld = Mathf.Max(Data.player.highestUnlockedWorld, Mathf.Max(4, LevelIndex[nextLevelName]));
 
             MarkDirty();
         }
 
-        // ============== ÄÚ²¿ ==============
+        // ============== å†…éƒ¨ ==============
 
         private void Load()
         {
             string raw = storage.Load(path);
-            // ¢Ú Èç¹ûÃ»ÓĞ´æµµ¾ÍĞÂ½¨Ò»·İ
+            // â‘¡ å¦‚æœæ²¡æœ‰å­˜æ¡£å°±æ–°å»ºä¸€ä»½
             if (raw == null || raw.Length == 0)
             {
-                Debug.Log("it's yout first time to  open the game");
-                _cache = new GameSaveDto();          // ¿Õ´æµµ
-                initSaveData();           // ¿ÉÑ¡£º¸øµÚÒ»¹Ø½âËøµÈ
-                Flush();                             // Á¢¼´Ğ´ÅÌ
+                _cache = new GameSaveDto();          // ç©ºå­˜æ¡£
+                initSaveData();           // å¯é€‰ï¼šç»™ç¬¬ä¸€å…³è§£é”ç­‰
+                Flush();                             // ç«‹å³å†™ç›˜
             }
             else
             {
-                Debug.Log("load save file successfully");
                 _cache = serializer.Deserialize(raw);
             }
-            // °´°æ±¾Ç¨ÒÆ
+            // æŒ‰ç‰ˆæœ¬è¿ç§»
             while (migrations.Find(m => m.FromVersion == _cache.version) is { } mig)
                 _cache = mig.Migrate(_cache);
 
-            // Ğ£Ñé¹Ø¿¨ÓĞĞ§ĞÔ£¨É¾µô±»É¾µôµÄ¹Ø¿¨µÄ¼ü£©
+            // æ ¡éªŒå…³å¡æœ‰æ•ˆæ€§ï¼ˆåˆ æ‰è¢«åˆ æ‰çš„å…³å¡çš„é”®ï¼‰
             //var invalid = _cache.levels.Keys
             //    .Where(k => !sceneList.levelName.Contains(k)).ToList();
             //foreach (var k in invalid) _cache.levels.Remove(k);
 
             _dirty = false;
         }
-        /// <summary>µÚÒ»´ÎÆô¶¯Ê±µÄÄ¬ÈÏÊı¾İ</summary>
+        /// <summary>ç¬¬ä¸€æ¬¡å¯åŠ¨æ—¶çš„é»˜è®¤æ•°æ®</summary>
         private void initSaveData()
         {
-            // Ê¾Àı£º°ÑµÚÒ»¹ØÉèÎªÒÑ½âËø
+            // ç¤ºä¾‹ï¼šæŠŠç¬¬ä¸€å…³è®¾ä¸ºå·²è§£é”
+            SaveData("MainMenu", "Tutorial1", 0);
             SaveData("Tutorial1", "Tutorial2", 0);
             SaveData("Tutorial2", "Tutorial3", 0);
             SaveData("Tutorial3", "Level1", 0);
             SaveData("Level1", "Level2", 0);
         }
-        //TODO Í¨¹ıÅäÖÃµÄ·½Ê½Îª¹Ø¿¨Ìí¼ÓË÷Òı
+        //TODO é€šè¿‡é…ç½®çš„æ–¹å¼ä¸ºå…³å¡æ·»åŠ ç´¢å¼•
         private void initLevelIndexMap()
         {
             if (LevelIndex == null)
             {
                 LevelIndex=new Dictionary<string, int>();
+                LevelIndex.Add("MainMenu", 0);
                 LevelIndex.Add("Tutorial1", 1);
                 LevelIndex.Add("Tutorial2", 2);
                 LevelIndex.Add("Tutorial3", 3);

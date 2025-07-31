@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SaveYourself.Core;
+using Newtonsoft.Json;
 using System.IO;
 
 // Assets/Scripts/Save/DataModel/GameSaveDto.cs
@@ -26,17 +27,31 @@ public class GameSaveDto
 [System.Serializable]
 public class PlayerProgressDto
 {
-    public int totalStars;
     public int highestUnlockedWorld;   // 示例：解锁世界
 }
 
 [System.Serializable]
 public class LevelRecordDto
 {
-    public bool cleared;
     public float bestTime;          // 秒
+    public int levelIndex;
+    public string levelName;
     public long firstClearUnix;
     public long lastClearUnix;
+    public LevelRecordDto()
+    {
+        bestTime = 0;
+        firstClearUnix = 0;
+        lastClearUnix = 0;
+    }
+    public LevelRecordDto(int idx,string name)
+    {
+        bestTime = 0;
+        levelIndex = idx;   
+        levelName = name;
+        firstClearUnix = 0;
+        lastClearUnix = 0;
+    }
 }
 
 public interface ISaveSerializer
@@ -47,9 +62,9 @@ public interface ISaveSerializer
 // 默认：Unity JsonUtility（易读、易调试）
 public class JsonSaveSerializer : ISaveSerializer
 {
-    public string Serialize(GameSaveDto dto) => JsonUtility.ToJson(dto, true);
+    public string Serialize(GameSaveDto dto) => JsonConvert.SerializeObject(dto, Formatting.Indented);
     public GameSaveDto Deserialize(string raw) =>
-        string.IsNullOrEmpty(raw) ? new GameSaveDto() : JsonUtility.FromJson<GameSaveDto>(raw);
+        string.IsNullOrEmpty(raw) ? new GameSaveDto() : JsonConvert.DeserializeObject<GameSaveDto>(raw);
 }
 
 
