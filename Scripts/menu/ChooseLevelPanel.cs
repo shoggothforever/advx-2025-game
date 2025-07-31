@@ -28,7 +28,9 @@ public class ChooseLevelPanel : MonoBehaviour
             var btn = Instantiate(levelButtonPrefab, content);
             var scenename = levelNames[i];
             btn.GetComponentInChildren<Text>().text = scenename;
-            btn.interactable = true;
+            if (i >= 3 &&! SaveManager.Instance.Data.levels.ContainsKey(scenename))
+                btn.interactable = false;
+            else btn.interactable = true;
             Debug.Log("loading scene " + scenename);
             btn.onClick.AddListener(() => LoaderManager.Instance.LoadScene(scenename));
         }

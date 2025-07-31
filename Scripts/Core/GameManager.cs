@@ -11,13 +11,6 @@ using SaveYourself.Interact;
 namespace SaveYourself.Core
 {
     public enum GameState { PreReverseTime, ReverseTime,PreForwardTime, ForwardTime, LevelComplete, LevelFailed }
-    struct LevelInfo
-    {
-        public int level;
-        public float duration;
-        public float startTime;
-        public float endTime;
-    }
     [System.Serializable]
     public class LevelCheckpoint
     {
@@ -29,20 +22,6 @@ namespace SaveYourself.Core
     {
         public static GameManager instance;
         public LevelCheckpoint checkpoint = new();
-        static LevelInfo[] reverseLevelInfos = new LevelInfo[] {
-        new LevelInfo { level = 1, duration = 10, startTime = 50, endTime = 40 },
-        new LevelInfo { level = 2, duration = 10, startTime = 40, endTime = 30 },
-        new LevelInfo { level = 3, duration = 10, startTime = 30, endTime = 20 },
-        new LevelInfo { level = 4, duration = 10, startTime = 20, endTime = 10 },
-        new LevelInfo { level = 5, duration = 10, startTime = 10, endTime = 0 },
-        };
-        static LevelInfo[] postiveLevelInfos = new LevelInfo[] {
-        new LevelInfo { level = 1, duration = 10, startTime = 80, endTime = 100 },
-        new LevelInfo { level = 2, duration = 10, startTime = 60, endTime = 80 },
-        new LevelInfo { level = 3, duration = 10, startTime = 40, endTime = 60 },
-        new LevelInfo { level = 4, duration = 10, startTime = 20, endTime = 40 },
-        new LevelInfo { level = 5, duration = 10, startTime = 0, endTime = 20 },
-        };
         public GameState currentState=GameState.PreReverseTime;
         public GameObject reverseWorld; // ÄæÊ±¿Õ
         public GameObject reversePlayer; // ÄæÊ±¿Õ

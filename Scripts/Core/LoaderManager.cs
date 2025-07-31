@@ -33,6 +33,7 @@ public class LoaderManager : MonoBehaviour
 
         gameObject.AddComponent<GameManager>();
         gameObject.AddComponent<TimeManager>();
+        gameObject.AddComponent<SaveManager>();
     }
 
     /* 公开 API，任何地方都能调用 */
