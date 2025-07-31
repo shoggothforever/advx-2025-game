@@ -20,7 +20,7 @@ namespace SaveYourself.Core
     }
     public class GameManager : MonoBehaviour
     {
-        public static GameManager instance;
+        public static GameManager Instance;
         public LevelCheckpoint checkpoint = new();
         public GameState currentState=GameState.PreReverseTime;
         public GameObject reverseWorld; // ÄæÊ±¿Õ
@@ -41,7 +41,7 @@ namespace SaveYourself.Core
 
         void Start()
         {
-            if (instance == null) { instance = this; DontDestroyOnLoad(gameObject); }
+            if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
             else Destroy(gameObject);
             GetComponentsInChildren<ITimeTrackable>(true, trackedCache);
             boxes = GameObject.FindGameObjectsWithTag("Box");

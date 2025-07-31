@@ -14,7 +14,7 @@ public class MenuManager : MonoBehaviour
     }
     public void OnStartClick()
     {
-        GameManager.instance.LoadNextScene();
+        GameManager.Instance.LoadNextScene();
     }
     public void OnChooseLevelClick()
     {

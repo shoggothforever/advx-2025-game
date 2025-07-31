@@ -824,6 +824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc9b9a1eea7fd143b1bda3665fbbd1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startLevel: MainMenu
   loadingCanvas: {fileID: 1662543028}
   progressBar: {fileID: 67408431}
   isReady: 0

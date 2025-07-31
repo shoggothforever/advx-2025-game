@@ -19,12 +19,12 @@ public class WaterTransformer : MonoBehaviour
     public void changeWater()
     {
         if (!isOnFire) return;
-        if (GameManager.instance.currentState == GameState.ReverseTime)
+        if (GameManager.Instance.currentState == GameState.ReverseTime)
         {
             if(IceArea)IceArea.SetActive(true);
             if(WaterArea) WaterArea.SetActive(false);
             if(SteamArea) SteamArea.SetActive(false);
-        }else if(GameManager.instance.currentState == GameState.ForwardTime)
+        }else if(GameManager.Instance.currentState == GameState.ForwardTime)
         {
             if (IceArea) IceArea.SetActive(false);
             if (WaterArea) WaterArea.SetActive(false);

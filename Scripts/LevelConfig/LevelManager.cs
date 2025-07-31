@@ -14,9 +14,9 @@ public class LevelManager : MonoBehaviour
     void SpawnAll()
     {
         if (config == null) { Debug.LogError("忘记挂 LevelConfig！"); return; }
-        GameManager.instance.levelName = config.levelName;
-        GameManager.instance.nextLevelName = config.nextLevelName;
-        GameManager.instance.timeLimit = config.timeLimit;
+        GameManager.Instance.levelName = config.levelName;
+        GameManager.Instance.nextLevelName = config.nextLevelName;
+        GameManager.Instance.timeLimit = config.timeLimit;
         // 生成所有物件
         int cnt = 0;
         foreach (var i in config.items)
@@ -26,14 +26,14 @@ public class LevelManager : MonoBehaviour
             if (go.name.StartsWith("BeginPos"))
             {
                 Debug.Log("find BeginPos");
-                GameManager.instance.pastWorld = go;
+                GameManager.Instance.pastWorld = go;
                 cnt++;
             }
             else if (go.name.StartsWith("Player Variant"))
             {
                 Debug.Log("find Player Variant");
-                GameManager.instance.pastPlayer = go;
-                go.transform.SetParent(GameManager.instance.pastWorld.transform, true);
+                GameManager.Instance.pastPlayer = go;
+                go.transform.SetParent(GameManager.Instance.pastWorld.transform, true);
                 TimeManager.Instance.reversePlayer = go;
                 go.SetActive(false);
                 ++cnt;
@@ -41,37 +41,37 @@ public class LevelManager : MonoBehaviour
             else if (go.name.StartsWith("EndPos"))
             {
                 Debug.Log("find EndPos");
-                GameManager.instance.reverseWorld = go;
+                GameManager.Instance.reverseWorld = go;
                 ++cnt;
             }
             else if (go.name.StartsWith("Player reverse"))
             {
                 Debug.Log("find Player reverse");
-                go.transform.SetParent(GameManager.instance.reverseWorld.transform, true);
-                GameManager.instance.reversePlayer = go;
+                go.transform.SetParent(GameManager.Instance.reverseWorld.transform, true);
+                GameManager.Instance.reversePlayer = go;
                 TimeManager.Instance.reversePlayer = go;
                 var vircam = go.GetComponentInChildren<Cinemachine.CinemachineVirtualCamera>();
                 if (vircam != null)
                 {
                     Debug.Log("find virtual cinemachine");
-                    GameManager.instance.reverseVirtualCamera = vircam;
+                    GameManager.Instance.reverseVirtualCamera = vircam;
                 }
                 ++cnt;
             }
             else if (go.name.StartsWith("waterTransformer"))
             {
                 Debug.Log("find waterTransformers");
-                GameManager.instance.waterTransformers = go.GetComponent<List<WaterTransformer>>();
+                GameManager.Instance.waterTransformers = go.GetComponent<List<WaterTransformer>>();
             }else if (go.name.StartsWith("Canvas"))
             {
                 Debug.Log("find Canvas");
                 go.GetComponent<Canvas>().worldCamera=Camera.main;
-                GameManager.instance.countdownText=go.GetComponentInChildren<Text>();
+                GameManager.Instance.countdownText=go.GetComponentInChildren<Text>();
                 ++cnt;
             }
         }
-        GameManager.instance.boxes= GameObject.FindGameObjectsWithTag("Box");
-        if (GameManager.instance.boxes != null)
+        GameManager.Instance.boxes= GameObject.FindGameObjectsWithTag("Box");
+        if (GameManager.Instance.boxes != null)
         {
             Debug.Log("find reversible boxes");
         }
@@ -80,16 +80,16 @@ public class LevelManager : MonoBehaviour
     public void LoadNextLevel()
     {
         if (config == null) { Debug.LogError("忘记挂 LevelConfig！"); return; }
-        LoaderManager.Instance.isReady = false;
+        Instance.isReady = false;
         TimeManager.Instance.Clear();
-        GameManager.instance.Clear();
-        LoaderManager.Instance.LoadScene(config.nextLevelName);
+        GameManager.Instance.Clear();
+        Instance.LoadScene(config.nextLevelName);
     }
     public void ReloadLevel()
     {
         if (config == null) { Debug.LogError("忘记挂 LevelConfig！"); return; }
-        LoaderManager.Instance.isReady = false;
-        LoaderManager.Instance.LoadScene(config.levelName);
+        Instance.isReady = false;
+        Instance.LoadScene(config.levelName);
     }
     public void OnQuitClick()
     {
@@ -105,10 +105,9 @@ public class LevelManager : MonoBehaviour
         {
             if (config.levelName != "MainMenu")
             {
-                LoaderManager.Instance.LoadScene("MainMenu");
+                Instance.LoadScene("MainMenu");
             }
             else Application.Quit();
         }
     }
-
 }

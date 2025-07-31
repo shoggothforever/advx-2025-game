@@ -123,7 +123,7 @@ namespace SaveYourself.Core
             {
                 case Phase.Reverse:
                     Instance.currentTime += Time.deltaTime;
-                    if (Instance.currentTime >= GameManager.instance.getTimeLimit() - GameManager.instance.RemainTimeCount)
+                    if (Instance.currentTime >= GameManager.Instance.getTimeLimit() - GameManager.Instance.RemainTimeCount)
                     {
                         StartPreReplay();
                     }
@@ -136,7 +136,7 @@ namespace SaveYourself.Core
                     }
                     break;
                 case Phase.PreReplay:
-                    if (GameManager.instance.currentState == GameState.ForwardTime)
+                    if (GameManager.Instance.currentState == GameState.ForwardTime)
                     {
                         StartReplay();
                         Debug.Log("start replay");
@@ -161,7 +161,7 @@ namespace SaveYourself.Core
         void StartReplay()
         {
             Instance.phase = Phase.Replay;
-            Instance.currentTime = GameManager.instance.getTimeLimit() - GameManager.instance.RemainTimeCount; // 从末尾开始倒放
+            Instance.currentTime = GameManager.Instance.getTimeLimit() - GameManager.Instance.RemainTimeCount; // 从末尾开始倒放
             Physics2D.IgnoreLayerCollision(
             LayerMask.NameToLayer("GhostPlayer"),
             LayerMask.NameToLayer("Box"),

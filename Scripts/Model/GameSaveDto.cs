@@ -12,7 +12,15 @@ public class GameSaveDto
     public long lastSavedUnix;    //  ±º‰¥¡£®√Î£©
     public PlayerProgressDto player = new();
     public Dictionary<string, LevelRecordDto> levels = new(); // key = LevelId
-    public Dictionary<string,List<TimeReverse.TimedAction>> LevelReverseSnapshot = new(); // key = LevelId
+    public Dictionary<string,List<TimeReverse.TimedAction>> levelReverseSnapshot = new(); // key = LevelId
+    public GameSaveDto()
+    {
+        version = 1;
+        lastSavedUnix = 0;
+        player = new();
+        levels = new();
+        levelReverseSnapshot = new();
+    }
 }
 
 [System.Serializable]
@@ -44,21 +52,6 @@ public class JsonSaveSerializer : ISaveSerializer
         string.IsNullOrEmpty(raw) ? new GameSaveDto() : JsonUtility.FromJson<GameSaveDto>(raw);
 }
 
-public interface IStorageBackend
-{
-    void Save(string raw);
-    string Load();
-}
-
-// PC/Mac£∫Application.persistentDataPath
-public class LocalFileStorage : IStorageBackend
-{
-    private readonly string path = Path.Combine(
-        Application.persistentDataPath, "save.dat");
-
-    public void Save(string raw) => File.WriteAllText(path, raw);
-    public string Load() => File.Exists(path) ? File.ReadAllText(path) : "";
-}
 
 public interface IMigration
 {

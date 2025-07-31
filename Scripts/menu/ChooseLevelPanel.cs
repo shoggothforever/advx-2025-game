@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using SaveYourself.Core;
 public class ChooseLevelPanel : MonoBehaviour
 {
     [SerializeField] Transform content;
@@ -28,10 +28,8 @@ public class ChooseLevelPanel : MonoBehaviour
             var btn = Instantiate(levelButtonPrefab, content);
             var scenename = levelNames[i];
             btn.GetComponentInChildren<Text>().text = scenename;
-            if (i >= 3 &&! SaveManager.Instance.Data.levels.ContainsKey(scenename))
-                btn.interactable = false;
-            else btn.interactable = true;
-            Debug.Log("loading scene " + scenename);
+            btn.interactable = true;
+            //Debug.Log("loading scene " + scenename);
             btn.onClick.AddListener(() => LoaderManager.Instance.LoadScene(scenename));
         }
     }
