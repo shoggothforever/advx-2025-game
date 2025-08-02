@@ -70,6 +70,11 @@ namespace SaveYourself.Core
         // ============== 对外 API ==============
 
         public void MarkDirty() => _dirty = true;
+        public void SaveSnapshot(string levelName,List<TimeReverse.TimedAction> history)
+        {
+            var rec = Data.levelReverseSnapshot;
+            rec[levelName] = history.ToArray();
+        }
         public void SaveData(string levelName, string nextLevelName, float time)
         {
             if (!Data.levels.ContainsKey(levelName))
@@ -78,9 +83,19 @@ namespace SaveYourself.Core
                 Data.levels[levelName] = levelRec;
             }
             var rec = Data.levels[levelName];
-            if (time < rec.bestTime || rec.bestTime == 0) rec.bestTime = time;
-            Data.player.highestUnlockedWorld = Mathf.Max(Data.player.highestUnlockedWorld, Mathf.Max(4, LevelIndex[nextLevelName]));
+            if (time < rec.bestTime || rec.bestTime == 0)
+            {
+                rec.bestTime = time;
 
+            }
+            var now=Time.time;
+            if (now < rec.firstClearUnix || rec.firstClearUnix==0f)
+            {
+                rec.firstClearUnix= now;
+            }
+            rec.lastClearUnix= now;
+            Data.levels[levelName] = rec;
+            Data.player.highestUnlockedWorld = Mathf.Max(Data.player.highestUnlockedWorld, Mathf.Max(4, LevelIndex[nextLevelName]));
             MarkDirty();
         }
 

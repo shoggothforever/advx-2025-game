@@ -13,7 +13,7 @@ public class GameSaveDto
     public long lastSavedUnix;    // 时间戳（秒）
     public PlayerProgressDto player = new();
     public Dictionary<string, LevelRecordDto> levels = new(); // key = LevelId
-    public Dictionary<string,List<TimeReverse.TimedAction>> levelReverseSnapshot = new(); // key = LevelId
+    public Dictionary<string,TimeReverse.TimedAction[]> levelReverseSnapshot = new(); // key = LevelId
     public GameSaveDto()
     {
         version = 1;
@@ -36,8 +36,8 @@ public class LevelRecordDto
     public float bestTime;          // 秒
     public int levelIndex;
     public string levelName;
-    public long firstClearUnix;
-    public long lastClearUnix;
+    public float firstClearUnix;
+    public float lastClearUnix;
     public LevelRecordDto()
     {
         bestTime = 0;
@@ -62,7 +62,10 @@ public interface ISaveSerializer
 // 默认：Unity JsonUtility（易读、易调试）
 public class JsonSaveSerializer : ISaveSerializer
 {
-    public string Serialize(GameSaveDto dto) => JsonConvert.SerializeObject(dto, Formatting.Indented);
+    public string Serialize(GameSaveDto dto) => JsonConvert.SerializeObject(dto, Formatting.Indented, new JsonSerializerSettings
+    {
+        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+    });
     public GameSaveDto Deserialize(string raw) =>
         string.IsNullOrEmpty(raw) ? new GameSaveDto() : JsonConvert.DeserializeObject<GameSaveDto>(raw);
 }

@@ -47,6 +47,10 @@ public class LoaderManager : MonoBehaviour
         {
             StartCoroutine(LoadAsync(sceneName));
         }
+        else
+        {
+            Debug.Log("cannot load level ,  not locked" );
+        }
     }
 
     IEnumerator LoadAsync(string sceneName)

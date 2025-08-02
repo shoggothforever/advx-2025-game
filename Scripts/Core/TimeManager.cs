@@ -11,7 +11,7 @@ namespace SaveYourself.Core
         public enum Phase { PreReverse,Reverse,PreReplay, Replay, Forward }
         public Phase phase = Phase.PreReverse;
         public float currentTime=0;             // 0..reverseDuration
-        readonly List<TimeReverse.TimedAction> history = new();
+        public readonly List<TimeReverse.TimedAction> history = new();
         readonly Dictionary<int, TimeReverse.ITimeTrackable> registry = new();
         static private TimeManager instance_;
         public static TimeManager Instance
@@ -87,7 +87,7 @@ namespace SaveYourself.Core
                     if (registry.TryGetValue(a.objId, out var obj))
                     {
                         st.Push(a);
-                        //obj.ApplySnapshot(a);k
+                        //obj.ApplySnapshot(a);
                         ++cnt;
                     }
                 }
@@ -138,6 +138,8 @@ namespace SaveYourself.Core
                 case Phase.PreReplay:
                     if (GameManager.Instance.currentState == GameState.ForwardTime)
                     {
+                        SaveManager.Instance.SaveSnapshot(GameManager.Instance.levelName, Instance.history);
+                        Debug.LogFormat("save history, length: {0}", history.Count);
                         StartReplay();
                         Debug.Log("start replay");
                         Debug.LogFormat("replayList length is {0}",history.Count);
@@ -160,7 +162,6 @@ namespace SaveYourself.Core
         }
         void StartReplay()
         {
-            Instance.phase = Phase.Replay;
             Instance.currentTime = GameManager.Instance.getTimeLimit() - GameManager.Instance.RemainTimeCount; // 从末尾开始倒放
             Physics2D.IgnoreLayerCollision(
             LayerMask.NameToLayer("GhostPlayer"),
@@ -174,6 +175,7 @@ namespace SaveYourself.Core
             LayerMask.NameToLayer("GhostPlayer"),
             LayerMask.NameToLayer("Player"),
             true);
+            Instance.phase = Phase.Replay;
         }
 
         void StartForward()
