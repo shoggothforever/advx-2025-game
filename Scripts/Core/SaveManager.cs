@@ -11,8 +11,6 @@ namespace SaveYourself.Core
     // PC/Mac：Application.persistentDataPath
     public class LocalFileStorage : IStorageBackend
     {
-
-
         public void Save(string path, string raw)
         {
             if (!File.Exists(path))

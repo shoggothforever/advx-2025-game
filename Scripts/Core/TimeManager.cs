@@ -106,14 +106,14 @@ namespace SaveYourself.Core
             phase = Phase.PreReverse;
             history.Clear();
             registry.Clear();
-            Physics2D.IgnoreLayerCollision(
-            LayerMask.NameToLayer("GhostPlayer"),
-            LayerMask.NameToLayer("Box"),
-            false);
-            Physics2D.IgnoreLayerCollision(
-            LayerMask.NameToLayer("GhostPlayer"),
-            LayerMask.NameToLayer("ShrinkBox"),
-            false);
+            //Physics2D.IgnoreLayerCollision(
+            //LayerMask.NameToLayer("GhostPlayer"),
+            //LayerMask.NameToLayer("Box"),
+            //false);
+            //Physics2D.IgnoreLayerCollision(
+            //LayerMask.NameToLayer("GhostPlayer"),
+            //LayerMask.NameToLayer("ShrinkBox"),
+            //false);
         }
         // Update is called once per frame
         void Update()
@@ -163,18 +163,6 @@ namespace SaveYourself.Core
         void StartReplay()
         {
             Instance.currentTime = GameManager.Instance.getTimeLimit() - GameManager.Instance.RemainTimeCount; // 从末尾开始倒放
-            Physics2D.IgnoreLayerCollision(
-            LayerMask.NameToLayer("GhostPlayer"),
-            LayerMask.NameToLayer("Box"),
-            true);
-            Physics2D.IgnoreLayerCollision(
-            LayerMask.NameToLayer("GhostPlayer"),
-            LayerMask.NameToLayer("ShrinkBox"),
-            true);            
-            Physics2D.IgnoreLayerCollision(
-            LayerMask.NameToLayer("GhostPlayer"),
-            LayerMask.NameToLayer("Player"),
-            true);
             Instance.phase = Phase.Replay;
         }
 

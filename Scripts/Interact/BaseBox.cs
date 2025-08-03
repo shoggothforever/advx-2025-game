@@ -62,7 +62,7 @@ namespace SaveYourself.Interact
                 originParent = collision.collider.transform.parent;
                 collision.collider.transform.SetParent(transform, true);
             }
-        }  
+        }
         public void OnCollisionExit2D(Collision2D collision)
         {
             if (collision.collider.CompareTag("Player"))

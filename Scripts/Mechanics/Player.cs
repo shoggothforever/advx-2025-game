@@ -12,13 +12,14 @@ namespace SaveYourself.Mechanics
     {
         [Header("Water Effects")]
         public float waterGravityScale = 0f;          // 普通水
-        public float steamGravityScale = 0.3f;        // 蒸汽
+        public float steamGravityScale =-0.2f;        // 蒸汽
         public float waterJumpMult = 0.6f;            // 普通水
         public float steamJumpMult = 1.5f;            // 蒸汽
 
         float defaultGravity;
         float defaultJumpTakeOffSpeed;
-        bool inWater;
+        public bool inWater;
+        public bool inSteam;
         public bool isReverse = false;
         /// <summary>
         /// Max horizontal speed of the player.
@@ -155,11 +156,18 @@ namespace SaveYourself.Mechanics
         protected override void ComputeVelocity()
         {
             // 如果在水里，让 WASD 直接控制 velocity
-            if (inWater)
+            if (inSteam)
             {
                 Vector2 swim = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
                 velocity = swim * maxSpeed * 0.8f;   // 0.8 可调整水中速度
                 //return;                                // 跳过原平台逻辑
+            }else if (inWater)
+            {
+                float h = Input.GetAxisRaw("Horizontal");
+                float v = Mathf.Max(Input.GetAxisRaw("Vertical"), 0); // 屏蔽向下输入
+                Vector2 swim = new Vector2(h, v).normalized;          // 方向
+
+                velocity = swim * maxSpeed * 0.8f;   // 0.8 可调整水中速度
             }
             if (jump && IsGrounded)
             {
@@ -202,17 +210,25 @@ namespace SaveYourself.Mechanics
             {
                 body.gravityScale = steamGravityScale;
                 jumpTakeOffSpeed = defaultJumpTakeOffSpeed * steamJumpMult;
-                inWater = true;
+                inSteam=true;
             }
+            if (c.CompareTag("Player") && gameObject.CompareTag("GhostPlayer"))
+                return; // 逻辑上忽略
         }
 
         void OnTriggerExit2D(Collider2D c)
         {
-            if (c.CompareTag("Water") || c.CompareTag("Steam"))
+            if (c.CompareTag("Water") )
             {
                 body.gravityScale = defaultGravity;
                 jumpTakeOffSpeed = defaultJumpTakeOffSpeed;
                 inWater = false;
+            }
+            if (c.CompareTag("Steam"))
+            {
+                body.gravityScale = defaultGravity;
+                jumpTakeOffSpeed = defaultJumpTakeOffSpeed;
+                inSteam = false;
             }
         }
         void OnCollisionStay2D(Collision2D c)

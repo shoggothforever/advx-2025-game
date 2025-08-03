@@ -216,8 +216,8 @@ namespace SaveYourself.Core
         {
             reverseWorld.SetActive(true);
             reversePlayer.GetComponent<Player>().controlEnabled = false;
+            reversePlayer.GetComponent<Rigidbody2D>().simulated = false;
             SetGhostPhysicsIgnoreCollision(true);
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), true);
 
             foreach (var sr in reversePlayer.GetComponentsInChildren<SpriteRenderer>())
             {
@@ -232,6 +232,7 @@ namespace SaveYourself.Core
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Box"), isIgnore);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), isIgnore);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), isIgnore);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), true);
         }
         public void Clear()
         {

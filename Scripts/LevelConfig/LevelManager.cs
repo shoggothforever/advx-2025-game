@@ -10,6 +10,10 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         SpawnAll();
+        Debug.LogFormat("Player :{0}", LayerMask.NameToLayer("Player"));
+        Debug.LogFormat("GhostPlayer :{0}", LayerMask.NameToLayer("GhostPlayer"));
+        Debug.LogFormat("Box :{0}", LayerMask.NameToLayer("Box"));
+        Debug.LogFormat("Player :{0}", LayerMask.NameToLayer("Player"));
     }
     void SpawnAll()
     {
