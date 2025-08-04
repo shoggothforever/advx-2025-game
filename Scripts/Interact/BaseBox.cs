@@ -54,7 +54,7 @@ namespace SaveYourself.Interact
         }
         public bool canShrink=false;
         public bool ignoreV = true;
-        private Transform originParent=null;
+        private Transform originParent = null;
         public void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.collider.CompareTag("Player"))

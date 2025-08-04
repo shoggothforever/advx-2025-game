@@ -112,6 +112,8 @@ namespace SaveYourself.Core
             TimeCountdown = getTimeLimit();
             // 禁用逆时空玩家，激活正时空AI
             reverseWorld.SetActive(false);
+            // 预备时不显示逆时空的玩家
+            //reversePlayer.SetActive(false);
             pastWorld.SetActive(true);
             Debug.Log("准备开始正时空阶段，你有 " + TimeCountdown + " 秒时间。");
             countdownText.color = Color.blue;
@@ -215,6 +217,7 @@ namespace SaveYourself.Core
         private void EnableReverseSprite()
         {
             reverseWorld.SetActive(true);
+            reversePlayer.SetActive(true);
             reversePlayer.GetComponent<Player>().controlEnabled = false;
             reversePlayer.GetComponent<Rigidbody2D>().simulated = false;
             SetGhostPhysicsIgnoreCollision(true);

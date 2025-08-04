@@ -15,7 +15,7 @@ namespace SaveYourself.Mechanics
         public float steamGravityScale =-0.2f;        // ÕôÆû
         public float waterJumpMult = 0.6f;            // ÆÕÍ¨Ë®
         public float steamJumpMult = 1.5f;            // ÕôÆû
-
+        private Transform originParent = null;
         float defaultGravity;
         float defaultJumpTakeOffSpeed;
         public bool inWater;
@@ -59,6 +59,7 @@ namespace SaveYourself.Mechanics
             animator = GetComponent<Animator>();
             Id = nextId++;
             anim = GetComponent<Animator>();
+            originParent = transform.parent;
             defaultJumpTakeOffSpeed = jumpTakeOffSpeed;
         }
         void Start()
@@ -107,8 +108,13 @@ namespace SaveYourself.Mechanics
                     jumpState = JumpState.PrepareToJump;
                 else if (Input.GetButtonUp("Jump"))
                 {
+                    transform.SetParent(originParent, true);
                     stopJump = true;
                     Schedule<PlayerStopJump>().player = this;
+                }
+                if (Input.GetKeyDown(KeyCode.A)|| Input.GetKeyDown(KeyCode.D))
+                {
+                    transform.SetParent(originParent, true);
                 }
             }
             else

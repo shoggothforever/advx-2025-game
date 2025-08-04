@@ -5,12 +5,12 @@ using UnityEngine;
 public class TriggerDoor : MonoBehaviour
 {
     // Start is called before the first frame update
-    TriggerButton[] btns;
+    public TriggerButton[] btns;
     public bool isOpen = false;
     private Transform OriginPostion;
     void Start()
     {
-        btns = GetComponent<TriggerButton[]>();
+        //btns = GetComponent<TriggerButton[]>();
         OriginPostion = transform;
     }
 
