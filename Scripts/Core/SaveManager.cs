@@ -126,6 +126,7 @@ namespace SaveYourself.Core
         private void initSaveData()
         {
             // 示例：把第一关设为已解锁
+            SaveData("playground", "MainMenu", 0);
             SaveData("MainMenu", "Tutorial1", 0);
             SaveData("Tutorial1", "Tutorial2", 0);
             SaveData("Tutorial2", "Tutorial3", 0);
@@ -146,6 +147,7 @@ namespace SaveYourself.Core
                 LevelIndex.Add("Level2", 5);
                 LevelIndex.Add("Level3", 6);
                 LevelIndex.Add("finalLevel", 7);
+                LevelIndex.Add("playground", 999);
             }
         }
         private void Flush()

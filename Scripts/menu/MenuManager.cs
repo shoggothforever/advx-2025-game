@@ -14,7 +14,11 @@ public class MenuManager : MonoBehaviour
     }
     public void OnStartClick()
     {
-        GameManager.Instance.LoadNextScene();
+        #if UNITY_EDITOR
+        LoaderManager.Instance.LoadScene("playground");
+        #else
+            GameManager.Instance.LoadNextScene();
+        #endif
     }
     public void OnChooseLevelClick()
     {

@@ -55,7 +55,7 @@ namespace SaveYourself.Core
             RemainTimeCount = 0f;
             reverseWorld.SetActive(true);
             reversePlayer.SetActive(true);
-            reversePlayer.GetComponent<Player>().enabled = true;
+            reversePlayer.GetComponent<Player>().controlEnabled = true;
             SetGhostPhysicsIgnoreCollision(false);
             currentState = GameState.ReverseTime;
             TimeCountdown = getTimeLimit();
@@ -69,13 +69,16 @@ namespace SaveYourself.Core
                 //Debug.LogFormat("get player id {0}", per.Id);
                 TimeManager.Instance.Register(per);
                 Debug.Log("register reverse player into TimeManager, ID: "+per.Id);
-                foreach (var box in boxes)
+                if (boxes != null)
                 {
-                    if (box.name.StartsWith("reversible_box"))
+                    foreach (var box in boxes)
                     {
-                        var bx = box.GetComponent<BaseBox>();
-                        TimeManager.Instance.Register(bx);
-                        Debug.LogFormat("put box into TimeManager, ID:{0}", bx.Id);
+                        if (box.name.StartsWith("reversible_box"))
+                        {
+                            var bx = box.GetComponent<BaseBox>();
+                            TimeManager.Instance.Register(bx);
+                            Debug.LogFormat("put box into TimeManager, ID:{0}", bx.Id);
+                        }
                     }
                 }
             }
@@ -111,7 +114,7 @@ namespace SaveYourself.Core
             RemainTimeCount = Mathf.Max(TimeCountdown,0);
             TimeCountdown = getTimeLimit();
             // 禁用逆时空玩家，激活正时空AI
-            reverseWorld.SetActive(false);
+            reversePlayer.GetComponent<Player>().controlEnabled = false;
             // 预备时不显示逆时空的玩家
             //reversePlayer.SetActive(false);
             pastWorld.SetActive(true);
@@ -153,6 +156,7 @@ namespace SaveYourself.Core
             if (currentState == GameState.PreReverseTime)
             {
                 countdownText.text = "press Z to start";
+                reversePlayer.GetComponent<Player>().controlEnabled = false;
                 if (Input.GetKeyDown(KeyCode.Z))
                 {
                     StartReverseTimePhase();

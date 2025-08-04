@@ -49,7 +49,7 @@ public class LoaderManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("cannot load level ,  not locked" );
+            Debug.LogFormat("cannot load level {0},  finish previous level to unlock",sceneName );
         }
     }
 

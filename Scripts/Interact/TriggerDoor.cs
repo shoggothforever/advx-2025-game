@@ -33,12 +33,12 @@ public class TriggerDoor : MonoBehaviour
         if (isOpen) 
             return;
         isOpen = true;
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
     public virtual void Close()
     {
         if (!isOpen) return;
         isOpen = false;
-        Instantiate(gameObject, OriginPostion);
+        gameObject.SetActive(true);
     }
 }
