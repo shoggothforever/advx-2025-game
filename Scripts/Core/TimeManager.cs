@@ -39,12 +39,20 @@ namespace SaveYourself.Core
                 registry.Remove(t.Id);
             }
         }
+        public void addHistory(TimeReverse.ITimeTrackable t,TimeReverse.TimedAction ta)
+        {
+            Register(t);
+            history.Add(ta);
+        }
         // 只在逆向阶段调用,统一记录所有可以逆向运行物体的状态
         public void Record()
         {
             foreach (var t in registry)
             {
+                if (t.Value.GetActionType()!=TimeReverse.ActionType.Manual)
+                {
                     Record(t.Value.RecordSnapshot());
+                }
             }
         }
         // 内部使用，往history中添加记录
@@ -84,10 +92,9 @@ namespace SaveYourself.Core
                 for (; rewindIndex < history.Count && history[rewindIndex].time <= currentTime + dt; ++rewindIndex)
                 {
                     var a = history[rewindIndex];
-                    if (registry.TryGetValue(a.objId, out var obj))
+                    if (registry.TryGetValue(a.objId, out _))
                     {
                         st.Push(a);
-                        //obj.ApplySnapshot(a);
                         ++cnt;
                     }
                 }
@@ -106,19 +113,10 @@ namespace SaveYourself.Core
             phase = Phase.PreReverse;
             history.Clear();
             registry.Clear();
-            //Physics2D.IgnoreLayerCollision(
-            //LayerMask.NameToLayer("GhostPlayer"),
-            //LayerMask.NameToLayer("Box"),
-            //false);
-            //Physics2D.IgnoreLayerCollision(
-            //LayerMask.NameToLayer("GhostPlayer"),
-            //LayerMask.NameToLayer("ShrinkBox"),
-            //false);
         }
         // Update is called once per frame
         void Update()
         {
-            //if (!LoaderManager.Instance.isReady) return;
             switch (Instance.phase)
             {
                 case Phase.Reverse:

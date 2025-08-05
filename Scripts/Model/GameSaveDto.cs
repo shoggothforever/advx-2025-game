@@ -4,7 +4,11 @@ using UnityEngine;
 using SaveYourself.Core;
 using Newtonsoft.Json;
 using System.IO;
-
+public class ReplayHistory
+{
+    public Dictionary<string, TimeReverse.TimedAction[]> levelReverseSnapshot = new(); // key = LevelId
+    public float remainTime;
+}
 // Assets/Scripts/Save/DataModel/GameSaveDto.cs
 [System.Serializable]              // ·½±ã Unity JsonUtility
 public class GameSaveDto

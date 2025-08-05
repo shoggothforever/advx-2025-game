@@ -13,6 +13,7 @@ public class LoaderManager : MonoBehaviour
     public CanvasGroup loadingCanvas;   // 拖 CanvasGroup
     public Slider progressBar;     // 可选
     public bool isReady = false;
+    public bool isStop = false; 
     void Awake()
     {
         if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }

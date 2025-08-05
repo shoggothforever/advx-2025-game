@@ -3,11 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using SaveYourself.Core;
 
-namespace SaveYourself.Interact
-{
+
     public class BaseBox : TimeReverse.ReversibleObject, TimeReverse.ITimeTrackable
     {
-        public void  ApplySnapshot(TimeReverse.TimedAction a)
+        public Rigidbody2D rb;
+        public override void Start()
+        {
+            GameManager.Instance.addTrack(this);
+            rb=GetComponent<Rigidbody2D>();
+        }
+        public TimeReverse.TimedAction RecordSnapshot()
+        {
+            return new TimeReverse.TimedAction
+            {
+                time = TimeManager.Instance.currentTime,
+                objId = Id,
+                pos = transform.position,
+                velocity = rb.velocity,
+                rotation = rb.rotation
+                //payload = JsonUtility.ToJson(transform.position)
+            };
+        }
+        public void ApplySnapshot(TimeReverse.TimedAction a)
         {
             //rb.MovePosition(a.pos);
             transform.position = Vector3.Lerp(transform.position, a.pos, 0.4f);
@@ -15,30 +32,6 @@ namespace SaveYourself.Interact
             {
                 rb.velocity = Vector2.zero;
             }
-        }
-
-        public TimeReverse.TimedAction RecordSnapshot()
-        {
-            return new TimeReverse.TimedAction
-            {
-                time = TimeManager.Instance.currentTime,
-                objId = Id,
-                type = TimeReverse.ActionType.Position,
-                pos = transform.position,
-                velocity = rb.velocity,
-                rotation = rb.rotation
-            //payload = JsonUtility.ToJson(transform.position)
-        };
-        }
-        public bool DetectMove()
-        {
-            bool wasMoving = lastVelocity.sqrMagnitude > 0.02f;
-            bool isMoving = rb.velocity.sqrMagnitude > 0.02f;
-            return wasMoving != isMoving;
-        }
-        public void SetKe()
-        {
-            rb.bodyType = RigidbodyType2D.Kinematic;
         }
         public void Enlarge()
         {
@@ -71,5 +64,8 @@ namespace SaveYourself.Interact
             }
         }
 
+    TimeReverse.ActionType TimeReverse.ITimeTrackable.GetActionType()
+    {
+        return TimeReverse.ActionType.Position;     // Ã¶¾Ù£ºPosition, AnimatorBool, AnimatorTrigger...
     }
 }

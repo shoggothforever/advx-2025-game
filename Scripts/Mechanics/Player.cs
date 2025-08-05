@@ -72,7 +72,6 @@ namespace SaveYourself.Mechanics
             {
                 time = TimeManager.Instance.currentTime,
                 objId = Id,
-                type = TimeReverse.ActionType.Position,
                 pos=transform.position,
                 velocity=body.velocity,
                 rotation=body.rotation,
@@ -87,16 +86,7 @@ namespace SaveYourself.Mechanics
             transform.position = Vector3.Lerp(transform.position,a.pos,0.4f);
             //transform.position = a.pos;
         }
-        public void SetKe()
-        {
-            body.bodyType = RigidbodyType2D.Kinematic;
-        }
-        public bool DetectMove()
-        {
-            bool wasMoving = lastVelocity.sqrMagnitude > 0.02f;
-            bool isMoving = body.velocity.sqrMagnitude > 0.02f;
-            return wasMoving != isMoving;
-        }
+
         public Bounds Bounds => collider2d.bounds;
 
         protected override void Update()
@@ -218,8 +208,8 @@ namespace SaveYourself.Mechanics
                 jumpTakeOffSpeed = defaultJumpTakeOffSpeed * steamJumpMult;
                 inSteam=true;
             }
-            if (c.CompareTag("Player") && gameObject.CompareTag("GhostPlayer"))
-                return; // 逻辑上忽略
+            //if (c.CompareTag("Player") && gameObject.CompareTag("GhostPlayer"))
+            //    return; // 逻辑上忽略
         }
 
         void OnTriggerExit2D(Collider2D c)
@@ -244,6 +234,12 @@ namespace SaveYourself.Mechanics
             Vector2 dir = c.contacts[0].normal * -1;   // 反向推
             rbBox.AddForce(dir * common.pushForce, ForceMode2D.Force);
         }
+
+        TimeReverse.ActionType TimeReverse.ITimeTrackable.GetActionType()
+        {
+            return TimeReverse.ActionType.Position;
+        }
+
         public enum JumpState
         {
             Grounded,

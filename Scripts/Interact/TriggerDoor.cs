@@ -1,17 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using SaveYourself.Core;
 public class TriggerDoor : MonoBehaviour
 {
     // Start is called before the first frame update
+    public GameObject door;
     public TriggerButton[] btns;
     public bool isOpen = false;
-    private Transform OriginPostion;
     void Start()
     {
         //btns = GetComponent<TriggerButton[]>();
-        OriginPostion = transform;
+        door.SetActive(!isOpen);
     }
 
     // Update is called once per frame
@@ -33,12 +33,13 @@ public class TriggerDoor : MonoBehaviour
         if (isOpen) 
             return;
         isOpen = true;
-        gameObject.SetActive(false);
+        door.SetActive(false);
     }
     public virtual void Close()
     {
         if (!isOpen) return;
         isOpen = false;
-        gameObject.SetActive(true);
+        door.SetActive(true);
     }
+
 }

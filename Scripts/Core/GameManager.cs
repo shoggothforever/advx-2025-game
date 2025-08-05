@@ -32,22 +32,24 @@ namespace SaveYourself.Core
         public List<WaterTransformer> waterTransformers; // 用于控制
         private float TimeCountdown=10f;
         public float RemainTimeCount=0;
-        readonly List<ITimeTrackable> trackedCache = new();
         public GameObject[] boxes;
         public string levelName;
         public string nextLevelName;
         public float timeLimit;
-        Dictionary<GameState, bool> tracked = new();
+        public List<ITimeTrackable> trackList = new();
+        private bool tracked = false;
 
         void Start()
         {
             if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
             else Destroy(gameObject);
-            GetComponentsInChildren<ITimeTrackable>(true, trackedCache);
             boxes = GameObject.FindGameObjectsWithTag("Box");
             Debug.LogFormat("find boxes count:{0}", boxes.Length);
         }
-
+        public void addTrack(ITimeTrackable t)
+        {
+            trackList.Add(t); 
+        }
 
         // 开始逆时空阶段
         public void StartReverseTimePhase()
@@ -62,25 +64,31 @@ namespace SaveYourself.Core
             TimeManager.Instance.phase=TimeManager.Phase.Reverse;
             // 激活逆时空玩家，禁用正时空AI
 
-            if (!tracked.ContainsKey(GameState.ReverseTime))
+            if (!tracked)
             {
-                tracked.Add(GameState.ReverseTime,true);
+                tracked=true;
                 var per = reversePlayer.GetComponent<Mechanics.Player>();
                 //Debug.LogFormat("get player id {0}", per.Id);
                 TimeManager.Instance.Register(per);
                 Debug.Log("register reverse player into TimeManager, ID: "+per.Id);
-                if (boxes != null)
+                Debug.LogFormat("will register {0} Items in TimeManager",trackList.Count);
+                foreach (var t in trackList)
                 {
-                    foreach (var box in boxes)
-                    {
-                        if (box.name.StartsWith("reversible_box"))
-                        {
-                            var bx = box.GetComponent<BaseBox>();
-                            TimeManager.Instance.Register(bx);
-                            Debug.LogFormat("put box into TimeManager, ID:{0}", bx.Id);
-                        }
-                    }
+                    TimeManager.Instance.Register(t);
+                    Debug.LogFormat("put box into TimeManager, ID:{0}", t.Id);
                 }
+                //if (boxes != null)
+                //{
+                //    foreach (var box in boxes)
+                //    {
+                //        if (box.name.StartsWith("reversible_box"))
+                //        {
+                //            var bx = box.GetComponent<BaseBox>();
+                //            TimeManager.Instance.Register(bx);
+                //            Debug.LogFormat("put box into TimeManager, ID:{0}", bx.Id);
+                //        }
+                //    }
+                //}
             }
 
             if (waterTransformers == null) { 
@@ -243,9 +251,9 @@ namespace SaveYourself.Core
         }
         public void Clear()
         {
-            trackedCache.Clear();
-            tracked.Clear();
+            trackList.Clear();
             currentState = GameState.PreReverseTime;
+            tracked = false;
             waterTransformers = null;
             boxes = null;
         }

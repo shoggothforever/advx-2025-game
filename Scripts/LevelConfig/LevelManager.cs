@@ -10,10 +10,10 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         SpawnAll();
-        Debug.LogFormat("Player :{0}", LayerMask.NameToLayer("Player"));
-        Debug.LogFormat("GhostPlayer :{0}", LayerMask.NameToLayer("GhostPlayer"));
-        Debug.LogFormat("Box :{0}", LayerMask.NameToLayer("Box"));
-        Debug.LogFormat("Player :{0}", LayerMask.NameToLayer("Player"));
+        //Debug.LogFormat("Player :{0}", LayerMask.NameToLayer("Player"));
+        //Debug.LogFormat("GhostPlayer :{0}", LayerMask.NameToLayer("GhostPlayer"));
+        //Debug.LogFormat("Box :{0}", LayerMask.NameToLayer("Box"));
+        //Debug.LogFormat("Player :{0}", LayerMask.NameToLayer("Player"));
     }
     void SpawnAll()
     {
@@ -74,11 +74,11 @@ public class LevelManager : MonoBehaviour
                 ++cnt;
             }
         }
-        GameManager.Instance.boxes= GameObject.FindGameObjectsWithTag("Box");
-        if (GameManager.Instance.boxes != null)
-        {
-            Debug.Log("find reversible boxes");
-        }
+        //GameManager.Instance.boxes= GameObject.FindGameObjectsWithTag("Box");
+        //if (GameManager.Instance.boxes != null)
+        //{
+        //    Debug.Log("find reversible boxes");
+        //}
         if(cnt>=2)LoaderManager.Instance.isReady = true;
     }
     public void LoadNextLevel()

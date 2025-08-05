@@ -1,23 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class TriggerButton : MonoBehaviour
+using SaveYourself.Core;
+public class TriggerButton : TimeReverse.ReversibleObject, TimeReverse.ITimeTrackable
 {
     [Header("Õ‚π€")]
     public GameObject spriteOn;
     public GameObject spriteOff;
-    public float delay = 1f;
+    public float delay = 0.1f;
     public bool ok = false;
-    public void Awake()
+    public new void Awake()
     {
-        spriteOn.SetActive(false);
-        spriteOff.SetActive(true);
+        base.Awake();
+        switchButton(ok);
+    }
+    public override void Start()
+    {
+        //GameManager.Instance.addTrack(this);
     }
     private void OnTriggerEnter2D(Collider2D c)
     {
-        
+        Debug.Log("enter button collider");
         StartCoroutine(DelaySwitch());
+    }
+    void Update()
+    {
+        if (ok &&!spriteOn.active)
+        {
+            DelaySwitch();
+        }
+        else if(!ok &&spriteOn.active)
+        {
+            switchButton(ok);
+        }
     }
     public bool isOk()
     {
@@ -25,11 +40,35 @@ public class TriggerButton : MonoBehaviour
     }
     private IEnumerator DelaySwitch()
     {
-
+        TimeManager.Instance.addHistory(this,RecordSnapshot());
         yield return new WaitForSeconds(delay);
-        spriteOff.SetActive(false);
-        spriteOn.SetActive(true);
         ok = true;
+        switchButton(ok);
 
+
+    }
+    private void switchButton(bool ok)
+    {
+        spriteOn.SetActive(ok);
+        spriteOff.SetActive(!ok);
+    }
+    public TimeReverse.TimedAction RecordSnapshot()
+    {
+        return new TimeReverse.TimedAction
+        {
+            time = TimeManager.Instance.currentTime,
+            objId = Id,
+            activated = ok,
+        };
+    }
+
+    void TimeReverse.ITimeTrackable.ApplySnapshot(TimeReverse.TimedAction a)
+    {
+        ok=a.activated;
+    }
+
+    TimeReverse.ActionType TimeReverse.ITimeTrackable.GetActionType()
+    {
+        return TimeReverse.ActionType.Manual;
     }
 }
