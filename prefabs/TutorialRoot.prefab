@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7648974482114017597}
   - component: {fileID: 1103426176018840520}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: video
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,18 +25,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 299851936914244871}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5.3652034, y: 3.3681374, z: 2.9938998}
+  m_LocalScale: {x: 3.9464533, y: 2.477482, z: 2.2022064}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 320280977458063905}
+  m_Father: {fileID: 320280978907288565}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 200}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 147.11287}
+  m_SizeDelta: {x: 960, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7648974482114017597
 CanvasRenderer:
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 8400000, guid: e2cc950b84eddd2418f61be9c3d3f86b, type: 2}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 320280977012316045}
   - component: {fileID: 320280977012316044}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 320280977203776884}
   - component: {fileID: 320280977203776843}
   m_Layer: 5
-  m_Name: NextBtn
+  m_Name: btn_tut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -301,22 +301,21 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 320280977458063904}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.3848, y: 2.3848, z: 2.3848}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 320280978486202030}
   - {fileID: 320280978907288565}
-  - {fileID: 5442134206459956300}
   m_Father: {fileID: 320280977959648821}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 960, y: 540}
-  m_SizeDelta: {x: 1920, y: 1080}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
 --- !u!223 &320280977458063916
 Canvas:
   m_ObjectHideFlags: 0
@@ -326,7 +325,7 @@ Canvas:
   m_GameObject: {fileID: 320280977458063904}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 2
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -360,7 +359,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &320280977458063906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,6 +386,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 320280977959648821}
+  - component: {fileID: 5982759671748158820}
+  - component: {fileID: 168721051435138896}
   m_Layer: 0
   m_Name: TutorialRoot
   m_TagString: Untagged
@@ -410,6 +411,60 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5982759671748158820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320280977959648820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbfeaf89dca5bb54e9c0b4c3049f2b60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 320280977458063904}
+  videoPlayer: {fileID: 168721051435138896}
+  renderTexture: {fileID: 8400000, guid: e2cc950b84eddd2418f61be9c3d3f86b, type: 2}
+  explanationText: {fileID: 320280977965021567}
+  nextButton: {fileID: 320280977203776843}
+  videoFileName: LeverPuzzle.mp4
+  explanation: 
+--- !u!328 &168721051435138896
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320280977959648820}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 0}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 0
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
 --- !u!1 &320280977965021565
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,7 +477,7 @@ GameObject:
   - component: {fileID: 320280977965021560}
   - component: {fileID: 320280977965021567}
   m_Layer: 5
-  m_Name: ExplaintationText
+  m_Name: text_tut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -502,7 +557,7 @@ GameObject:
   - component: {fileID: 320280978486202024}
   - component: {fileID: 320280978486202031}
   m_Layer: 5
-  m_Name: BgImage
+  m_Name: bg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -578,7 +633,7 @@ GameObject:
   - component: {fileID: 320280978907288567}
   - component: {fileID: 320280978907288566}
   m_Layer: 5
-  m_Name: ExplanationPanel
+  m_Name: panel_tut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -598,6 +653,7 @@ RectTransform:
   m_Children:
   - {fileID: 320280977965021566}
   - {fileID: 320280977203776842}
+  - {fileID: 5442134206459956300}
   m_Father: {fileID: 320280977458063905}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

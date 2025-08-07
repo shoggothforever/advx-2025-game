@@ -10,11 +10,11 @@ public class TutorialPanel : MonoBehaviour
     public GameObject root;            // TutorialCanvas
     public VideoPlayer videoPlayer;    // 拖一个 VideoPlayer 组件
     public RenderTexture renderTexture;
-    public TextMeshProUGUI explanationText;
+    public Text explanationText;
     public Button nextButton;
 
     [Header("内容")]
-    public string videoFileName = "LeverPuzzle.mp4";
+    public string videoFileName = "Resource/Video/jump.mp4";
     [TextArea(3, 8)]
     public string explanation;         // 在 Inspector 里填中文
 
