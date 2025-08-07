@@ -133,6 +133,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1394106072999265407}
     m_Modifications:
+    - target: {fileID: 320280977203776842, guid: 16aea9bdff2692b4db242cf60541df13, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 320280977203776842, guid: 16aea9bdff2692b4db242cf60541df13, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 320280977203776842, guid: 16aea9bdff2692b4db242cf60541df13, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 320280977959648820, guid: 16aea9bdff2692b4db242cf60541df13, type: 3}
       propertyPath: m_Name
       value: TutorialRoot
@@ -184,6 +196,14 @@ PrefabInstance:
     - target: {fileID: 320280977959648821, guid: 16aea9bdff2692b4db242cf60541df13, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4370024975783072399, guid: 16aea9bdff2692b4db242cf60541df13, type: 3}
+      propertyPath: m_Size.x
+      value: 480
+      objectReference: {fileID: 0}
+    - target: {fileID: 4370024975783072399, guid: 16aea9bdff2692b4db242cf60541df13, type: 3}
+      propertyPath: m_Size.y
+      value: 270
       objectReference: {fileID: 0}
     - target: {fileID: 5982759671748158820, guid: 16aea9bdff2692b4db242cf60541df13, type: 3}
       propertyPath: explanationText

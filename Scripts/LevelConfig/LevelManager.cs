@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using SaveYourself.Core;
 using static LoaderManager;
+using UnityEngine.EventSystems;
+
 public class LevelManager : MonoBehaviour
 {
     public LevelConfig config; // Inspector 拖进来
@@ -74,12 +76,16 @@ public class LevelManager : MonoBehaviour
                 ++cnt;
             }
         }
-        //GameManager.Instance.boxes= GameObject.FindGameObjectsWithTag("Box");
-        //if (GameManager.Instance.boxes != null)
-        //{
-        //    Debug.Log("find reversible boxes");
-        //}
-        if(cnt>=2)LoaderManager.Instance.isReady = true;
+        if (FindObjectOfType<EventSystem>() == null)
+        {
+            var es = new GameObject("EventSystem");
+            es.AddComponent<EventSystem>();
+            es.AddComponent<StandaloneInputModule>();   // 2D/3D UI 都需要
+            #if ENABLE_INPUT_SYSTEM
+            es.AddComponent<InputSystemUIInputModule>(); // 新版 Input System
+            #endif
+        }
+        if (cnt>=2)LoaderManager.Instance.isReady = true;
     }
     public void LoadNextLevel()
     {
