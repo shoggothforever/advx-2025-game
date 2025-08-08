@@ -1,27 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class TutorialTrigger : MonoBehaviour
 {
     public GameObject panel;
-    private bool tutStart = false;
+    public GameObject bubble;
+    public Text tipsText;
+    public float showDistance = 2f;
+    public bool inTrigger = false;
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!tutStart&& other.CompareTag("Player") || other.CompareTag("GhostPlayer"))
+        if (other.CompareTag("Player") || other.CompareTag("GhostPlayer"))
         {
-            Debug.Log("play tutorial");
-            panel.SetActive(true);
-            tutStart = true;
+            Debug.Log("can play tutorial");
+            bubble.SetActive(true);
+            inTrigger = true;
         }
     }
     void OnTriggerExit2D(Collider2D other)
     {
-        if (tutStart && other.CompareTag("Player") || other.CompareTag("GhostPlayer"))
+        if (other.CompareTag("Player") || other.CompareTag("GhostPlayer"))
         {
             Debug.Log("stop tutorial");
-            panel.SetActive(false);
-            tutStart = false;
+            inTrigger = false;
+            bubble.SetActive(false);
+            StopAllCoroutines();
+            if (panel.active) SetTut(false);
         }
+    }
+    private void Update()
+    {
+        if (panel.active)
+        {
+            bubble.SetActive(false);
+        }
+        else
+        {
+            bubble.SetActive(true);
+        }
+        if (!panel.active && inTrigger && Input.GetKeyDown(KeyCode.F))
+        {
+                SetTut(true);
+        }else if(panel.active && Input.GetKeyDown(KeyCode.F))
+        {
+            SetTut(false);
+        }
+
+    }
+
+    private void SetTut(bool val)
+    {
+        panel.SetActive(val);
     }
 }

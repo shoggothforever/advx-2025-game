@@ -77,18 +77,6 @@ namespace SaveYourself.Core
                     TimeManager.Instance.Register(t);
                     Debug.LogFormat("put box into TimeManager, ID:{0}", t.Id);
                 }
-                //if (boxes != null)
-                //{
-                //    foreach (var box in boxes)
-                //    {
-                //        if (box.name.StartsWith("reversible_box"))
-                //        {
-                //            var bx = box.GetComponent<BaseBox>();
-                //            TimeManager.Instance.Register(bx);
-                //            Debug.LogFormat("put box into TimeManager, ID:{0}", bx.Id);
-                //        }
-                //    }
-                //}
             }
 
             if (waterTransformers == null) { 
@@ -137,14 +125,17 @@ namespace SaveYourself.Core
             pastPlayer.SetActive(true);
             EnableReverseSprite();
             //箱子热胀冷缩
-            foreach (var box in boxes)
+            if (boxes != null)
             {
-                if (box.name.StartsWith("shrink_box"))
+                foreach (var box in boxes)
                 {
-                    var bx = box.GetComponent<ShrinkBox>();
-                    if (bx)
+                    if (box.name.StartsWith("shrink_box"))
                     {
-                        bx.EnlargeStable();
+                        var bx = box.GetComponent<ShrinkBox>();
+                        if (bx)
+                        {
+                            bx.EnlargeStable();
+                        }
                     }
                 }
             }
@@ -187,8 +178,6 @@ namespace SaveYourself.Core
                 }
             }
             if (Input.GetKeyDown(KeyCode.P)) {
-                Clear();
-                TimeManager.Instance.Clear();
                 LoaderManager.Instance.LoadScene(levelName);
             }
             // 预备时间不倒计时
@@ -209,8 +198,6 @@ namespace SaveYourself.Core
         }
         public void LoadNextScene()
         {
-            Clear();
-            TimeManager.Instance.Clear();
             LoaderManager.Instance.LoadScene(nextLevelName);
         }
         public float getTimeLimit()

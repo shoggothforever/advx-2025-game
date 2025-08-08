@@ -56,6 +56,9 @@ public class LoaderManager : MonoBehaviour
 
     IEnumerator LoadAsync(string sceneName)
     {
+        if(GameManager.Instance!=null)GameManager.Instance.Clear();
+        if (TimeManager.Instance != null) TimeManager.Instance.Clear();
+        Instance.isReady = false;
         loadingCanvas.alpha = 1f;           // 显示加载 UI
         yield return null;
 
