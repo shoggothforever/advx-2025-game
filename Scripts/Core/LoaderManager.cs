@@ -77,6 +77,15 @@ public class LoaderManager : MonoBehaviour
         op.allowSceneActivation = true;
         loadingCanvas.alpha = 0f;
     }
+    public static LevelManager FindLevelManagerInScene(string sceneName)
+    {
+        Scene scene = SceneManager.GetSceneByName(sceneName);
+        if (scene.isLoaded){
+            return (LevelManager)(scene.GetRootGameObjects()
+                   .Select(go => go.GetComponentsInChildren<LevelManager>(true)));
+                   }
+        return null;
+    }
     public static T[] FindComponentsInScene<T>(string sceneName) where T : Component
     {
         Scene scene = SceneManager.GetSceneByName(sceneName);

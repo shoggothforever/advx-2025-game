@@ -94,7 +94,6 @@ public class LevelManager : MonoBehaviour
     public void ReloadLevel()
     {
         if (config == null) { Debug.LogError("Íü¼Ç¹Ò LevelConfig£¡"); return; }
-        Instance.isReady = false;
         Instance.LoadScene(config.levelName);
     }
     public void OnQuitClick()
@@ -116,4 +115,8 @@ public class LevelManager : MonoBehaviour
             else Application.Quit();
         }
     }
+}
+public interface ILevelLogic
+{
+    public void DOLevel();
 }

@@ -11,23 +11,15 @@ using SaveYourself.Interact;
 namespace SaveYourself.Core
 {
     public enum GameState { PreReverseTime, ReverseTime,PreForwardTime, ForwardTime, LevelComplete, LevelFailed }
-    [System.Serializable]
-    public class LevelCheckpoint
-    {
-        public string levelName;                 // Level_01
-        public Vector3 playerPos;
-        public List<TimeReverse.TimedAction> boxHistory; // 箱子/机关回放数据
-    }
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
-        public LevelCheckpoint checkpoint = new();
         public GameState currentState=GameState.PreReverseTime;
         public GameObject reverseWorld; // 逆时空
-        public GameObject reversePlayer; // 逆时空
+        public GameObject reversePlayer; // 逆时空角色
         public Cinemachine.CinemachineVirtualCamera reverseVirtualCamera; // 逆时空摄像机
         public GameObject pastWorld;      // 正时空
-        public GameObject pastPlayer;      // 正时空
+        public GameObject pastPlayer;      // 正时空角色
         public Text countdownText;       // 用于显示倒计时的UI文本
         public List<WaterTransformer> waterTransformers; // 用于控制
         private float TimeCountdown=10f;
@@ -38,7 +30,8 @@ namespace SaveYourself.Core
         public float timeLimit;
         public List<ITimeTrackable> trackList = new();
         private bool tracked = false;
-
+        private bool timeStopped = false;
+        private LevelManager lm;
         void Start()
         {
             if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
@@ -61,6 +54,7 @@ namespace SaveYourself.Core
             SetGhostPhysicsIgnoreCollision(false);
             currentState = GameState.ReverseTime;
             TimeCountdown = getTimeLimit();
+            timeStopped = false;
             TimeManager.Instance.phase=TimeManager.Phase.Reverse;
             // 激活逆时空玩家，禁用正时空AI
 
@@ -112,8 +106,10 @@ namespace SaveYourself.Core
             // 禁用逆时空玩家，激活正时空AI
             reversePlayer.GetComponent<Player>().controlEnabled = false;
             // 预备时不显示逆时空的玩家
-            //reversePlayer.SetActive(false);
+            reversePlayer.SetActive(false);
             pastWorld.SetActive(true);
+            pastPlayer.SetActive(true);
+            pastPlayer.GetComponent<Player>().controlEnabled = false;
             Debug.Log("准备开始正时空阶段，你有 " + TimeCountdown + " 秒时间。");
             countdownText.color = Color.blue;
             countdownText.text = common.GetTimeCountDownStr(TimeCountdown) +"\n"+"按下 R 键 结束准备";
@@ -122,7 +118,7 @@ namespace SaveYourself.Core
         public void StartForwardTimePhase()
         {
             currentState = GameState.ForwardTime;
-            pastPlayer.SetActive(true);
+            pastPlayer.GetComponent<Player>().controlEnabled = true;
             EnableReverseSprite();
             //箱子热胀冷缩
             if (boxes != null)
@@ -149,9 +145,19 @@ namespace SaveYourself.Core
             }
         }
 
+        public void OneRoll()
+        {
+            timeStopped = true;
+
+        }
+
         void Update()
         {
             if (levelName!="SampleScene"&&!LoaderManager.Instance.isReady) return;
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                timeStopped = !timeStopped;
+            }
             if (currentState == GameState.PreReverseTime)
             {
                 countdownText.text = "press Z to start";
@@ -172,16 +178,16 @@ namespace SaveYourself.Core
                 {
                     StartForwardTimePhase();
                 }
-                else
-                {
-                    StartReverseTimePhase();
-                }
+                //else
+                //{
+                //    StartReverseTimePhase();
+                //}
             }
             if (Input.GetKeyDown(KeyCode.P)) {
                 LoaderManager.Instance.LoadScene(levelName);
             }
             // 预备时间不倒计时
-            if (TimeCountdown > 0 && (currentState != GameState.PreForwardTime || currentState != GameState.PreForwardTime))
+            if (!timeStopped&&TimeCountdown > 0 && (currentState != GameState.PreForwardTime || currentState != GameState.PreForwardTime))
             {
                 TimeCountdown = TimeCountdown - Time.deltaTime;
                 //Debug.Log("你有 " + TimeCountdown + " 秒时间。");
@@ -203,15 +209,6 @@ namespace SaveYourself.Core
         public float getTimeLimit()
         {
             return timeLimit;
-        }
-        /* 1. 保存当前关卡 */
-        public void SaveCheckpoint()
-        {
-            checkpoint.levelName = SceneManager.GetActiveScene().name;
-            checkpoint.playerPos = FindObjectOfType<Player>().transform.position;
-
-            // 示例：每个关卡的回放功能，后续需要自己写导出和解析功能
-            //checkpoint.boxHistory = TimeManager.Instance.ExportHistory(); // 自己写导出
         }
         private void EnableReverseSprite()
         {

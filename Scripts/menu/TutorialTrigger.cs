@@ -13,7 +13,6 @@ public class TutorialTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") || other.CompareTag("GhostPlayer"))
         {
-            Debug.Log("can play tutorial");
             bubble.SetActive(true);
             inTrigger = true;
         }
@@ -22,7 +21,6 @@ public class TutorialTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") || other.CompareTag("GhostPlayer"))
         {
-            Debug.Log("stop tutorial");
             inTrigger = false;
             bubble.SetActive(false);
             StopAllCoroutines();
