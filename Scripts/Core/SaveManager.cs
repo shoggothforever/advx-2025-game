@@ -29,8 +29,7 @@ namespace SaveYourself.Core
         public static SaveManager Instance { get; private set; }
 
         //[Header("配置")]
-        //[SerializeField] private LevelConfig sceneList; // 用来校验关卡有效性
-
+        public LevelConnection levelConnection;
         private readonly ISaveSerializer serializer = new JsonSaveSerializer();
         private readonly IStorageBackend storage = new LocalFileStorage();
         private readonly List<IMigration> migrations = new() { new Migration_1_to_2() };
@@ -114,40 +113,32 @@ namespace SaveYourself.Core
             // 按版本迁移
             while (migrations.Find(m => m.FromVersion == _cache.version) is { } mig)
                 _cache = mig.Migrate(_cache);
-
-            // 校验关卡有效性（删掉被删掉的关卡的键）
-            //var invalid = _cache.levels.Keys
-            //    .Where(k => !sceneList.levelName.Contains(k)).ToList();
-            //foreach (var k in invalid) _cache.levels.Remove(k);
-
             _dirty = false;
         }
         /// <summary>第一次启动时的默认数据</summary>
         private void initSaveData()
         {
             // 示例：把第一关设为已解锁
-            SaveData("playground", "MainMenu", 0);
-            SaveData("MainMenu", "Tutorial1", 0);
-            SaveData("Tutorial1", "Tutorial2", 0);
-            SaveData("Tutorial2", "Tutorial3", 0);
-            SaveData("Tutorial3", "Level1", 0);
-            SaveData("Level1", "Level2", 0);
+            SaveData("playground", "playground", 0);
+            for(int i = 0; i < Mathf.Min(levelConnection.items.Count, 3); i++)
+            {
+                SaveData(levelConnection.items[i], levelConnection.items[i + 1], 0);
+            }
         }
         //TODO 通过配置的方式为关卡添加索引
         private void initLevelIndexMap()
         {
             if (LevelIndex == null)
             {
+                if (levelConnection == null)
+                {
+                    levelConnection = Resources.Load<LevelConnection>("Configs/levels");
+                }
                 LevelIndex=new Dictionary<string, int>();
-                LevelIndex.Add("MainMenu", 0);
-                LevelIndex.Add("Tutorial1", 1);
-                LevelIndex.Add("Tutorial2", 2);
-                LevelIndex.Add("Tutorial3", 3);
-                LevelIndex.Add("Level1", 4);
-                LevelIndex.Add("Level2", 5);
-                LevelIndex.Add("Level3", 6);
-                LevelIndex.Add("finalLevel", 7);
-                LevelIndex.Add("playground", 999);
+                for(int i=0; i<levelConnection.items.Count; i++)
+                {
+                    LevelIndex.Add(levelConnection.items[i], i);
+                }
             }
         }
         private void Flush()

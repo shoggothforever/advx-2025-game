@@ -51,7 +51,7 @@ public class LevelRecordDto
     public LevelRecordDto(int idx,string name)
     {
         bestTime = 0;
-        levelIndex = idx;   
+        levelIndex = idx;
         levelName = name;
         firstClearUnix = 0;
         lastClearUnix = 0;

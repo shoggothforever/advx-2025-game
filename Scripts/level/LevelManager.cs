@@ -10,13 +10,18 @@ public class LevelManager : MonoBehaviour
 {
     public LevelConfig config; // Inspector ÍÏ½øÀ´
     public GameObject PauseMenu;
+    public LevelManager lm;
+    public ILevelLogic level;
     void Awake()
     {
+
         string scene = gameObject.scene.name;
         config = Resources.Load<LevelConfig>($"Configs/{scene}");
     }
     void Start() 
     {
+        if (lm == null) lm = this;
+        if(PauseMenu!=null)SetPasueMenu(false);
         SpawnAll();
     }
     void SpawnAll()

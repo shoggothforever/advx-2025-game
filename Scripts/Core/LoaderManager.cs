@@ -18,12 +18,10 @@ public class LoaderManager : MonoBehaviour
     {
         if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
         else { Destroy(gameObject); return; }
-
         // 1. 初始化全局管理器
         InitManagers();
         DontDestroyOnLoad(loadingCanvas.gameObject);
         DontDestroyOnLoad(progressBar.gameObject);
-
     }
     void Start()
     {

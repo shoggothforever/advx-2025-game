@@ -185,7 +185,7 @@ namespace SaveYourself.Core
                     StartPreForwardTimePhase();
                 else if (currentState == GameState.ForwardTime)
                 {
-                    // showRestartMenu()
+                    
                 }
             }
             if (currentState == GameState.PreReverseTime)
