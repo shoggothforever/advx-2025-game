@@ -45,6 +45,7 @@ public class LevelManager : MonoBehaviour
             {
                 Debug.Log("find Player Variant");
                 GameManager.Instance.pastPlayer = go;
+                GameManager.Instance.originPastPlayPosition = i.position;
                 go.transform.SetParent(GameManager.Instance.pastWorld.transform, true);
                 TimeManager.Instance.reversePlayer = go;
                 go.SetActive(false);
@@ -110,6 +111,12 @@ public class LevelManager : MonoBehaviour
         if (config == null) { Debug.LogError("Íü¼Ç¹Ò LevelConfig£¡"); return; }
         SetPasueMenu(false);
         Instance.LoadScene(config.levelName);
+    }
+    public void ReturnToMid()
+    {
+        if (config == null) { Debug.LogError("Íü¼Ç¹Ò LevelConfig£¡"); return; }
+        SetPasueMenu(false);
+        GameManager.Instance.RestartFromPreForward();
     }
     public void OnBackToMainMenu()
     {

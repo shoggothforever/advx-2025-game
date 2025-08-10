@@ -20,6 +20,7 @@ namespace SaveYourself.Core
         public Cinemachine.CinemachineVirtualCamera reverseVirtualCamera; // 逆时空摄像机
         public GameObject pastWorld;      // 正时空
         public GameObject pastPlayer;      // 正时空角色
+        public Vector3 originPastPlayPosition;
         public Text countdownText;       // 用于显示倒计时的UI文本
         public List<WaterTransformer> waterTransformers; // 用于控制
         private float TimeCountdown=10f; // 倒计时
@@ -98,11 +99,11 @@ namespace SaveYourself.Core
         }
 
         // 预备正时空阶段
-        public void StartPreForwardTimePhase()
+        public void StartPreForwardTimePhase(bool first)
         {
             currentState = GameState.PreForwardTime;
             // 获取逆向时空节约下来的时间
-            RemainTimeCount = Mathf.Max(TimeCountdown,0);
+            if(first)RemainTimeCount = Mathf.Max(TimeCountdown,0);
             // 恢复TimeCounddown
             TimeCountdown = getTimeLimit();
             // 禁用逆时空玩家，激活正时空AI
@@ -112,7 +113,6 @@ namespace SaveYourself.Core
             pastWorld.SetActive(true);
             pastPlayer.SetActive(true);
             pastPlayer.GetComponent<Player>().controlEnabled = false;
-            Debug.Log("准备开始正时空阶段，你有 " + TimeCountdown + " 秒时间。");
             countdownText.color = Color.blue;
             countdownText.text = common.GetTimeCountDownStr(TimeCountdown) +"\n"+"按下 Z 键 结束准备";
         }    
@@ -182,7 +182,7 @@ namespace SaveYourself.Core
             else if (TimeCountdown <= 0)
             {
                 if (currentState == GameState.ReverseTime)
-                    StartPreForwardTimePhase();
+                    StartPreForwardTimePhase(true);
                 else if (currentState == GameState.ForwardTime)
                 {
                     lm.SetPasueMenu(true);
@@ -202,18 +202,28 @@ namespace SaveYourself.Core
             {
                 if (currentState == GameState.ReverseTime)
                 {
-                    StartPreForwardTimePhase();
+                    StartPreForwardTimePhase(true);
                 }
                 else if (currentState == GameState.PreForwardTime)
                 {
                     StartForwardTimePhase();
                 }
             }
+            if(Input.GetKeyDown(KeyCode.O))
+            {
+                RestartFromPreForward();
+            }
 
         }
         public void LoadNextScene()
         {
             LoaderManager.Instance.LoadScene(nextLevelName);
+        }
+        public void RestartFromPreForward()
+        {
+            StartPreForwardTimePhase(false);
+            pastPlayer.transform.position = originPastPlayPosition;
+            TimeManager.Instance.RestartFromPreForward();
         }
         public float getTimeLimit()
         {

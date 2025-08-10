@@ -11,7 +11,9 @@ namespace SaveYourself.Core
         public enum Phase { PreReverse,Reverse,PreReplay, Replay, Forward }
         public Phase phase = Phase.PreReverse;
         public float currentTime=0;             // 0..reverseDuration
-        public readonly List<TimeReverse.TimedAction> history = new();
+        private float currentTimeRecord = 0;
+        public  List<TimeReverse.TimedAction> history = new();
+        private List<TimeReverse.TimedAction> historyRecord = new();
         readonly Dictionary<int, TimeReverse.ITimeTrackable> registry = new();
         static private TimeManager instance_;
         public static TimeManager Instance
@@ -118,11 +120,11 @@ namespace SaveYourself.Core
         void Update()
         {
             if (GameManager.Instance.timeStopped) return;
-            switch (Instance.phase)
+            switch (phase)
             {
                 case Phase.Reverse:
-                    Instance.currentTime += Time.deltaTime;
-                    if (Instance.currentTime >= GameManager.Instance.getTimeLimit() - GameManager.Instance.RemainTimeCount)
+                    currentTime += Time.deltaTime;
+                    if (currentTime >= GameManager.Instance.getTimeLimit() - GameManager.Instance.RemainTimeCount)
                     {
                         StartPreReplay();
                     }
@@ -130,23 +132,22 @@ namespace SaveYourself.Core
                     {
                         if (Time.frameCount % common.RecordGap == 0)
                         {
-                            Instance.Record();
+                            Record();
                         }
                     }
                     break;
                 case Phase.PreReplay:
                     if (GameManager.Instance.currentState == GameState.ForwardTime)
                     {
-                        SaveManager.Instance.SaveSnapshot(GameManager.Instance.levelName, Instance.history);
-                        Debug.LogFormat("save history, length: {0}", history.Count);
+                        SaveManager.Instance.SaveSnapshot(GameManager.Instance.levelName, history);
                         StartReplay();
                         Debug.Log("start replay");
                         Debug.LogFormat("replayList length is {0}",history.Count);
                     }
                     break;
                 case Phase.Replay:
-                    Instance.RewindStep(Time.deltaTime);
-                    if (Instance.currentTime <= 0)
+                    RewindStep(Time.deltaTime);
+                    if (currentTime <= 0)
                         StartForward();
                     break;
                 case Phase.Forward:
@@ -156,7 +157,11 @@ namespace SaveYourself.Core
         }
         void StartPreReplay()
         {
-           Instance.phase =Phase.PreReplay;
+            historyRecord = new List<TimeReverse.TimedAction>(history);
+            Debug.LogFormat("save history, length: {0}", history.Count);
+            currentTimeRecord = currentTime;
+            Debug.LogFormat("record currentTime:{0}", currentTime);
+            Instance.phase =Phase.PreReplay;
         }
         void StartReplay()
         {
@@ -168,6 +173,12 @@ namespace SaveYourself.Core
         {
             Instance.phase = Phase.Forward;
             currentTime = 0;
+        }
+        public void RestartFromPreForward()
+        {
+            currentTime = currentTimeRecord;
+            history = new List<TimeReverse.TimedAction>(historyRecord);
+            phase = Phase.PreReplay;
         }
     }
 }
