@@ -63,7 +63,7 @@ namespace SaveYourself.Core
         // 在 Replay 阶段逐帧调用
         public void RewindStep(float dt)
         {
-
+            if (GameManager.Instance.timeStopped) return;
             currentTime = Mathf.Max(currentTime - dt, 0f);
 
             // 二分查找第一个 time >= currentTime 的索引
@@ -117,6 +117,7 @@ namespace SaveYourself.Core
         // Update is called once per frame
         void Update()
         {
+            if (GameManager.Instance.timeStopped) return;
             switch (Instance.phase)
             {
                 case Phase.Reverse:

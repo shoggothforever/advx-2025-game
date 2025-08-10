@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 public class LevelManager : MonoBehaviour
 {
     public LevelConfig config; // Inspector ÍÏ½øÀ´
+    public GameObject PauseMenu;
     void Awake()
     {
         string scene = gameObject.scene.name;
@@ -96,14 +97,30 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.Clear();
         Instance.LoadScene(config.nextLevelName);
     }
+    public void OnResume()
+    {
+        SetPasueMenu(false);
+    }
     public void ReloadLevel()
     {
         if (config == null) { Debug.LogError("Íü¼Ç¹Ò LevelConfig£¡"); return; }
+        SetPasueMenu(false);
         Instance.LoadScene(config.levelName);
+    }
+    public void OnBackToMainMenu()
+    {
+        SetPasueMenu(false);
+        Instance.LoadScene("MainMenu");
     }
     public void OnQuitClick()
     {
+        SetPasueMenu(false);
         Application.Quit();
+    }
+    private void SetPasueMenu(bool val)
+    {
+        GameManager.Instance.controlTime(val);
+        PauseMenu.SetActive(val);
     }
     private void Update()
     {
@@ -113,9 +130,13 @@ public class LevelManager : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if (config.levelName != "MainMenu")
+            if (PauseMenu.activeSelf)
             {
-                Instance.LoadScene("MainMenu");
+                OnResume();
+            }
+            else if (config.levelName != "MainMenu")
+            {
+                SetPasueMenu(true);
             }
             else Application.Quit();
         }

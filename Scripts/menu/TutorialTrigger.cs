@@ -24,12 +24,12 @@ public class TutorialTrigger : MonoBehaviour
             inTrigger = false;
             bubble.SetActive(false);
             StopAllCoroutines();
-            if (panel.active) SetTut(false);
+            if (panel.activeSelf) SetTut(false);
         }
     }
     private void Update()
     {
-        if (panel.active)
+        if (panel.activeSelf)
         {
             bubble.SetActive(false);
         }
@@ -37,10 +37,10 @@ public class TutorialTrigger : MonoBehaviour
         {
             bubble.SetActive(true);
         }
-        if (!panel.active && inTrigger && Input.GetKeyDown(KeyCode.F))
+        if (!panel.activeSelf && inTrigger && Input.GetKeyDown(KeyCode.F))
         {
                 SetTut(true);
-        }else if(panel.active && Input.GetKeyDown(KeyCode.F))
+        }else if(panel.activeSelf && Input.GetKeyDown(KeyCode.F))
         {
             SetTut(false);
         }

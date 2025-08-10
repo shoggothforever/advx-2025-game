@@ -29,23 +29,15 @@ namespace SaveYourself.Core
         public string nextLevelName;
         public float timeLimit;
         public List<ITimeTrackable> trackList = new();
+        public bool timeStopped = false;
         private bool tracked = false;
-        private bool timeStopped = false;
-        private LevelManager lm;
+        private ILevelLogic levelLogic;
         void Start()
         {
             if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
             else Destroy(gameObject);
             boxes = GameObject.FindGameObjectsWithTag("Box");
             Debug.LogFormat("find boxes count:{0}", boxes.Length);
-            if(lm== null)
-            {
-                lm=FindObjectOfType<LevelManager>();
-                if (lm != null)
-                {
-                    Debug.Log("find levelManager in GM");
-                }
-            }
         }
         public void addTrack(ITimeTrackable t)
         {
@@ -166,6 +158,12 @@ namespace SaveYourself.Core
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 timeStopped = !timeStopped;
+                controlTime(timeStopped);
+            }
+            if (timeStopped)
+            {
+                countdownText.text = "按下Q键恢复时间运行";
+                return;
             }
             if (Input.GetKeyDown(KeyCode.P)) {
                 LoaderManager.Instance.LoadScene(levelName);
@@ -189,11 +187,7 @@ namespace SaveYourself.Core
                 {
                     // showRestartMenu()
                 }
-            }else if (timeStopped)
-            {
-                countdownText.text = "按下Q键恢复时间运行";
             }
-
             if (currentState == GameState.PreReverseTime)
             {
                 countdownText.text = "按下Z键 结束准备";
@@ -225,6 +219,14 @@ namespace SaveYourself.Core
         {
             return timeLimit;
         }
+        public void controlTime(bool val)
+        {
+            timeStopped = val;
+            if (val) Time.timeScale = 0;
+            else Time.timeScale = 1;
+            if(currentState==GameState.ForwardTime)pastPlayer.GetComponent<Player>().controlEnabled = !val;
+            if (currentState == GameState.ReverseTime)reversePlayer.GetComponent<Player>().controlEnabled = !val;
+        }
         private void EnableReverseSprite()
         {
             reverseWorld.SetActive(true);
@@ -253,9 +255,10 @@ namespace SaveYourself.Core
             trackList.Clear();
             currentState = GameState.PreReverseTime;
             tracked = false;
+            timeStopped = false;
             waterTransformers = null;
             boxes = null;
-            lm = null;
+            levelLogic = null;
         }
     }
 }

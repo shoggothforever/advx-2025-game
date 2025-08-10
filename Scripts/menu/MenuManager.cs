@@ -30,7 +30,7 @@ public class MenuManager : MonoBehaviour
     }
     public void Update()
     {
-        if (chooseLevelPanel.active && Input.GetKeyUp(KeyCode.Escape))
+        if (chooseLevelPanel.activeSelf && Input.GetKeyUp(KeyCode.Escape))
         {
             chooseLevelPanel.SetActive(false);
         }

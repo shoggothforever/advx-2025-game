@@ -25,11 +25,11 @@ public class TriggerButton : TimeReverse.ReversibleObject, TimeReverse.ITimeTrac
     }
     void Update()
     {
-        if (ok &&!spriteOn.active)
+        if (ok &&!spriteOn.activeSelf)
         {
             DelaySwitch();
         }
-        else if(!ok &&spriteOn.active)
+        else if(!ok &&spriteOn.activeSelf)
         {
             switchButton(ok);
         }
@@ -44,8 +44,6 @@ public class TriggerButton : TimeReverse.ReversibleObject, TimeReverse.ITimeTrac
         yield return new WaitForSeconds(delay);
         ok = true;
         switchButton(ok);
-
-
     }
     private void switchButton(bool ok)
     {
