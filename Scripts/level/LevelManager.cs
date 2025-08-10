@@ -10,7 +10,6 @@ public class LevelManager : MonoBehaviour
 {
     public LevelConfig config; // Inspector 拖进来
     public GameObject PauseMenu;
-    public LevelManager lm;
     public ILevelLogic level;
     void Awake()
     {
@@ -20,7 +19,6 @@ public class LevelManager : MonoBehaviour
     }
     void Start() 
     {
-        if (lm == null) lm = this;
         if(PauseMenu!=null)SetPasueMenu(false);
         SpawnAll();
     }
@@ -30,6 +28,7 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.levelName = config.levelName;
         GameManager.Instance.nextLevelName = config.nextLevelName;
         GameManager.Instance.timeLimit = config.timeLimit;
+        GameManager.Instance.lm = this;
         // 生成所有物件
         int cnt = 0;
         foreach (var i in config.items)
@@ -122,7 +121,7 @@ public class LevelManager : MonoBehaviour
         SetPasueMenu(false);
         Application.Quit();
     }
-    private void SetPasueMenu(bool val)
+    public void SetPasueMenu(bool val)
     {
         GameManager.Instance.controlTime(val);
         PauseMenu.SetActive(val);

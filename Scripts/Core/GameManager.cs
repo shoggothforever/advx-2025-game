@@ -31,7 +31,7 @@ namespace SaveYourself.Core
         public List<ITimeTrackable> trackList = new();
         public bool timeStopped = false;
         private bool tracked = false;
-        private ILevelLogic levelLogic;
+        public LevelManager lm;
         void Start()
         {
             if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
@@ -175,7 +175,7 @@ namespace SaveYourself.Core
                 //Debug.Log("你有 " + TimeCountdown + " 秒时间。");
                 if (currentState == GameState.PreForwardTime || currentState == GameState.PreForwardTime)
                 {
-                    countdownText.text = "按下 Z 键 开始游戏";
+                    countdownText.text = "按下 Z 键 结束准备";
                 }
                 else countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
             }// 逆熵世界倒计时结束开始正熵世界
@@ -185,12 +185,12 @@ namespace SaveYourself.Core
                     StartPreForwardTimePhase();
                 else if (currentState == GameState.ForwardTime)
                 {
-                    
+                    lm.SetPasueMenu(true);
                 }
             }
             if (currentState == GameState.PreReverseTime)
             {
-                countdownText.text = "按下Z键 结束准备";
+                countdownText.text = "按下Z键 开始游戏";
                 reversePlayer.GetComponent<Player>().controlEnabled = false;
                 if (Input.GetKeyDown(KeyCode.Z))
                 {
@@ -258,7 +258,7 @@ namespace SaveYourself.Core
             timeStopped = false;
             waterTransformers = null;
             boxes = null;
-            levelLogic = null;
+            lm = null;
         }
     }
 }
