@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97f1b54f76e58444cba6ea52384414da, type: 3}
-  m_Name: menu
+  m_Name: MainMenu
   m_EditorClassIdentifier: 
   levelName: MainMenu
   nextLevelName: Tutorial1

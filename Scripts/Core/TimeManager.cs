@@ -156,7 +156,6 @@ namespace SaveYourself.Core
         void StartPreReplay()
         {
            Instance.phase =Phase.PreReplay;
-
         }
         void StartReplay()
         {
@@ -167,6 +166,7 @@ namespace SaveYourself.Core
         void StartForward()
         {
             Instance.phase = Phase.Forward;
+            currentTime = 0;
         }
     }
 }

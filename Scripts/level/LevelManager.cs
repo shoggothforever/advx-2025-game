@@ -9,13 +9,18 @@ using UnityEngine.EventSystems;
 public class LevelManager : MonoBehaviour
 {
     public LevelConfig config; // Inspector 拖进来
-    void Start()
+    void Awake()
+    {
+        string scene = gameObject.scene.name;
+        config = Resources.Load<LevelConfig>($"Configs/{scene}");
+    }
+    void Start() 
     {
         SpawnAll();
     }
     void SpawnAll()
     {
-        if (config == null) { Debug.LogError("忘记挂 LevelConfig！"); return; }
+        if (config == null) { Debug.LogError("无法找到 LevelConfig！"); return; }
         GameManager.Instance.levelName = config.levelName;
         GameManager.Instance.nextLevelName = config.nextLevelName;
         GameManager.Instance.timeLimit = config.timeLimit;
@@ -81,7 +86,7 @@ public class LevelManager : MonoBehaviour
             es.AddComponent<InputSystemUIInputModule>(); // 新版 Input System
             #endif
         }
-        if (cnt>=2)LoaderManager.Instance.isReady = true;
+        if (cnt>=2)Instance.isReady = true;
     }
     public void LoadNextLevel()
     {
@@ -118,5 +123,63 @@ public class LevelManager : MonoBehaviour
 }
 public interface ILevelLogic
 {
-    public void DOLevel();
+    public void DoWholeLevel();
+    public void DoInPreReverse();
+    public void DoInReverse();
+    public void DoInPreForward();
+    public void DoInForward();
+}
+public class EmptyLevel : ILevelLogic
+{
+    public void DoInForward()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DoInPreForward()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DoInPreReverse()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DoInReverse()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DoWholeLevel()
+    {
+        throw new System.NotImplementedException();
+    }
+}
+public class PlayGroundLevel : ILevelLogic
+{
+    public void DoInForward()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DoInPreForward()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DoInPreReverse()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DoInReverse()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DoWholeLevel()
+    {
+        throw new System.NotImplementedException();
+    }
 }

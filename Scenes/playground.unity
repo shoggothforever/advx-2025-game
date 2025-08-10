@@ -1298,10 +1298,18 @@ PrefabInstance:
     - target: {fileID: 5704924045375132123, guid: 31a507ae2ffc3ef43a63bdcd4ca58a66, type: 3}
       propertyPath: config
       value: 
-      objectReference: {fileID: 11400000, guid: b8bfc2beaff894840935af23341e617d, type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: 5704924045375132123, guid: 31a507ae2ffc3ef43a63bdcd4ca58a66, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6643662457545962133, guid: 31a507ae2ffc3ef43a63bdcd4ca58a66, type: 3}
       propertyPath: m_Name
       value: LevelManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643662457545962133, guid: 31a507ae2ffc3ef43a63bdcd4ca58a66, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6643662457545962133, guid: 31a507ae2ffc3ef43a63bdcd4ca58a66, type: 3}
       propertyPath: m_TagString

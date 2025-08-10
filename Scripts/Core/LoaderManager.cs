@@ -34,8 +34,6 @@ public class LoaderManager : MonoBehaviour
     void InitManagers()
     {
         // 按需 AddComponent 或用 Addressable 实例化
-        //gameObject.AddComponent<AudioManager>();
-
         gameObject.AddComponent<GameManager>();
         gameObject.AddComponent<TimeManager>();
         gameObject.AddComponent<SaveManager>();

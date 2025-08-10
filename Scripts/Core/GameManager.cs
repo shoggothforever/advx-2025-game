@@ -22,8 +22,8 @@ namespace SaveYourself.Core
         public GameObject pastPlayer;      // 正时空角色
         public Text countdownText;       // 用于显示倒计时的UI文本
         public List<WaterTransformer> waterTransformers; // 用于控制
-        private float TimeCountdown=10f;
-        public float RemainTimeCount=0;
+        private float TimeCountdown=10f; // 倒计时
+        public float RemainTimeCount=0; // 节约的时间
         public GameObject[] boxes;
         public string levelName;
         public string nextLevelName;
@@ -38,6 +38,14 @@ namespace SaveYourself.Core
             else Destroy(gameObject);
             boxes = GameObject.FindGameObjectsWithTag("Box");
             Debug.LogFormat("find boxes count:{0}", boxes.Length);
+            if(lm== null)
+            {
+                lm=FindObjectOfType<LevelManager>();
+                if (lm != null)
+                {
+                    Debug.Log("find levelManager in GM");
+                }
+            }
         }
         public void addTrack(ITimeTrackable t)
         {
@@ -101,7 +109,9 @@ namespace SaveYourself.Core
         public void StartPreForwardTimePhase()
         {
             currentState = GameState.PreForwardTime;
+            // 获取逆向时空节约下来的时间
             RemainTimeCount = Mathf.Max(TimeCountdown,0);
+            // 恢复TimeCounddown
             TimeCountdown = getTimeLimit();
             // 禁用逆时空玩家，激活正时空AI
             reversePlayer.GetComponent<Player>().controlEnabled = false;
@@ -112,7 +122,7 @@ namespace SaveYourself.Core
             pastPlayer.GetComponent<Player>().controlEnabled = false;
             Debug.Log("准备开始正时空阶段，你有 " + TimeCountdown + " 秒时间。");
             countdownText.color = Color.blue;
-            countdownText.text = common.GetTimeCountDownStr(TimeCountdown) +"\n"+"按下 R 键 结束准备";
+            countdownText.text = common.GetTimeCountDownStr(TimeCountdown) +"\n"+"按下 Z 键 结束准备";
         }    
         // 开始正时空阶段
         public void StartForwardTimePhase()
@@ -148,7 +158,6 @@ namespace SaveYourself.Core
         public void OneRoll()
         {
             timeStopped = true;
-
         }
 
         void Update()
@@ -158,9 +167,36 @@ namespace SaveYourself.Core
             {
                 timeStopped = !timeStopped;
             }
+            if (Input.GetKeyDown(KeyCode.P)) {
+                LoaderManager.Instance.LoadScene(levelName);
+            }
+            // 预备时间不倒计时
+            if (!timeStopped && TimeCountdown > 0 && (currentState != GameState.PreForwardTime || currentState != GameState.PreForwardTime))
+            {
+                TimeCountdown -= Time.deltaTime;
+                //Debug.Log("你有 " + TimeCountdown + " 秒时间。");
+                if (currentState == GameState.PreForwardTime || currentState == GameState.PreForwardTime)
+                {
+                    countdownText.text = "按下 Z 键 开始游戏";
+                }
+                else countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
+            }// 逆熵世界倒计时结束开始正熵世界
+            else if (TimeCountdown <= 0)
+            {
+                if (currentState == GameState.ReverseTime)
+                    StartPreForwardTimePhase();
+                else if (currentState == GameState.ForwardTime)
+                {
+                    // showRestartMenu()
+                }
+            }else if (timeStopped)
+            {
+                countdownText.text = "按下Q键恢复时间运行";
+            }
+
             if (currentState == GameState.PreReverseTime)
             {
-                countdownText.text = "press Z to start";
+                countdownText.text = "按下Z键 结束准备";
                 reversePlayer.GetComponent<Player>().controlEnabled = false;
                 if (Input.GetKeyDown(KeyCode.Z))
                 {
@@ -168,7 +204,7 @@ namespace SaveYourself.Core
                 }
                 return;
             }
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.Z))
             {
                 if (currentState == GameState.ReverseTime)
                 {
@@ -178,29 +214,8 @@ namespace SaveYourself.Core
                 {
                     StartForwardTimePhase();
                 }
-                //else
-                //{
-                //    StartReverseTimePhase();
-                //}
             }
-            if (Input.GetKeyDown(KeyCode.P)) {
-                LoaderManager.Instance.LoadScene(levelName);
-            }
-            // 预备时间不倒计时
-            if (!timeStopped&&TimeCountdown > 0 && (currentState != GameState.PreForwardTime || currentState != GameState.PreForwardTime))
-            {
-                TimeCountdown = TimeCountdown - Time.deltaTime;
-                //Debug.Log("你有 " + TimeCountdown + " 秒时间。");
-                if(currentState == GameState.PreForwardTime || currentState == GameState.PreForwardTime)
-                {
-                    countdownText.text = "press Z to start";
-                }
-                    else countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
-            }// 逆熵世界倒计时结束开始正熵世界
-            else if (TimeCountdown <=0 && currentState == GameState.ReverseTime)
-            {
-                StartPreForwardTimePhase();
-            }
+
         }
         public void LoadNextScene()
         {
@@ -240,6 +255,7 @@ namespace SaveYourself.Core
             tracked = false;
             waterTransformers = null;
             boxes = null;
+            lm = null;
         }
     }
 }

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97f1b54f76e58444cba6ea52384414da, type: 3}
-  m_Name: Tutor3
+  m_Name: Tutorial2
   m_EditorClassIdentifier: 
-  levelName: Tutorial3
-  nextLevelName: Level1
+  levelName: Tutorial2
+  nextLevelName: Tutorial3
   timeLimit: 20
   playerSpawn: {x: 0, y: 0, z: 0}
   items:
@@ -35,5 +35,13 @@ MonoBehaviour:
     scale: {x: 2, y: 2, z: 1}
   - prefab: {fileID: 3024578306212300893, guid: 90620d5f0c174a342a283e23ec5d9a82, type: 3}
     position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - prefab: {fileID: 1177841938949279545, guid: 8fb5fd9b5941a4a45a458e243543b19d, type: 3}
+    position: {x: 16.81, y: 8.69, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 2, z: 1}
+  - prefab: {fileID: 7902654965975361880, guid: fbaffea3aa3ef504abaa023cb814ab3e, type: 3}
+    position: {x: 27.73, y: 13.29, z: 0}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
