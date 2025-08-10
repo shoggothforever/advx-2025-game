@@ -37,13 +37,11 @@ public class LevelManager : MonoBehaviour
             go.transform.localScale = i.scale;
             if (go.name.StartsWith("BeginPos"))
             {
-                Debug.Log("find BeginPos");
                 GameManager.Instance.pastWorld = go;
                 cnt++;
             }
             else if (go.name.StartsWith("Player Variant"))
             {
-                Debug.Log("find Player Variant");
                 GameManager.Instance.pastPlayer = go;
                 GameManager.Instance.originPastPlayPosition = i.position;
                 go.transform.SetParent(GameManager.Instance.pastWorld.transform, true);
@@ -53,13 +51,11 @@ public class LevelManager : MonoBehaviour
             }
             else if (go.name.StartsWith("EndPos"))
             {
-                Debug.Log("find EndPos");
                 GameManager.Instance.reverseWorld = go;
                 ++cnt;
             }
             else if (go.name.StartsWith("Player reverse"))
             {
-                Debug.Log("find Player reverse");
                 go.transform.SetParent(GameManager.Instance.reverseWorld.transform, true);
                 GameManager.Instance.reversePlayer = go;
                 TimeManager.Instance.reversePlayer = go;
@@ -73,11 +69,9 @@ public class LevelManager : MonoBehaviour
             }
             else if (go.name.StartsWith("waterTransformer"))
             {
-                Debug.Log("find waterTransformers");
                 GameManager.Instance.waterTransformers = go.GetComponent<List<WaterTransformer>>();
             }else if (go.name.StartsWith("Canvas"))
             {
-                Debug.Log("find Canvas");
                 go.GetComponent<Canvas>().worldCamera=Camera.main;
                 GameManager.Instance.countdownText=go.GetComponentInChildren<Text>();
                 ++cnt;
