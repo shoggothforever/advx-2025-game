@@ -57,7 +57,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 927213013451211559, guid: 64eacd142ca9ab640a83a8ea142072a3, type: 3}
       propertyPath: m_Name
-      value: reversible_box1
+      value: reversible_box1 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 927213013451211560, guid: 64eacd142ca9ab640a83a8ea142072a3, type: 3}
       propertyPath: rb
@@ -92,5 +92,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waterLevelY: 8.5
-  buoyancy: 20
-  damping: 2
+  buoyancy: 15
+  damping: 5

@@ -7,8 +7,8 @@ public class FloatBox : MonoBehaviour
 {
     [Header("浮力参数")]
     public float waterLevelY = 0f;     // 水面 Y 坐标（可在场景里手动设）
-    public float buoyancy = 10f;    // 浮力强度
-    public float damping = 2f;     // 垂直阻尼，防止振荡
+    public float buoyancy = 15f;    // 浮力强度
+    public float damping = 5f;     // 垂直阻尼，防止振荡
 
     Rigidbody2D rb;
     float defaultGravity;
