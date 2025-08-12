@@ -16,7 +16,6 @@ namespace SaveYourself.Gameplay
             var player = model.player;
             player.collider2d.enabled = true;
             player.controlEnabled = false;
-            player.health.Increment();
             player.Teleport(model.spawnPoint.transform.position);
             player.jumpState = Player.JumpState.Grounded;
             player.animator.SetBool("dead", false);

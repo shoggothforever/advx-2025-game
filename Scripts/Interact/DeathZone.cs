@@ -6,10 +6,11 @@ public class DeathZone : MonoBehaviour
 {
     public void OnCollisionEnter2D(Collision2D c)
     {
-        if(c.collider.CompareTag("GhostPlayer"))
+        if (c.collider.CompareTag("GhostPlayer"))
         {
-            LoaderManager.Instance.LoadScene(GameManager.Instance.levelName); 
-        }else if (c.collider.CompareTag("Player"))
+            LoaderManager.Instance.LoadScene(GameManager.Instance.levelName);
+        }
+        else if (c.collider.CompareTag("Player"))
         {
             GameManager.Instance.RestartFromPreForward();
         }

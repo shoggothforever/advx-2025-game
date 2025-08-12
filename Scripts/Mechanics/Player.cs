@@ -31,8 +31,6 @@ namespace SaveYourself.Mechanics
         public float jumpTakeOffSpeed = 3;
 
         public JumpState jumpState = JumpState.Grounded;
-
-        public Health health;
         private bool stopJump;
         /*internal new*/
         public Collider2D collider2d;
@@ -52,7 +50,6 @@ namespace SaveYourself.Mechanics
         public int Id { get; private set; }
         void Awake()
         {
-            health = GetComponent<Health>();
             audioSource = GetComponent<AudioSource>();
             collider2d = GetComponent<Collider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
