@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 4629926827127369148}
   - component: {fileID: 2766455715180286723}
   m_Layer: 0
-  m_Name: switch
+  m_Name: reversible_switch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

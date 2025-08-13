@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 6188708128751165536}
   - component: {fileID: 1835308803081792109}
   m_Layer: 0
-  m_Name: doorLinks
+  m_Name: reversible_doorLinks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

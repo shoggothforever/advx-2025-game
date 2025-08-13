@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 740156916784279084}
   - component: {fileID: 740156916784279087}
   m_Layer: 0
-  m_Name: "\u6D3B\u677F\u95E8"
+  m_Name: "reversible_\u6D3B\u677F\u95E8"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
