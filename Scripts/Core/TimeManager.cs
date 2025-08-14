@@ -41,6 +41,13 @@ namespace SaveYourself.Core
                 registry.Remove(t.Id);
             }
         }
+        public void UnRegisterByID(int id)
+        {
+            if (registry.ContainsKey(id))
+            {
+                registry.Remove(id);
+            }
+        }
         public void addHistory(TimeReverse.ITimeTrackable t,TimeReverse.TimedAction ta)
         {
             Register(t);
