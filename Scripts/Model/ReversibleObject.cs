@@ -13,7 +13,6 @@ namespace SaveYourself.Model
         // 逆时空玩家与此物体交互时调用的方法
         public virtual void OnReverseInteraction()
         {
-            Debug.Log(gameObject.name + " 的状态在逆时空被改变了。");
             stateChanged = true;
         }
 

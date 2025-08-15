@@ -44,8 +44,8 @@ public class StartPointTrigger : MonoBehaviour
                 // 计数完成
                 currentCount = 0;
                 dic.Clear();
-                SaveManager.Instance.SaveData(GameManager.Instance.levelName,GameManager.Instance.nextLevelName,GameManager.Instance.getTimeLimit()-GameManager.Instance.RemainTimeCount);
-                SaveManager.Instance.SaveData(GameManager.Instance.nextLevelName, GameManager.Instance.nextLevelName,0);
+                SaveManager.Instance.SaveData(GameManager.Instance.levelName,GameManager.Instance.getTimeLimit()-GameManager.Instance.RemainTimeCount);
+                SaveManager.Instance.AddNewLevelEntrance(GameManager.Instance.nextLevelName);
                 GameManager.Instance.LoadNextScene();
             }
         }

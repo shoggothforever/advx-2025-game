@@ -10,5 +10,5 @@ public class Const
     public const int reversableRoleInitialID = 1;
     public const int reversableItemInitialID = 100;
     public const int pushForce = 50;
-    public const int RecordGap = 1;
+    public const int RecordGap = 3;
 }

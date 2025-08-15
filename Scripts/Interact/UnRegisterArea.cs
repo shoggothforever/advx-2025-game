@@ -8,26 +8,26 @@ public class UnRegisterArea : MonoBehaviour
 {
     public void OnTriggerEnter2D(Collider2D c)
     {
+        bool needUnRegister = false;
         Debug.Log("trigger UnRegisterArea");
         if (c.name.StartsWith("reversible"))
         {
-
-            Transform parent = c.transform.parent;          // ¸¸¼¶ Transform
-            if (c.CompareTag("GhostPlayer"))
+            if (c.CompareTag("Box"))
             {
-                TimeManager.Instance.UnRegisterByID(1);
-                Debug.Log("unrigister player reverse");
+                Debug.Log("unregister this reversible box");
 
             }
-            //else if (c.CompareTag("Box"))
-            //{
-            //    BaseBox box = GetFromCollider(c);
-            //    if (box != null) Debug.Log("unregister this reversible box");
-            //    TimeManager.Instance.UnRegister(box);
-            //}
-            //TimeReverse.ITimeTrackable trackable = c.GetComponentInParent<TimeReverse.ITimeTrackable>();
-            //if (trackable != null) Debug.Log("unregister this reversible object");
-            //TimeManager.Instance.UnRegister(trackable);
+        }
+        else if (c.CompareTag("GhostPlayer"))
+        {
+            Debug.Log("unrigister player reverse");
+            needUnRegister = true;
+        }
+        if (needUnRegister)
+        {
+            TimeReverse.ITimeTrackable trackable = c.GetComponentInParent<TimeReverse.ITimeTrackable>();
+            if (trackable != null) Debug.LogFormat("unregister this reversible object with id {0}", trackable.Id);
+            TimeManager.Instance.UnRegister(trackable);
         }
     }
 }

@@ -64,7 +64,6 @@ namespace SaveYourself.Core
             {
                 tracked=true;
                 var per = reversePlayer.GetComponent<Mechanics.Player>();
-                //Debug.LogFormat("get player id {0}", per.Id);
                 TimeManager.Instance.Register(per);
                 Debug.Log("register reverse player into TimeManager, ID: "+per.Id);
                 Debug.LogFormat("will register {0} Items in TimeManager",trackList.Count);
@@ -84,7 +83,6 @@ namespace SaveYourself.Core
                     if (t != null)
                     {
                         waterTransformers.Add(t);
-                        Debug.Log("add waterTransform into game manager");
                     }
 
                 }
@@ -243,7 +241,8 @@ namespace SaveYourself.Core
             reverseWorld.SetActive(true);
             reversePlayer.SetActive(true);
             reversePlayer.GetComponent<Player>().controlEnabled = false;
-            reversePlayer.GetComponent<Rigidbody2D>().simulated = false;
+            Physics2D.IgnoreCollision(pastPlayer.GetComponent<Collider2D>(), reversePlayer.GetComponent<Collider2D>());
+            //reversePlayer.GetComponent<Rigidbody2D>().simulated = false;
             SetGhostPhysicsIgnoreCollision(true);
 
             foreach (var sr in reversePlayer.GetComponentsInChildren<SpriteRenderer>())
@@ -259,7 +258,7 @@ namespace SaveYourself.Core
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Box"), isIgnore);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), isIgnore);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), isIgnore);
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), true);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), isIgnore);
         }
         public void Clear()
         {

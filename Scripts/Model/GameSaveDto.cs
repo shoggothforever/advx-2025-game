@@ -15,23 +15,15 @@ public class GameSaveDto
 {
     public int version = 1;      // 存档版本号
     public long lastSavedUnix;    // 时间戳（秒）
-    public PlayerProgressDto player = new();
     public Dictionary<string, LevelRecordDto> levels = new(); // key = LevelId
     public Dictionary<string,TimeReverse.TimedAction[]> levelReverseSnapshot = new(); // key = LevelId
     public GameSaveDto()
     {
         version = 1;
         lastSavedUnix = 0;
-        player = new();
         levels = new();
         levelReverseSnapshot = new();
     }
-}
-
-[System.Serializable]
-public class PlayerProgressDto
-{
-    public int highestUnlockedWorld;   // 示例：解锁世界
 }
 
 [System.Serializable]

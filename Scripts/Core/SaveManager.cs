@@ -9,6 +9,7 @@ namespace SaveYourself.Core
     {
         void Save(string path, string raw);
         string Load(string path);
+        void Delete(string path);
     }
     // PC/Mac：Application.persistentDataPath
     public class LocalFileStorage : IStorageBackend
@@ -24,6 +25,13 @@ namespace SaveYourself.Core
 
         }
         public string Load(string path) => File.Exists(path) ? File.ReadAllText(path) : "";
+        public void Delete(string path)
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
     }
 
     public class SaveManager : MonoBehaviour
@@ -37,9 +45,9 @@ namespace SaveYourself.Core
         private readonly List<IMigration> migrations = new() { new Migration_1_to_2() };
         private string path;
         private GameSaveDto _cache;           // 运行期只操作这份内存
+        public GameSaveDto Data => _cache;    // 任何地方直接访问
         private bool _dirty;                  // 脏标记，避免频繁写盘
         private float _lastWriteTime;         // 节流：最多 2 秒写一次
-        public GameSaveDto Data => _cache;    // 任何地方直接访问
         private static Dictionary<string, int> LevelIndex;
         private void Awake()
         {
@@ -69,16 +77,21 @@ namespace SaveYourself.Core
         public void MarkDirty() => _dirty = true;
         public void SaveSnapshot(string levelName,List<TimeReverse.TimedAction> history)
         {
-            var rec = Data.levelReverseSnapshot;
-            rec[levelName] = history.ToArray();
+            //var rec = Data.levelReverseSnapshot;
+            // just save disk space
+            //rec[levelName] = history.ToArray();
         }
-        public void SaveData(string levelName, string nextLevelName, float time)
+        public void AddNewLevelEntrance(string levelName)
         {
             if (!Data.levels.ContainsKey(levelName))
             {
-                var levelRec = new LevelRecordDto(LevelIndex[levelName],levelName);
+                var levelRec = new LevelRecordDto(LevelIndex[levelName], levelName);
                 Data.levels[levelName] = levelRec;
             }
+        }
+        public void SaveData(string levelName, float time)
+        {
+            AddNewLevelEntrance(levelName);
             var rec = Data.levels[levelName];
             if (time < rec.bestTime || rec.bestTime == 0)
             {
@@ -119,11 +132,11 @@ namespace SaveYourself.Core
         private void initSaveData()
         {
             // 示例：把第一关设为已解锁
-            SaveData("playground", "playground", 0);
+            SaveData("playground", 0);
             int cnt = levelConnection.items.Count;
-            for (int i = 0; i < Mathf.Min(cnt, 3)-1; i++)
+            for (int i = 0; i < Mathf.Min(cnt, 2); i++)
             {
-                SaveData(levelConnection.items[i], levelConnection.items[i + 1], 0);
+                SaveData(levelConnection.items[i], 0);
             }
         }
         //TODO 通过配置的方式为关卡添加索引
@@ -138,7 +151,6 @@ namespace SaveYourself.Core
                 LevelIndex=new Dictionary<string, int>();
                 for(int i=0; i<levelConnection.items.Count; i++)
                 {
-                    Debug.Log(levelConnection.items[i]);
                     LevelIndex.Add(levelConnection.items[i], i);
                 }
             }
