@@ -241,8 +241,7 @@ namespace SaveYourself.Core
             reverseWorld.SetActive(true);
             reversePlayer.SetActive(true);
             reversePlayer.GetComponent<Player>().controlEnabled = false;
-            Physics2D.IgnoreCollision(pastPlayer.GetComponent<Collider2D>(), reversePlayer.GetComponent<Collider2D>());
-            //reversePlayer.GetComponent<Rigidbody2D>().simulated = false;
+            reversePlayer.GetComponent<Rigidbody2D>().simulated = false;
             SetGhostPhysicsIgnoreCollision(true);
 
             foreach (var sr in reversePlayer.GetComponentsInChildren<SpriteRenderer>())
