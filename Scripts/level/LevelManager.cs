@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SaveYourself.Core;
+using SaveYourself.Utils;
+using SaveYourself.Model;
 using static LoaderManager;
 using UnityEngine.EventSystems;
 
 public class LevelManager : MonoBehaviour
 {
-    public LevelConfig config; // Inspector ÍÏ½øÀ´
+    public LevelConfig config;
     public GameObject PauseMenu;
     public ILevelLogic level;
     void Awake()
-    {
-
+    { 
         string scene = gameObject.scene.name;
         config = Resources.Load<LevelConfig>($"Configs/{scene}");
     }
@@ -129,10 +130,12 @@ public class LevelManager : MonoBehaviour
     }
     private void Update()
     {
+        #if UNITY_EDITOR 
         if (Input.GetKeyDown(KeyCode.N))
         {
             LoadNextLevel();
         }
+        #endif
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             if (PauseMenu.activeSelf)

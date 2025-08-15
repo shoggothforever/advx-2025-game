@@ -29,10 +29,6 @@ namespace SaveYourself.Utils
             }
             return str;
         }
-        public const string initCountdownText = "press Z to start";
-        public const int reversableRoleInitialID = 1;
-        public const int reversableItemInitialID = 100;
-        public const int pushForce = 50;
-        public const int RecordGap = 1;
+
     }
 }

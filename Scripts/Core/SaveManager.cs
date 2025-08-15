@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using SaveYourself.Utils;
+using SaveYourself.Model;
 namespace SaveYourself.Core
 {
     public interface IStorageBackend
@@ -81,7 +83,6 @@ namespace SaveYourself.Core
             if (time < rec.bestTime || rec.bestTime == 0)
             {
                 rec.bestTime = time;
-
             }
             var now=Time.time;
             if (now < rec.firstClearUnix || rec.firstClearUnix==0f)
@@ -90,7 +91,6 @@ namespace SaveYourself.Core
             }
             rec.lastClearUnix= now;
             Data.levels[levelName] = rec;
-            Data.player.highestUnlockedWorld = Mathf.Max(Data.player.highestUnlockedWorld, Mathf.Max(4, LevelIndex[nextLevelName]));
             MarkDirty();
         }
 
@@ -120,7 +120,8 @@ namespace SaveYourself.Core
         {
             // 示例：把第一关设为已解锁
             SaveData("playground", "playground", 0);
-            for(int i = 0; i < Mathf.Min(levelConnection.items.Count, 3); i++)
+            int cnt = levelConnection.items.Count;
+            for (int i = 0; i < Mathf.Min(cnt, 3)-1; i++)
             {
                 SaveData(levelConnection.items[i], levelConnection.items[i + 1], 0);
             }
@@ -132,14 +133,19 @@ namespace SaveYourself.Core
             {
                 if (levelConnection == null)
                 {
-                    levelConnection = Resources.Load<LevelConnection>("Configs/levels");
+                    levelConnection = Resources.Load<LevelConnection>(Const.LevelConnectionPath);
                 }
                 LevelIndex=new Dictionary<string, int>();
                 for(int i=0; i<levelConnection.items.Count; i++)
                 {
+                    Debug.Log(levelConnection.items[i]);
                     LevelIndex.Add(levelConnection.items[i], i);
                 }
             }
+        }
+        public int getLevelIndex(string levelName)
+        {
+            return LevelIndex[levelName];
         }
         private void Flush()
         {

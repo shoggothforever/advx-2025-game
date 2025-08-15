@@ -44,7 +44,7 @@ namespace SaveYourself.Mechanics
         SpriteRenderer spriteRenderer;
         internal Animator animator;
         readonly PlatformerModel model = GetModel<PlatformerModel>();
-        static int nextId = common.reversableRoleInitialID;
+        static int nextId = Const.reversableRoleInitialID;
         Animator anim;
 
         public int Id { get; private set; }
@@ -229,7 +229,7 @@ namespace SaveYourself.Mechanics
             if (!c.collider.CompareTag("Box")) return;
             Rigidbody2D rbBox = c.collider.attachedRigidbody;
             Vector2 dir = c.contacts[0].normal * -1;   // ·´ÏòÍÆ
-            rbBox.AddForce(dir * common.pushForce, ForceMode2D.Force);
+            rbBox.AddForce(dir * Const.pushForce, ForceMode2D.Force);
         }
 
         TimeReverse.ActionType TimeReverse.ITimeTrackable.GetActionType()

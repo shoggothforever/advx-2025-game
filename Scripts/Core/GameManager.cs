@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using SaveYourself.Utils;
+using SaveYourself.Model;
 using SaveYourself.Mechanics;
 using static SaveYourself.Core.TimeReverse;
 using SaveYourself.Interact;

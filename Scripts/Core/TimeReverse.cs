@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SaveYourself.Utils;
+using SaveYourself.Model;
 namespace SaveYourself.Core
 {
     public class TimeReverse : MonoBehaviour
@@ -30,7 +31,7 @@ namespace SaveYourself.Core
         }
         public abstract class ReversibleObject : MonoBehaviour
         {
-            static int nextId =common.reversableItemInitialID ;
+            static int nextId =Const.reversableItemInitialID ;
             public int Id { get; private set; }
             public void Awake()
             {

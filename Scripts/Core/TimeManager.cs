@@ -137,7 +137,7 @@ namespace SaveYourself.Core
                     }
                     else
                     {
-                        if (Time.frameCount % common.RecordGap == 0)
+                        if (Time.frameCount % Const.RecordGap == 0)
                         {
                             Record();
                         }

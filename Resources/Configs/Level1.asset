@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level1
   m_EditorClassIdentifier: 
   levelName: Level1
-  nextLevelName: Level2
+  nextLevelName: end
   timeLimit: 30
   playerSpawn: {x: 15.583969, y: 2.7296603, z: 0}
   items:

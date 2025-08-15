@@ -7,7 +7,11 @@ using SaveYourself.Core;
 public class MenuManager : MonoBehaviour
 {
     public GameObject chooseLevelPanel;
-    public MenuManager Instance { get; private set; }
+    public static MenuManager Instance { get; private set; }
+    public void Awake()
+    {
+        
+    }
     public void Start()
     {
         if (Instance==null) Instance = this;

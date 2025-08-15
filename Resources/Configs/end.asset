@@ -9,15 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d21b850e6918494cab973b0965c0f00, type: 3}
-  m_Name: levels
+  m_Script: {fileID: 11500000, guid: 97f1b54f76e58444cba6ea52384414da, type: 3}
+  m_Name: end
   m_EditorClassIdentifier: 
-  items:
-  - MainMenu
-  - Tutorial1
-  - Tutorial2
-  - Tutorial3
-  - Level1
-  - end
-  - Level3
-  - playground
+  levelName: end
+  nextLevelName: end
+  timeLimit: 0
+  playerSpawn: {x: 0, y: 0, z: 0}
+  items: []
