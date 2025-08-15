@@ -108,7 +108,7 @@ namespace SaveYourself.Mechanics
             {
                 move.x = 0;
             }
-            if (TimeManager.Instance.phase == TimeManager.Phase.Reverse)
+            if (TimeManager.Instance.phase == TimeManager.Phase.Record)
             {
                 lastVelocity = body.velocity;
             }

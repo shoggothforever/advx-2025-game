@@ -57,23 +57,21 @@ namespace SaveYourself.Core
             currentState = GameState.ReverseTime;
             TimeCountdown = getTimeLimit();
             timeStopped = false;
-            TimeManager.Instance.phase=TimeManager.Phase.Reverse;
             // 激活逆时空玩家，禁用正时空AI
-
             if (!tracked)
             {
                 tracked=true;
                 var per = reversePlayer.GetComponent<Mechanics.Player>();
-                TimeManager.Instance.Register(per);
+                TimeManager.Instance.Registe(per);
                 Debug.Log("register reverse player into TimeManager, ID: "+per.Id);
-                Debug.LogFormat("will register {0} Items in TimeManager",trackList.Count);
+                Debug.LogFormat("will registe {0} Items in TimeManager",trackList.Count);
                 foreach (var t in trackList)
                 {
-                    TimeManager.Instance.Register(t);
+                    TimeManager.Instance.Registe(t);
                     Debug.LogFormat("put box into TimeManager, ID:{0}", t.Id);
                 }
             }
-
+            TimeManager.Instance.StartRecord();
             if (waterTransformers == null) { 
                 Scene scene = SceneManager.GetSceneByName(levelName);
                 if (!scene.isLoaded) return;

@@ -8,8 +8,8 @@ namespace SaveYourself.Core
     {
         public GameObject pastPlayer;
         public GameObject reversePlayer;
-        public enum Phase { PreReverse,Reverse,PreReplay, Replay, Forward }
-        public Phase phase = Phase.PreReverse;
+        public enum Phase { PreRecord,Record,PreReplay, Replay, End }
+        public Phase phase = Phase.PreRecord;
         public float currentTime=0;             // 0..reverseDuration
         private float currentTimeRecord = 0;
         public  List<TimeReverse.TimedAction> history = new();
@@ -26,7 +26,7 @@ namespace SaveYourself.Core
             instance_ = this;
         }
         // 只在逆向阶段调用，将要记录的物体添加到记录队列中去
-        public void Register(TimeReverse.ITimeTrackable t)
+        public void Registe(TimeReverse.ITimeTrackable t)
         {
             if (!registry.ContainsKey(t.Id))
             {
@@ -34,14 +34,14 @@ namespace SaveYourself.Core
                 registry.Add(t.Id, t);
             }
         }
-        public void UnRegister(TimeReverse.ITimeTrackable t)
+        public void UnRegiste(TimeReverse.ITimeTrackable t)
         {
             if (registry.ContainsKey(t.Id))
             {
                 registry.Remove(t.Id);
             }
         }
-        public void UnRegisterByID(int id)
+        public void UnRegisteByID(int id)
         {
             if (registry.ContainsKey(id))
             {
@@ -50,7 +50,7 @@ namespace SaveYourself.Core
         }
         public void addHistory(TimeReverse.ITimeTrackable t,TimeReverse.TimedAction ta)
         {
-            Register(t);
+            Registe(t);
             history.Add(ta);
         }
         // 只在逆向阶段调用,统一记录所有可以逆向运行物体的状态
@@ -109,7 +109,16 @@ namespace SaveYourself.Core
                 }
                 while(st.Count > 0)
                 {
-                    registry[st.Peek().objId].ApplySnapshot(st.Pop());
+                    TimeReverse.ITimeTrackable obj;
+                    if (registry.TryGetValue(st.Peek().objId, out obj))
+                    {
+                        obj.ApplySnapshot(st.Pop());
+                    }
+                    else
+                    {
+                        st.Pop();
+                    }
+                    //registry[st.Peek().objId].ApplySnapshot(st.Pop());
                 }
                 //Debug.LogFormat("apply {0} snapshot",cnt);
             }
@@ -119,7 +128,7 @@ namespace SaveYourself.Core
         public void Clear()
         {
             currentTime = 0;
-            phase = Phase.PreReverse;
+            phase = Phase.PreRecord;
             history.Clear();
             registry.Clear();
         }
@@ -129,7 +138,7 @@ namespace SaveYourself.Core
             if (GameManager.Instance.timeStopped) return;
             switch (phase)
             {
-                case Phase.Reverse:
+                case Phase.Record:
                     currentTime += Time.deltaTime;
                     if (currentTime >= GameManager.Instance.getTimeLimit() - GameManager.Instance.RemainTimeCount)
                     {
@@ -155,12 +164,16 @@ namespace SaveYourself.Core
                 case Phase.Replay:
                     RewindStep(Time.deltaTime);
                     if (currentTime <= 0)
-                        StartForward();
+                        StopReplay();
                     break;
-                case Phase.Forward:
+                case Phase.End:
                     // 这里可以让玩家控制 forwardPlayer
                     break;
             }
+        }
+        public void StartRecord()
+        {
+            phase = Phase.Record;
         }
         void StartPreReplay()
         {
@@ -176,9 +189,9 @@ namespace SaveYourself.Core
             Instance.phase = Phase.Replay;
         }
 
-        void StartForward()
+        void StopReplay()
         {
-            Instance.phase = Phase.Forward;
+            Instance.phase = Phase.End;
             currentTime = 0;
         }
         public void RestartFromPreForward()
