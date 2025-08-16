@@ -335,6 +335,26 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1208144871472054, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
   m_PrefabInstance: {fileID: 7322842862773142880}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-3871864250006748048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7321652345534660310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bfc9335689cff54f8c5894ea03a2e35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockPrefab: {fileID: 8906480716476180513, guid: 5e3b30f1cd6e4db45871ef89938d5ba2, type: 3}
+  previewSprite: {fileID: 7482667652216324306, guid: 8b216097fd24f844fba527948fb4ad69, type: 3}
+  canPlaceColor: {r: 0, g: 1, b: 0, a: 1}
+  cannotPlaceColor: {r: 1, g: 0, b: 0, a: 1}
+  maxCount: 3
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &164354921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,7 +380,6 @@ MonoBehaviour:
   maxSpeed: 5
   jumpTakeOffSpeed: 5
   jumpState: 0
-  health: {fileID: 0}
   collider2d: {fileID: 7322842864174612227}
   audioSource: {fileID: 0}
   controlEnabled: 1

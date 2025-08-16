@@ -15,19 +15,14 @@ public class UnRegisterArea : MonoBehaviour
             if (c.CompareTag("Box"))
             {
                 Debug.Log("unregister this reversible box");
-
+                needUnRegister = true;
             }
-        }
-        else if (c.CompareTag("GhostPlayer"))
-        {
-            Debug.Log("unrigister player reverse");
-            needUnRegister = true;
         }
         if (needUnRegister)
         {
             TimeReverse.ITimeTrackable trackable = c.GetComponentInParent<TimeReverse.ITimeTrackable>();
             if (trackable != null) Debug.LogFormat("unregister this reversible object with id {0}", trackable.Id);
-            TimeManager.Instance.UnRegister(trackable);
+            TimeManager.Instance.UnRegiste(trackable);
         }
     }
 }
