@@ -166,7 +166,7 @@ namespace SaveYourself.Core
                 LoaderManager.Instance.LoadScene(levelName);
             }
             // 预备时间不倒计时
-            if (!timeStopped && TimeCountdown > 0 && (currentState != GameState.PreReverseTime || currentState != GameState.PreForwardTime))
+            if (!timeStopped && TimeCountdown > 0 && (currentState != GameState.PreReverseTime && currentState != GameState.PreForwardTime))
             {
                 TimeCountdown -= Time.deltaTime;
                 countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
