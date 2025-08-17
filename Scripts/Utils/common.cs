@@ -29,6 +29,18 @@ namespace SaveYourself.Utils
             }
             return str;
         }
-
+        public static string GetPlaceForwardZoneStr(int remain)
+        {
+            string str = "";
+            if (remain > 0)
+            {
+                str = string.Format("block remain : {0} ", remain);
+            }
+            else
+            {
+                str = "";
+            }
+            return str;
+        }
     }
 }

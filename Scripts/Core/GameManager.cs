@@ -12,6 +12,7 @@ using SaveYourself.Interact;
 namespace SaveYourself.Core
 {
     public enum GameState { PreReverseTime, ReverseTime,PreForwardTime, ForwardTime, LevelComplete, LevelFailed }
+    public enum Capability { PlaceForwardZone };
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
@@ -30,10 +31,13 @@ namespace SaveYourself.Core
         public string levelName;
         public string nextLevelName;
         public float timeLimit;
-        public List<ITimeTrackable> trackList = new();
+        public int remain = 1; 
         public bool timeStopped = false;
         private bool tracked = false;
+        private bool canPlaceForwardZone = false;
         public LevelManager lm;
+        public List<ITimeTrackable> trackList = new();
+        private Dictionary<Capability, bool> capabilitiles_ = new();
         void Start()
         {
             if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
@@ -43,7 +47,7 @@ namespace SaveYourself.Core
         }
         public void addTrack(ITimeTrackable t)
         {
-            trackList.Add(t); 
+            trackList.Add(t);
         }
 
         // 开始逆时空阶段
@@ -111,7 +115,7 @@ namespace SaveYourself.Core
             pastPlayer.SetActive(true);
             pastPlayer.GetComponent<Player>().controlEnabled = false;
             countdownText.color = Color.blue;
-            countdownText.text = common.GetTimeCountDownStr(TimeCountdown) +"\n"+"按下 Z 键 结束准备";
+            countdownText.text = common.GetTimeCountDownStr(TimeCountdown) + "\n"+"按下 Z 键 结束准备";
         }    
         // 开始正时空阶段
         public void StartForwardTimePhase()
@@ -184,11 +188,15 @@ namespace SaveYourself.Core
             {
                 countdownText.text = "按下Z键 开始游戏";
                 reversePlayer.GetComponent<Player>().controlEnabled = false;
+                lm.level.DoInPreReverse();
                 if (Input.GetKeyDown(KeyCode.Z))
                 {
                     StartReverseTimePhase();
                 }
                 return;
+            }else if(currentState == GameState.PreForwardTime)
+            {
+                lm.level.DoInPreForward();
             }
             if (Input.GetKeyDown(KeyCode.Z))
             {
@@ -200,10 +208,6 @@ namespace SaveYourself.Core
                 {
                     StartForwardTimePhase();
                 }
-            }
-            if(Input.GetKeyDown(KeyCode.O))
-            {
-                RestartFromPreForward();
             }
 
         }
@@ -251,6 +255,19 @@ namespace SaveYourself.Core
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Water"), isIgnore);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Steam"), isIgnore);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("GhostPlayer"), LayerMask.NameToLayer("Player"), isIgnore);
+        }
+        public void SetCapability(Capability cap)
+        {
+            if(!CheckCapability(cap))
+            capabilitiles_.Add(cap, true);
+        }
+        public void RemoveCapability(Capability cap)
+        {
+            capabilitiles_.Remove(cap);
+        }
+        public bool CheckCapability(Capability cap)
+        {
+            return capabilitiles_.ContainsKey(cap);
         }
         public void Clear()
         {

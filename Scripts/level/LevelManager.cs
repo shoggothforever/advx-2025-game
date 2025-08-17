@@ -26,6 +26,7 @@ public class LevelManager : MonoBehaviour
     void SpawnAll()
     {
         if (config == null) { Debug.LogError("Œﬁ∑®’“µΩ LevelConfig£°"); return; }
+        level = LevelFactory.Create(config.levelName);
         GameManager.Instance.levelName = config.levelName;
         GameManager.Instance.nextLevelName = config.nextLevelName;
         GameManager.Instance.timeLimit = config.timeLimit;
@@ -60,12 +61,11 @@ public class LevelManager : MonoBehaviour
                 go.transform.SetParent(GameManager.Instance.reverseWorld.transform, true);
                 GameManager.Instance.reversePlayer = go;
                 TimeManager.Instance.reversePlayer = go;
-                //var vircam = go.GetComponentInChildren<Cinemachine.CinemachineVirtualCamera>();
-                //if (vircam != null)
-                //{
-                //    Debug.Log("find virtual cinemachine");
-                //    GameManager.Instance.reverseVirtualCamera = vircam;
-                //}
+                var vircam = go.GetComponentInChildren<Cinemachine.CinemachineVirtualCamera>();
+                if (vircam != null)
+                {
+                    GameManager.Instance.reverseVirtualCamera = vircam;
+                }
                 ++cnt;
             }
             else if (go.name.StartsWith("waterTransformer"))
@@ -88,6 +88,7 @@ public class LevelManager : MonoBehaviour
             #endif
         }
         if (cnt>=2)Instance.isReady = true;
+        level.DoBeforeLevel();
     }
     public void LoadNextLevel()
     {
@@ -95,6 +96,7 @@ public class LevelManager : MonoBehaviour
         Instance.isReady = false;
         TimeManager.Instance.Clear();
         GameManager.Instance.Clear();
+        level.DoAfterLevel();
         Instance.LoadScene(config.nextLevelName);
     }
     public void OnResume()
@@ -138,77 +140,16 @@ public class LevelManager : MonoBehaviour
         #endif
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if (PauseMenu.activeSelf)
+            if (config.levelName != "MainMenu")
             {
-                OnResume();
-            }
-            else if (config.levelName != "MainMenu")
-            {
+                if (PauseMenu.activeSelf)
+                {
+                    OnResume();
+                    return;
+                }
                 SetPasueMenu(true);
             }
             else Application.Quit();
         }
-    }
-}
-public interface ILevelLogic
-{
-    public void DoWholeLevel();
-    public void DoInPreReverse();
-    public void DoInReverse();
-    public void DoInPreForward();
-    public void DoInForward();
-}
-public class EmptyLevel : ILevelLogic
-{
-    public void DoInForward()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void DoInPreForward()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void DoInPreReverse()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void DoInReverse()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void DoWholeLevel()
-    {
-        throw new System.NotImplementedException();
-    }
-}
-public class PlayGroundLevel : ILevelLogic
-{
-    public void DoInForward()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void DoInPreForward()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void DoInPreReverse()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void DoInReverse()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void DoWholeLevel()
-    {
-        throw new System.NotImplementedException();
     }
 }

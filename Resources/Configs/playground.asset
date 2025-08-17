@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: playground
   m_EditorClassIdentifier: 
   levelName: playground
-  nextLevelName: 
+  nextLevelName: end
   timeLimit: 15
   playerSpawn: {x: 0, y: 0, z: 0}
   items:

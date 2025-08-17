@@ -342,7 +342,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7321652345534660310}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6bfc9335689cff54f8c5894ea03a2e35, type: 3}
   m_Name: 
@@ -354,7 +354,7 @@ MonoBehaviour:
   maxCount: 3
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
 --- !u!114 &164354921
 MonoBehaviour:
   m_ObjectHideFlags: 0

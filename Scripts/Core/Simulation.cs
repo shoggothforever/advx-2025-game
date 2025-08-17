@@ -14,7 +14,6 @@ namespace SaveYourself.Core
 
         static HeapQueue<Event> eventQueue = new HeapQueue<Event>();
         static Dictionary<System.Type, Stack<Event>> eventPools = new Dictionary<System.Type, Stack<Event>>();
-
         /// <summary>
         /// Create a new event of type T and return it, but do not schedule it.
         /// </summary>
@@ -95,6 +94,32 @@ namespace SaveYourself.Core
         static public void DestroyModel<T>() where T : class, new()
         {
             InstanceRegister<T>.instance = null;
+        }
+
+        /// <summary>
+        /// Return the simulation model instance for a levelLogic.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        static public T GetLevelLogic<T>() where T : ILevelLogic, new()
+        {
+            return LevelRegister<T>.instance;
+        }
+        /// <summary>
+        /// Set a simulation model instance for a levelLogic.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        static public void SetLevelLogic<T>(T instance) where T : ILevelLogic, new()
+        {
+            LevelRegister<T>.instance = instance;
+        }
+
+        /// <summary>
+        /// Destroy the simulation model instance for a levelLogic.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        static public void DestroyLevelLogic<T>() where T : ILevelLogic, new()
+        {
+            LevelRegister<T>.instance = default(T);
         }
 
         /// <summary>

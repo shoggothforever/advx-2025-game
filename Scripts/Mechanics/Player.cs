@@ -191,6 +191,11 @@ namespace SaveYourself.Mechanics
 
             targetVelocity = move * maxSpeed;
         }
+        public bool CheckCapabilityEnable(Capability capability)
+        {
+            return false;
+        }
+
         void OnTriggerEnter2D(Collider2D c)
         {
             if (c.CompareTag("Water"))
