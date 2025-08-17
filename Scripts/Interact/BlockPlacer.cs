@@ -18,7 +18,7 @@ public class BlockPlacer : MonoBehaviour
     void Awake()
     {
         remaining = maxCount;
-        blockPrefab.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255, 50);
+        blockPrefab.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255, 20);
         // ´´½¨Ô¤ÀÀ¾«Áé
         GameObject previewObj = new GameObject("BlockPreview");
         previewObj.transform.SetParent(transform);
@@ -35,9 +35,9 @@ public class BlockPlacer : MonoBehaviour
     void Update()
     {
         bool isPreForward = GameManager.Instance.currentState== GameState.PreForwardTime;
-        previewRenderer.enabled = isPreForward && remaining > 0;
-
-        if (!isPreForward || remaining <= 0) return;
+        bool canShow = !(GameManager.Instance.timeStopped || !isPreForward || remaining <= 0);
+        previewRenderer.enabled = canShow;
+        if (!canShow) return;
 
         Vector3 world = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 cell = SnapToGrid(world);

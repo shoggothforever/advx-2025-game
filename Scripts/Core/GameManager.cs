@@ -166,15 +166,10 @@ namespace SaveYourself.Core
                 LoaderManager.Instance.LoadScene(levelName);
             }
             // 预备时间不倒计时
-            if (!timeStopped && TimeCountdown > 0 && (currentState != GameState.PreForwardTime || currentState != GameState.PreForwardTime))
+            if (!timeStopped && TimeCountdown > 0 && (currentState != GameState.PreReverseTime || currentState != GameState.PreForwardTime))
             {
                 TimeCountdown -= Time.deltaTime;
-                //Debug.Log("你有 " + TimeCountdown + " 秒时间。");
-                if (currentState == GameState.PreForwardTime || currentState == GameState.PreForwardTime)
-                {
-                    countdownText.text = "按下 Z 键 结束准备";
-                }
-                else countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
+                countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
             }// 逆熵世界倒计时结束开始正熵世界
             else if (TimeCountdown <= 0)
             {

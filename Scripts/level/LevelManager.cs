@@ -60,12 +60,12 @@ public class LevelManager : MonoBehaviour
                 go.transform.SetParent(GameManager.Instance.reverseWorld.transform, true);
                 GameManager.Instance.reversePlayer = go;
                 TimeManager.Instance.reversePlayer = go;
-                var vircam = go.GetComponentInChildren<Cinemachine.CinemachineVirtualCamera>();
-                if (vircam != null)
-                {
-                    Debug.Log("find virtual cinemachine");
-                    GameManager.Instance.reverseVirtualCamera = vircam;
-                }
+                //var vircam = go.GetComponentInChildren<Cinemachine.CinemachineVirtualCamera>();
+                //if (vircam != null)
+                //{
+                //    Debug.Log("find virtual cinemachine");
+                //    GameManager.Instance.reverseVirtualCamera = vircam;
+                //}
                 ++cnt;
             }
             else if (go.name.StartsWith("waterTransformer"))

@@ -19,8 +19,8 @@ namespace SaveYourself.Gameplay
             player.Teleport(model.spawnPoint.transform.position);
             player.jumpState = Player.JumpState.Grounded;
             player.animator.SetBool("dead", false);
-            model.virtualCamera.m_Follow = player.transform;
-            model.virtualCamera.m_LookAt = player.transform;
+            //model.virtualCamera.m_Follow = player.transform;
+            //model.virtualCamera.m_LookAt = player.transform;
             Simulation.Schedule<EnablePlayerInput>(2f);
         }
     }
