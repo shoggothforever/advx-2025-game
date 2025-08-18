@@ -89,7 +89,11 @@ public class Tutorial1 : EmptyLevel, ILevelLogic
     public override void DoBeforeLevel()
     {
         GameManager.Instance.SetCapability(Capability.PlaceForwardZone);
-        GameManager.Instance.pastPlayer.GetComponent<BlockPlacer>().enabled = true;
+        var bp = GameManager.Instance.pastPlayer.GetComponent<BlockPlacer>();
+        if (bp == null) return;
+        bp.maxCount = 1;
+        bp.enabled = true;
+
     }
     public override void DoWholeLevel()
     {

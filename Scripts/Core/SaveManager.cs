@@ -5,6 +5,7 @@ using SaveYourself.Utils;
 using SaveYourself.Model;
 namespace SaveYourself.Core
 {
+
     public interface IStorageBackend
     {
         void Save(string path, string raw);
@@ -37,7 +38,7 @@ namespace SaveYourself.Core
     public class SaveManager : MonoBehaviour
     {
         public static SaveManager Instance { get; private set; }
-
+        public bool needSaveHistory = false;
         //[Header("配置")]
         public LevelConnection levelConnection;
         private readonly ISaveSerializer serializer = new JsonSaveSerializer();
@@ -77,9 +78,12 @@ namespace SaveYourself.Core
         public void MarkDirty() => _dirty = true;
         public void SaveSnapshot(string levelName,List<TimeReverse.TimedAction> history)
         {
-            //var rec = Data.levelReverseSnapshot;
-            // just save disk space
-            //rec[levelName] = history.ToArray();
+            if (needSaveHistory)
+            {
+                var rec = Data.levelReverseSnapshot;
+                // just save disk space
+                rec[levelName] = history.ToArray();
+            }
         }
         public void AddNewLevelEntrance(string levelName)
         {
