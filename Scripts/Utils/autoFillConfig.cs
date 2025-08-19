@@ -36,6 +36,7 @@ public static class autoFillConfig
             {
                 if (go.name.StartsWith(keyItem[i])){
                     keys[keyItem[i]] = go;
+                    Debug.Log($"add {keyItem[i]}");
                 }
             }
         }
@@ -50,9 +51,9 @@ public static class autoFillConfig
                     new SpawnItem
                     {
                         prefab = go,
-                        position = go.transform.localPosition,
-                        rotation = go.transform.eulerAngles,
-                        scale = go.transform.localScale,
+                        position = keys[key].transform.position,
+                        rotation = keys[key].transform.eulerAngles,
+                        scale = keys[key].transform.localScale,
                     }
                     );
                 }
@@ -63,9 +64,9 @@ public static class autoFillConfig
                     new SpawnItem
                     {
                         prefab = go,
-                        position = go.transform.localPosition,
-                        rotation = go.transform.eulerAngles,
-                        scale = go.transform.localScale,
+                        position = keys[key].transform.position,
+                        rotation = keys[key].transform.eulerAngles,
+                        scale = keys[key].transform.localScale,
                     }
                     );
                 }
@@ -75,18 +76,21 @@ public static class autoFillConfig
         }
         for (int i = 0; i < necessaryItem.Length; i++)
         {
-            if (!keys.ContainsKey(keyItem[i]))
+            if (!keys.ContainsKey(necessaryItem[i]))
             {
-                GameObject go =new GameObject { };
-                bool flag = false;
-                if(keyItem[i] == "Canvas")
+                if (necessaryItem[i] == "Canvas")
                 {
-                    go = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Scripts/level/Canvas.prefab");
-                    flag = true;
-                }
-                if (flag)
-                {
-                    Add(go, config);
+                    Debug.Log($"search {keyItem[i]}");
+                    var go = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Scripts/level/Canvas.prefab");
+                    if (go == null) Debug.Log($"can not find {necessaryItem[i]}");
+                    config.items.Add(
+                     new SpawnItem
+                     {
+                         prefab = go,
+                         position = go.transform.position,
+                         rotation = go.transform.eulerAngles,
+                         scale = go.transform.localScale,
+                     });
                 }
             }
         }
