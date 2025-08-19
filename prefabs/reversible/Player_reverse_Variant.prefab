@@ -231,7 +231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1208144871472054, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_Name
-      value: Player reverse Variant
+      value: Player_reverse_Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1208144871472054, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_Layer
@@ -267,7 +267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4520396350849616, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4520396350849616, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_LocalRotation.x
@@ -275,7 +275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4520396350849616, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4520396350849616, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_LocalRotation.z
@@ -287,7 +287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4520396350849616, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4520396350849616, guid: 8d7204baf868d844390d27dd065ef986, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -377,7 +377,6 @@ MonoBehaviour:
   maxSpeed: 4.5
   jumpTakeOffSpeed: 4.5
   jumpState: 0
-  health: {fileID: 0}
   collider2d: {fileID: 700538218374639929}
   audioSource: {fileID: 0}
   controlEnabled: 1

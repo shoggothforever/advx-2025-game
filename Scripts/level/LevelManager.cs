@@ -42,7 +42,7 @@ public class LevelManager : MonoBehaviour
                 GameManager.Instance.pastWorld = go;
                 cnt++;
             }
-            else if (go.name.StartsWith("Player Variant"))
+            else if (go.name.StartsWith("Player_Variant"))
             {
                 GameManager.Instance.pastPlayer = go;
                 GameManager.Instance.originPastPlayPosition = i.position;
@@ -56,7 +56,7 @@ public class LevelManager : MonoBehaviour
                 GameManager.Instance.reverseWorld = go;
                 ++cnt;
             }
-            else if (go.name.StartsWith("Player reverse"))
+            else if (go.name.StartsWith("Player_reverse"))
             {
                 go.transform.SetParent(GameManager.Instance.reverseWorld.transform, true);
                 GameManager.Instance.reversePlayer = go;
