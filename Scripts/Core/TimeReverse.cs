@@ -21,13 +21,14 @@ namespace SaveYourself.Core
         // 为了让 JSON 能序列化 Vector3
         [System.Serializable] struct Vector3Snapshot { public float x, y, z; public Vector3 ToVector3() => new(x, y, z); }
         [System.Serializable] struct BoolSnapshot { public string name; public bool value; }
-        public enum ActionType { Position, AnimatorBool, AnimatorTrigger, Destroy, Spawn,Manual }
+        public enum ActionType { Position, AnimatorBool, AnimatorTrigger, Destroy, Spawn,Manual ,Ignore}
         public interface ITimeTrackable
         {
          int Id { get; }
          TimedAction RecordSnapshot();   // 当前帧拍快照
          void ApplySnapshot(TimedAction a);
          ActionType GetActionType();
+         string Name();
         }
         public abstract class ReversibleObject : MonoBehaviour
         {
@@ -36,6 +37,7 @@ namespace SaveYourself.Core
             public void Awake()
             {
                 Id = nextId++;
+                name = "default reverse object";
             }
             virtual public void Start() { }
         }

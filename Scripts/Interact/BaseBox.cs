@@ -7,7 +7,7 @@ using SaveYourself.Core;
     public class BaseBox : TimeReverse.ReversibleObject, TimeReverse.ITimeTrackable
     {
         public Rigidbody2D rb;
-        public override void Start()
+    public override void Start()
         {
             GameManager.Instance.addTrack(this);
             rb=GetComponent<Rigidbody2D>();
@@ -48,7 +48,10 @@ using SaveYourself.Core;
         public bool canShrink=false;
         public bool ignoreV = true;
         private Transform originParent = null;
-        public void OnCollisionEnter2D(Collision2D collision)
+
+
+
+    public void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.collider.CompareTag("Player"))
             {
@@ -64,8 +67,12 @@ using SaveYourself.Core;
             }
         }
 
-    TimeReverse.ActionType TimeReverse.ITimeTrackable.GetActionType()
+    TimeReverse.ActionType  TimeReverse.ITimeTrackable.GetActionType()
     {
         return TimeReverse.ActionType.Position;     // Ã¶¾Ù£ºPosition, AnimatorBool, AnimatorTrigger...
+    }
+    string TimeReverse.ITimeTrackable.Name()
+    {
+        return "base box";
     }
 }

@@ -16,7 +16,7 @@ public class TriggerButton : TimeReverse.ReversibleObject, TimeReverse.ITimeTrac
     }
     public override void Start()
     {
-        //GameManager.Instance.addTrack(this);
+        GameManager.Instance.addTrack(this);
     }
     private void OnTriggerEnter2D(Collider2D c)
     {
@@ -68,5 +68,9 @@ public class TriggerButton : TimeReverse.ReversibleObject, TimeReverse.ITimeTrac
     TimeReverse.ActionType TimeReverse.ITimeTrackable.GetActionType()
     {
         return TimeReverse.ActionType.Manual;
+    }
+    string TimeReverse.ITimeTrackable.Name()
+    {
+        return "trigger button";
     }
 }

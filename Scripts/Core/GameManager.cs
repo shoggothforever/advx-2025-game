@@ -42,11 +42,10 @@ namespace SaveYourself.Core
         {
             if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
             else Destroy(gameObject);
-            boxes = GameObject.FindGameObjectsWithTag("Box");
-            Debug.LogFormat("find boxes count:{0}", boxes.Length);
         }
         public void addTrack(ITimeTrackable t)
         {
+            if (t.GetActionType()!=ActionType.Ignore)
             trackList.Add(t);
         }
 
@@ -65,14 +64,14 @@ namespace SaveYourself.Core
             if (!tracked)
             {
                 tracked=true;
-                var per = reversePlayer.GetComponent<Mechanics.Player>();
+                var per = reversePlayer.GetComponent<Player>();
                 TimeManager.Instance.Registe(per);
                 Debug.Log("register reverse player into TimeManager, ID: "+per.Id);
                 Debug.LogFormat("will registe {0} Items in TimeManager",trackList.Count);
                 foreach (var t in trackList)
                 {
                     TimeManager.Instance.Registe(t);
-                    Debug.LogFormat("put box into TimeManager, ID:{0}", t.Id);
+                    Debug.LogFormat("put {0} into TimeManager, ID:{0}",t.Name(), t.Id);
                 }
             }
             TimeManager.Instance.StartRecord();
@@ -97,6 +96,7 @@ namespace SaveYourself.Core
             Debug.Log("逆时空阶段开始！你有 " + TimeCountdown + " 秒时间。");
             countdownText.color = Color.red;
             countdownText.text = common.GetTimeCountDownStr(TimeCountdown);
+            lm.level.DoInReverse();
         }
 
         // 预备正时空阶段
@@ -116,6 +116,7 @@ namespace SaveYourself.Core
             pastPlayer.GetComponent<Player>().controlEnabled = false;
             countdownText.color = Color.blue;
             countdownText.text = common.GetTimeCountDownStr(TimeCountdown) + "\n"+"按下 Z 键 结束准备";
+            
         }    
         // 开始正时空阶段
         public void StartForwardTimePhase()
@@ -124,6 +125,8 @@ namespace SaveYourself.Core
             pastPlayer.GetComponent<Player>().controlEnabled = true;
             EnableReverseSprite();
             //箱子热胀冷缩
+            boxes = GameObject.FindGameObjectsWithTag("Box");
+            Debug.LogFormat("find boxes count:{0}", boxes.Length);
             if (boxes != null)
             {
                 foreach (var box in boxes)
@@ -146,13 +149,8 @@ namespace SaveYourself.Core
                     wt.changeWater();
                 }
             }
+            lm.level.DoInForward();
         }
-
-        public void OneRoll()
-        {
-            timeStopped = true;
-        }
-
         void Update()
         {
             if (levelName!="SampleScene"&&!LoaderManager.Instance.isReady) return;
@@ -209,7 +207,7 @@ namespace SaveYourself.Core
                     StartForwardTimePhase();
                 }
             }
-
+            lm.level.DoWholeLevel();
         }
         public void LoadNextScene()
         {

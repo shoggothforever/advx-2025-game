@@ -241,7 +241,10 @@ namespace SaveYourself.Mechanics
         {
             return TimeReverse.ActionType.Position;
         }
-
+        string TimeReverse.ITimeTrackable.Name()
+        {
+            return "player";
+        }
         public enum JumpState
         {
             Grounded,

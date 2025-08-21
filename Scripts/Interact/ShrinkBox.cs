@@ -1,3 +1,4 @@
+using SaveYourself.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,10 @@ namespace SaveYourself.Interact
         void Awake()
         {
             canShrink = true;
+        }
+        public TimeReverse.ActionType GetActionType()
+        {
+            return TimeReverse.ActionType.Ignore;     // Ã¶¾Ù£ºPosition, AnimatorBool, AnimatorTrigger...
         }
     }
 }
