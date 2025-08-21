@@ -12,18 +12,12 @@ namespace SaveYourself.Interact
             var upPosition=transform.position+new Vector3(0,0.5f,0);
             var newBox = Instantiate(ShrinkBoxPrefab, upPosition, transform.rotation);
             var newRb = newBox.GetComponent<Rigidbody2D>();
-            //newRb.velocity = rb.velocity;
-            //newRb.angularVelocity = rb.angularVelocity;
 
             Destroy(gameObject);
         }
         void Awake()
         {
             canShrink = true;
-        }
-        public TimeReverse.ActionType GetActionType()
-        {
-            return TimeReverse.ActionType.Ignore;     // Ã¶¾Ù£ºPosition, AnimatorBool, AnimatorTrigger...
         }
     }
 }

@@ -4,35 +4,10 @@ using UnityEngine;
 using SaveYourself.Core;
 
 
-    public class BaseBox : TimeReverse.ReversibleObject, TimeReverse.ITimeTrackable
+    public class BaseBox :MonoBehaviour
     {
         public Rigidbody2D rb;
-    public override void Start()
-        {
-            GameManager.Instance.addTrack(this);
-            rb=GetComponent<Rigidbody2D>();
-        }
-        public TimeReverse.TimedAction RecordSnapshot()
-        {
-            return new TimeReverse.TimedAction
-            {
-                time = TimeManager.Instance.currentTime,
-                objId = Id,
-                pos = transform.position,
-                velocity = rb.velocity,
-                rotation = rb.rotation
-                //payload = JsonUtility.ToJson(transform.position)
-            };
-        }
-        public void ApplySnapshot(TimeReverse.TimedAction a)
-        {
-            //rb.MovePosition(a.pos);
-            transform.position = Vector3.Lerp(transform.position, a.pos, 0.4f);
-            if (ignoreV)
-            {
-                rb.velocity = Vector2.zero;
-            }
-        }
+
         public void Enlarge()
         {
             // 1. ÊÓ¾õ
@@ -66,13 +41,39 @@ using SaveYourself.Core;
                 collision.collider.transform.SetParent(originParent);
             }
         }
-
-    TimeReverse.ActionType  TimeReverse.ITimeTrackable.GetActionType()
+ 
+    public class BaseReversibleBox : TimeReverse.ReversibleObject,TimeReverse.ITimeTrackable
     {
-        return TimeReverse.ActionType.Position;     // Ã¶¾Ù£ºPosition, AnimatorBool, AnimatorTrigger...
-    }
-    string TimeReverse.ITimeTrackable.Name()
-    {
-        return "base box";
+        Rigidbody2D rb;
+        public override void Start()
+        {
+            GameManager.Instance.addTrack(this);
+            rb = GetComponent<Rigidbody2D>();
+        }
+        public TimeReverse.TimedAction RecordSnapshot()
+        {
+            return new TimeReverse.TimedAction
+            {
+                time = TimeManager.Instance.currentTime,
+                objId = Id,
+                pos = transform.position,
+                velocity = rb.velocity,
+                rotation = rb.rotation
+                //payload = JsonUtility.ToJson(transform.position)
+            };
+        }
+        public void ApplySnapshot(TimeReverse.TimedAction a)
+        {
+            //rb.MovePosition(a.pos);
+            transform.position = Vector3.Lerp(transform.position, a.pos, 0.4f);
+        }
+        TimeReverse.ActionType TimeReverse.ITimeTrackable.GetActionType()
+        {
+            return TimeReverse.ActionType.Position;     // Ã¶¾Ù£ºPosition, AnimatorBool, AnimatorTrigger...
+        }
+        string TimeReverse.ITimeTrackable.Name()
+        {
+            return "base box";
+        }
     }
 }

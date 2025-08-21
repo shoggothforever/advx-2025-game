@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5341967815127932476, guid: dd801b96afc84a7459b24a30ea5f869d, type: 3}
       propertyPath: m_Name
-      value: reversible_box1
+      value: reversible_box1 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5341967815127932478, guid: dd801b96afc84a7459b24a30ea5f869d, type: 3}
       propertyPath: m_RootOrder
@@ -65,3 +65,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd801b96afc84a7459b24a30ea5f869d, type: 3}
+--- !u!1 &927213013451211559 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5341967815127932476, guid: dd801b96afc84a7459b24a30ea5f869d, type: 3}
+  m_PrefabInstance: {fileID: 5115073496378252571}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-6346257896373847530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927213013451211559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7995926de911994da4e90c30159a074, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterLevelY: 0
+  buoyancy: 15
+  damping: 5
