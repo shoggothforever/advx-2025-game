@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 5341967815127932465}
   - component: {fileID: 5341967815127932464}
   - component: {fileID: 5341967815127932467}
-  - component: {fileID: -4977871526651562519}
   m_Layer: 7
-  m_Name: reversible_box1
+  m_Name: base_box
   m_TagString: Box
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,15 +149,3 @@ MonoBehaviour:
   rb: {fileID: 0}
   canShrink: 0
   ignoreV: 1
---- !u!114 &-4977871526651562519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5341967815127932476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2936cf757ffec74291b5dad188245d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

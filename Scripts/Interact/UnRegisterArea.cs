@@ -9,12 +9,9 @@ public class UnRegisterArea : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D c)
     {
         bool needUnRegister = false;
-        if (c.name.StartsWith("reversible"))
+        if (c.CompareTag("Box"))
         {
-            if (c.CompareTag("Box"))
-            {
-                needUnRegister = true;
-            }
+            needUnRegister = true;
         }
         if (needUnRegister)
         {
