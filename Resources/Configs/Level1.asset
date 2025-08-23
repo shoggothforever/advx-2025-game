@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelName: Level1
   nextLevelName: Level2
-  timeLimit: 30
+  timeLimit: 10
   playerSpawn: {x: 15.583969, y: 2.7296603, z: 0}
   items:
   - prefab: {fileID: 6021138300331296203, guid: 6f11f60719b443a48adbef40a6806d17, type: 3}

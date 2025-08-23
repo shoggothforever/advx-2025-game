@@ -186,7 +186,7 @@ namespace SaveYourself.Core
             {
                 countdownText.text = "按下Z键 开始游戏";
                 reversePlayer.GetComponent<Player>().controlEnabled = false;
-                if(lm.level!=null)lm.level.DoInPreReverse();
+                //if(lm.level!=null)lm.level.DoInPreReverse();
                 if (Input.GetKeyDown(KeyCode.Z))
                 {
                     StartReverseTimePhase();

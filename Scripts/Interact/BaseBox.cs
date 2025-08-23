@@ -27,13 +27,15 @@ public class BaseBox :MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
+            Debug.Log("detected player enter the box triggeraA");
             // 1. 判断玩家是否站在平台顶部
             ContactPoint2D[] contacts = collision.contacts;
             foreach (var cp in contacts)
             {
                 // 玩家碰撞点法线朝上 => 玩家脚底接触平台顶面
-                if (Vector2.Dot(cp.normal, Vector2.up) > 0.7f)
+                if (Vector2.Dot(cp.normal, Vector2.up) ==-1f)
                 {
+                    Debug.Log("set box as player's transform parent");
                     originParent = collision.collider.transform.parent;
                     collision.collider.transform.SetParent(transform, true);
                     break;
