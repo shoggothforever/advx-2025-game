@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Level3
   m_EditorClassIdentifier: 
   levelName: Level3
-  nextLevelName: emd
+  nextLevelName: end
   timeLimit: 40
   playerSpawn: {x: 0, y: 0, z: 0}
   items:
   - prefab: {fileID: 1534842449224503505, guid: fca333b95db9f484badce7fe4ccd9166, type: 3}
-    position: {x: 6.3608184, y: 0.09046173, z: 0}
+    position: {x: 6.032999, y: -1.9994688, z: 1}
     rotation: {x: 6.3608184, y: 0.09046173, z: 0}
     scale: {x: 1, y: 1, z: 1}
   - prefab: {fileID: 6021138300331296203, guid: 6f11f60719b443a48adbef40a6806d17, type: 3}
@@ -26,7 +26,7 @@ MonoBehaviour:
     rotation: {x: 20.524532, y: 12.082407, z: 0}
     scale: {x: 1, y: 1, z: 1}
   - prefab: {fileID: 7321652345534660310, guid: f603362502dd69e408f932278b6941a1, type: 3}
-    position: {x: 5.271768, y: 0.12232447, z: 1}
+    position: {x: 6.032999, y: -1.9994688, z: 1}
     rotation: {x: -0, y: 0, z: 0}
     scale: {x: 2, y: 2, z: 1}
   - prefab: {fileID: 701581881313865964, guid: ec795d0e758808d4882a9dfbc316ff12, type: 3}
