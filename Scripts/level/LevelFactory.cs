@@ -14,7 +14,13 @@ public class LevelFactory
     {
         { "default", typeof(DefaultLevel) },
         { "playground", typeof(PlayGroundLevel) },
-        { "Tutorial1", typeof(Tutorial1) }
+        { "Tutorial1", typeof(Tutorial1) },
+        { "Tutorial2", typeof(Tutorial2) },
+        { "Tutorial3", typeof(Tutorial3) },
+        { "Level1", typeof(Level1) },
+        { "Level2", typeof(Level2) },
+        { "Level3", typeof(Level3) },
+        { "finalLevel", typeof(finalLevel) }
         // 后续关卡继续加
     };
     public static ILevelLogic Create(string levelName)
@@ -99,4 +105,33 @@ public class Tutorial1 : EmptyLevel, ILevelLogic
     {
         
     }
+}
+public class Tutorial2 : EmptyLevel, ILevelLogic
+{
+
+}
+
+public class Tutorial3 : EmptyLevel, ILevelLogic
+{
+
+}
+
+public class Level1 : EmptyLevel, ILevelLogic
+{
+
+}
+
+public class Level2 : EmptyLevel, ILevelLogic
+{
+
+}
+
+public class Level3 : EmptyLevel, ILevelLogic
+{
+
+}
+
+public class finalLevel : EmptyLevel, ILevelLogic
+{
+
 }
